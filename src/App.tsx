@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import { slidesData } from './constants/slides';
 import { Slide } from './components/Slide';
@@ -12,6 +12,7 @@ export default function App() {
   const [[slideIndex, direction], setSlide] = useState([0, 0]);
   const [showNotes, setShowNotes] = useState(false);
   const [isPresentMode, setIsPresentMode] = useState(false);
+  const fullscreenRef = useRef<HTMLDivElement>(null);
 
   const paginate = (newDirection: number) => {
     const nextIndex = currentSlide + newDirection;
@@ -20,6 +21,28 @@ export default function App() {
       setSlide([nextIndex, newDirection]);
     }
   };
+
+  const toggleFullscreen = async () => {
+    if (!document.fullscreenElement) {
+      try {
+        await fullscreenRef.current?.requestFullscreen();
+        setIsPresentMode(true);
+      } catch (err) {
+        console.error(`Error attempting to enable fullscreen: ${err}`);
+      }
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+  // Sync state with browser fullscreen changes (e.g. Esc key)
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsPresentMode(!!document.fullscreenElement);
+    };
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    return () => document.removeEventListener('fullscreenchange', handleFullscreenChange);
+  }, []);
 
   // Keyboard navigation
   useEffect(() => {
@@ -31,9 +54,12 @@ export default function App() {
       } else if (e.key === 'n') {
         setShowNotes(prev => !prev);
       } else if (e.key === 'Escape') {
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
         setIsPresentMode(false);
       } else if (e.key === 'f' || e.key === 'p') {
-        setIsPresentMode(prev => !prev);
+        toggleFullscreen();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -44,7 +70,10 @@ export default function App() {
   const progress = ((currentSlide + 1) / slidesData.length) * 100;
 
   return (
-    <div className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#4F46E5]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}>
+    <div 
+      ref={fullscreenRef}
+      className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#4F46E5]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
+    >
       {/* Dynamic Font Injection */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;500;700&display=swap');
@@ -58,11 +87,14 @@ export default function App() {
 
         /* Ensure no scroll on root */
         #root { height: 100%; width: 100%; overflow: hidden; position: fixed; inset: 0; }
+
+        /* Hide UI in native fullscreen */
+        div:fullscreen .hide-in-fullscreen { display: none; }
       `}</style>
 
       {/* Progress Bar - Hidden in Present Mode */}
       {!isPresentMode && (
-        <div className="h-1.5 w-full bg-[#142433] absolute top-0 left-0 z-50">
+        <div className="h-1.5 w-full bg-[#142433] absolute top-0 left-0 z-50 hide-in-fullscreen">
           <div 
             className="h-full bg-[#A7DADB] transition-all duration-500 ease-out shadow-[0_0_20px_#A7DADB]" 
             style={{ width: `${progress}%` }}
@@ -72,7 +104,7 @@ export default function App() {
 
       {/* Header - Hidden in Present Mode */}
       {!isPresentMode && (
-        <header className="h-20 flex justify-between items-center px-12 py-4 z-10 shrink-0 border-b border-[#142433]">
+        <header className="h-20 flex justify-between items-center px-12 py-4 z-10 shrink-0 border-b border-[#142433] hide-in-fullscreen">
           <Logo />
           <div className="text-[#b0c5c6] font-display text-lg tracking-widest uppercase bg-[#142433] px-6 py-2 rounded-full border border-[#A7DADB]/10">
             {slide.tag}
@@ -100,14 +132,14 @@ export default function App() {
 
       {/* Navigation Footer - Hidden in Present Mode */}
       {!isPresentMode && (
-        <div className="h-24 shrink-0 bg-[#020C1B]">
+        <div className="h-24 shrink-0 bg-[#020C1B] hide-in-fullscreen">
           <Navigation 
             currentSlide={currentSlide}
             totalSlides={slidesData.length}
             onPrev={() => paginate(-1)}
             onNext={() => paginate(1)}
             onToggleNotes={() => setShowNotes(!showNotes)}
-            onTogglePresent={() => setIsPresentMode(true)}
+            onTogglePresent={toggleFullscreen}
             showNotes={showNotes}
           />
         </div>
