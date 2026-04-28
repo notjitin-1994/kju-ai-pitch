@@ -6,7 +6,7 @@ import {
   ShieldAlert, LibraryBig, RefreshCw, Gauge, Clock, Palette, Repeat, Wrench, Fingerprint,
   BookOpen, FlaskConical, EyeOff, Activity, Network, ChevronRight
 } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { m } from 'framer-motion';
 import { theme } from '../theme/branding';
 import { FlipCard } from '../components/FlipCard';
 
@@ -33,9 +33,11 @@ export const slidesData: Slide[] = [
     overlayColor: "rgba(2, 12, 27, 0.2)",
     content: (
       <div className="relative h-full flex flex-col justify-center">
-        <div className="relative z-20 space-y-12 max-w-2xl text-left">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
+        <div className="relative z-20 space-y-12 max-w-5xl text-left">
+          <m.div 
+            initial={{ opacity: 0, x: -20 }} 
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8, duration: 0.8 }}
             className="flex items-center gap-6"
           >
             <img src="/kjc-logo.png" alt="KJC" className="h-24 w-auto" />
@@ -44,15 +46,25 @@ export const slidesData: Slide[] = [
               <span className="text-xl tracking-[0.4em] font-display uppercase font-bold text-[#A7DADB]">Strategic</span>
               <span className="text-xl tracking-[0.4em] font-display uppercase font-bold text-white">Partnership</span>
             </div>
-          </motion.div>
+          </m.div>
           <div className="space-y-4">
-            <h1 className="text-[140px] font-display font-bold text-white leading-[0.9] tracking-tighter text-left">
+            <m.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.6, duration: 0.8 }}
+              className="text-[140px] font-display font-bold text-white leading-[0.9] tracking-tighter text-left"
+            >
               The AI <br /><span className="italic font-serif text-[#A7DADB]">Transformation</span>
-            </h1>
+            </m.h1>
           </div>
-          <p className="text-4xl text-[#b0c5c6] font-light max-w-3xl leading-relaxed text-left">
+          <m.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.4, duration: 1.0 }}
+            className="text-4xl text-[#b0c5c6] font-light max-w-none leading-relaxed text-left whitespace-nowrap"
+          >
             Deploying a world-class cognitive ecosystem at Kristu Jayanti College.
-          </p>
+          </m.p>
         </div>
       </div>
     ),
