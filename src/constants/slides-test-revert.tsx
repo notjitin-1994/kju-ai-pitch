@@ -225,7 +225,7 @@ export const slidesData: Slide[] = [
                  Traditional graduates face <span className="text-white font-medium italic font-serif">zero differentiation</span> in competitive recruitment cycles.
                </p>
                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                 <motion.div initial={{ width: "0%" }} whileInView={{ width: "20%" }} className="h-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]" transition={{ delay: 0.5, duration: 1.5 }} />
+                 <m.div initial={{ width: "0%" }} whileInView={{ width: "20%" }} className="h-full bg-red-500 shadow-[0_0_15px_rgba(239,68,68,0.5)]" transition={{ delay: 0.5, duration: 1.5 }} />
                </div>
                <p className="text-3xl font-mono text-red-400 uppercase tracking-widest">Confidence Index: Critical Low</p>
             </div>
@@ -300,7 +300,7 @@ export const slidesData: Slide[] = [
                  Educators face a <span className="text-white font-medium italic font-serif text-left">structural ceiling</span> in productivity without AI enablement.
                </p>
                <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                 <motion.div initial={{ width: "0%" }} whileInView={{ width: "85%" }} className="h-full bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)]" transition={{ delay: 0.5, duration: 1.5 }} />
+                 <m.div initial={{ width: "0%" }} whileInView={{ width: "85%" }} className="h-full bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.5)]" transition={{ delay: 0.5, duration: 1.5 }} />
                </div>
                <p className="text-3xl font-mono text-orange-400 uppercase tracking-widest">Effort Index: Dangerously High</p>
             </div>
@@ -369,7 +369,7 @@ export const slidesData: Slide[] = [
     content: (
       <div className="relative w-full h-full flex flex-col items-center justify-center px-12 text-center">
         <div className="relative z-10 w-full flex flex-col items-center">
-          <motion.div
+          <m.div
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="mb-16 backdrop-blur-md bg-white/5 border border-white/10 px-10 py-5 rounded-sm text-center"
@@ -377,8 +377,8 @@ export const slidesData: Slide[] = [
             <span className="text-6xl text-[#b0c5c6] font-display line-through decoration-[#4F46E5] decoration-8 opacity-60 uppercase tracking-[0.3em]">
               Don't launch "AI Courses"
             </span>
-          </motion.div>
-          <motion.h1 
+          </m.div>
+          <m.h1 
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3, duration: 0.8 }}
@@ -386,7 +386,7 @@ export const slidesData: Slide[] = [
           >
             <span className="font-serif italic font-light text-white/90 block mb-6">Architect a</span>
             <span className="text-[#A7DADB] uppercase block">Cognitive Campus.</span>
-          </motion.h1>
+          </m.h1>
         </div>
       </div>
     ),
@@ -517,13 +517,13 @@ export const slidesData: Slide[] = [
     bgImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200",
     content: (
       <div className="flex flex-col h-full justify-center space-y-12 py-4 text-left">
-        <motion.p 
+        <m.p 
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 0.6, y: 0 }}
           className="text-6xl text-[#A7DADB] font-display italic font-light text-left pl-2"
         >
           Turning every teacher into a high-leverage educator.
-        </motion.p>
+        </m.p>
         <div className="grid grid-cols-3 gap-8 h-full items-center">
           {[
             { 
@@ -597,22 +597,22 @@ export const slidesData: Slide[] = [
             <div className="absolute top-0 right-0 -mr-32 -mt-32 w-96 h-96 bg-[#4F46E5]/15 blur-[120px] rounded-full group-hover:bg-[#4F46E5]/25 transition-all duration-1000" />
             <div className="absolute bottom-0 left-0 -ml-32 -mb-32 w-80 h-80 bg-[#A7DADB]/10 blur-[100px] rounded-full" />
             <div className="relative z-10 w-full flex flex-col items-center text-center">
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12 flex items-center gap-3 text-center">
+              <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12 flex items-center gap-3 text-center">
                 <Gauge className="w-5 h-5 text-[#A7DADB]" />
                 <span className="text-[#A7DADB] font-display text-xl uppercase tracking-[0.4em] opacity-70 text-center">Efficiency Quotient</span>
-              </motion.div>
+              </m.div>
               <div className="relative mb-16 text-center">
                 <svg className="w-80 h-80 transform -rotate-90">
                   <circle cx="160" cy="160" r="145" stroke="currentColor" strokeWidth="1" fill="transparent" className="text-white/10" />
                   <circle cx="160" cy="160" r="130" stroke="currentColor" strokeWidth="20" fill="transparent" className="text-[#142433]" />
-                  <motion.circle cx="160" cy="160" r="130" stroke="#A7DADB" strokeWidth="20" strokeLinecap="round" fill="transparent" strokeDasharray={2 * Math.PI * 130} initial={{ strokeDashoffset: 2 * Math.PI * 130 }} whileInView={{ strokeDashoffset: (2 * Math.PI * 130) * (1 - 0.55) }} transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.5 }} className="filter drop-shadow-[0_0_12px_rgba(167,218,219,0.3)]" />
+                  <m.circle cx="160" cy="160" r="130" stroke="#A7DADB" strokeWidth="20" strokeLinecap="round" fill="transparent" strokeDasharray={2 * Math.PI * 130} initial={{ strokeDashoffset: 2 * Math.PI * 130 }} whileInView={{ strokeDashoffset: (2 * Math.PI * 130) * (1 - 0.55) }} transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1], delay: 0.5 }} className="filter drop-shadow-[0_0_12px_rgba(167,218,219,0.3)]" />
                 </svg>
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}>
+                  <m.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} transition={{ delay: 1, duration: 0.8 }}>
                     <span className="text-7xl font-display font-bold text-white tracking-tighter text-center">40-60</span>
                     <span className="text-5xl font-display font-light text-[#A7DADB] ml-1 text-center">%</span>
                     <p className="text-[#b0c5c6] font-body text-xl uppercase tracking-widest mt-2 text-center text-center">Time Reclaimed</p>
-                  </motion.div>
+                  </m.div>
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-8 w-full max-w-md px-4 text-center">
@@ -710,7 +710,7 @@ export const slidesData: Slide[] = [
               detail: "Accelerating research through automated hypothesis generation, complex simulations, and neural pattern recognition."
             }
           ].map((item, i) => (
-            <motion.div 
+            <m.div 
               key={i}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -750,7 +750,7 @@ export const slidesData: Slide[] = [
                   </p>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>
@@ -771,7 +771,7 @@ export const slidesData: Slide[] = [
           
           {/* Central Divider Pulse */}
           <div className="absolute left-1/2 top-10 bottom-10 w-[1px] bg-gradient-to-b from-transparent via-[#A7DADB]/20 to-transparent z-10 text-left text-left">
-            <motion.div 
+            <m.div 
               animate={{ top: ["0%", "100%"], opacity: [0, 1, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
               className="absolute w-[3px] h-20 -left-[1px] bg-[#A7DADB] shadow-[0_0_15px_#A7DADB] text-left text-left"
@@ -792,7 +792,7 @@ export const slidesData: Slide[] = [
                 { icon: <BookOpen size={40} />, label: "Theoretical learning" },
                 { icon: <EyeOff size={40} />, label: "No tracking or analytics" },
               ].map((item, idx) => (
-                <motion.div 
+                <m.div 
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 0.4, x: 0 }}
                   transition={{ delay: idx * 0.1 }}
@@ -803,7 +803,7 @@ export const slidesData: Slide[] = [
                     {item.icon}
                   </div>
                   <span className="text-6xl font-light font-body text-left leading-tight text-left">{item.label}</span>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
@@ -822,7 +822,7 @@ export const slidesData: Slide[] = [
                 { icon: <FlaskConical size={40} />, label: "Applied & embedded AI labs", highlight: "Directly Integrated" },
                 { icon: <BarChart3 size={40} />, label: "Measurable, data-backed outcomes", highlight: "Guaranteed ROI" },
               ].map((item, idx) => (
-                <motion.div 
+                <m.div 
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.2 + (idx * 0.1), type: "spring", stiffness: 100 }}
@@ -836,7 +836,7 @@ export const slidesData: Slide[] = [
                     <span className="text-6xl font-medium text-white font-body text-left leading-tight text-left">{item.label}</span>
                     <span className="text-3xl font-display uppercase tracking-widest text-[#A7DADB]/60 text-left mt-1 text-left">{item.highlight}</span>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
@@ -862,7 +862,7 @@ export const slidesData: Slide[] = [
 
         <div className="relative z-10 flex flex-col gap-0 w-full">
           {/* NODE 01: DISCOVERY */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -884,10 +884,10 @@ export const slidesData: Slide[] = [
                 Full-spectrum infrastructure audit and subject-matter frontier identification across core streams.
               </p>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* NODE 02: VANGUARD */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -909,7 +909,7 @@ export const slidesData: Slide[] = [
                 Deployment in 3 lead departments to establish ROI metrics and core adoption baselines.
               </p>
             </div>
-          </motion.div>
+          </m.div>
         </div>
       </div>
     ),
@@ -930,7 +930,7 @@ export const slidesData: Slide[] = [
 
         <div className="relative z-10 flex flex-col gap-0 w-full">
           {/* NODE 03: FULL SCALE */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
@@ -952,10 +952,10 @@ export const slidesData: Slide[] = [
                 Seamless expansion of successful AI frameworks across all institutional departments and administrative student services.
               </p>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* NODE 04: MARKET LEADER */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, x: 30 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
@@ -977,7 +977,7 @@ export const slidesData: Slide[] = [
                 Solidifying Kristu Jayanti as the definitive AI-native institution, leading the era of Indian higher education prestige.
               </p>
             </div>
-          </motion.div>
+          </m.div>
         </div>
 
       </div>
@@ -991,7 +991,7 @@ export const slidesData: Slide[] = [
     content: (
       <div className="grid grid-cols-2 gap-10 h-full py-4">
         {/* TANGIBLE ROI - DATA & GROWTH AESTHETIC */}
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0, x: -40 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -1019,7 +1019,7 @@ export const slidesData: Slide[] = [
                 { icon: Briefcase, text: "Placement Premium", sub: "Higher tier recruitment" }, 
                 { icon: Zap, text: "Admin Velocity", sub: "Operational overhead reduction" } 
               ].map((item, i) => (
-                <motion.div 
+                <m.div 
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1033,14 +1033,14 @@ export const slidesData: Slide[] = [
                     <span className="text-6xl text-white font-display font-bold uppercase tracking-tight block group-hover/item:translate-x-2 transition-transform duration-500">{item.text}</span>
                     <span className="text-3xl text-[#b0c5c6] font-body font-light block opacity-70">{item.sub}</span>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </m.div>
 
         {/* INTANGIBLE ROI - LEGACY & PRESTIGE AESTHETIC */}
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0, x: 40 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
@@ -1068,7 +1068,7 @@ export const slidesData: Slide[] = [
                 { icon: Globe, text: "Academic Legacy", sub: "Future-proof institutional brand" }, 
                 { icon: Sparkles, text: "Digital Frontier", sub: "Technological prestige" } 
               ].map((item, i) => (
-                <motion.div 
+                <m.div 
                   key={i}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -1082,11 +1082,11 @@ export const slidesData: Slide[] = [
                     <span className="text-6xl text-white font-display font-bold uppercase tracking-tight block group-hover/item:translate-x-2 transition-transform duration-500">{item.text}</span>
                     <span className="text-3xl text-[#b0c5c6] font-body font-light block opacity-70">{item.sub}</span>
                   </div>
-                </motion.div>
+                </m.div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     ),
     notes: "Let's talk ROI. This is not an IT expense. This is an investment into enrollment growth. Being an AI-first campus becomes your strongest admissions marketing tool."
@@ -1100,7 +1100,7 @@ export const slidesData: Slide[] = [
         <div className="grid grid-cols-2 gap-16 w-full max-w-[1400px] h-[560px] relative z-10">
           
           {/* LEAD PANE (Left - The Winner) */}
-          <motion.div
+          <m.div
             initial={{ scale: 1.15, opacity: 0, filter: "brightness(2) blur(10px)" }}
             whileInView={{ scale: 1, opacity: 1, filter: "brightness(1) blur(0px)" }}
             transition={{ type: "spring", damping: 15, stiffness: 80, delay: 0.8 }}
@@ -1129,14 +1129,14 @@ export const slidesData: Slide[] = [
             </div>
 
             <div className="relative z-10">
-              <motion.span 
+              <m.span 
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: 1.2 }}
                 className="font-body italic text-[#A7DADB]/80 text-5xl mb-4 block"
               >
                 One Led.
-              </motion.span>
+              </m.span>
               <h2 className="text-7xl font-display font-bold text-white leading-none tracking-tighter uppercase">
                 Became <br />
                 <span className="text-[#A7DADB]">AI-First.</span>
@@ -1146,7 +1146,7 @@ export const slidesData: Slide[] = [
             <div className="relative z-10 flex justify-between items-end">
               <div className="flex gap-2">
                 {[1, 2, 3, 4].map(i => (
-                  <motion.div 
+                  <m.div 
                     key={i}
                     animate={{ opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
@@ -1159,10 +1159,10 @@ export const slidesData: Slide[] = [
                 <p>ECOSYSTEM_STATUS: EVOLVED</p>
               </div>
             </div>
-          </motion.div>
+          </m.div>
 
           {/* ADAPT PANE (Right - The Lagger) */}
-          <motion.div
+          <m.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 1.2, delay: 2.0, ease: "easeOut" }}
@@ -1206,7 +1206,7 @@ export const slidesData: Slide[] = [
                 <div className="w-4 h-1 bg-white" />
               </div>
             </div>
-          </motion.div>
+          </m.div>
 
         </div>
 
@@ -1236,20 +1236,20 @@ export const slidesData: Slide[] = [
           <div className="absolute bottom-[-10%] right-[-10%] w-[1000px] h-[1000px] rounded-full bg-[#A7DADB]/10 blur-[180px]" />
         </div>
 
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5, staggerChildren: 0.2 }}
           className="relative z-10 w-full max-w-lg flex flex-col items-center text-center"
         >
           {/* NORTH STAR LOGO SECTION - LARGE & PROMINENT */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
             className="relative mb-14 group"
           >
-            <motion.div 
+            <m.div 
               animate={{ 
                 scale: [1, 1.15, 1], 
                 opacity: [0.2, 0.4, 0.2],
@@ -1264,10 +1264,10 @@ export const slidesData: Slide[] = [
               <div className="h-32 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent" />
               <img src="/logo.png" alt="Smartslate" className="h-40 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(79,70,229,0.4)]" />
             </div>
-          </motion.div>
+          </m.div>
 
           {/* CINEMATIC TYPOGRAPHY */}
-          <motion.div 
+          <m.div 
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
@@ -1278,11 +1278,11 @@ export const slidesData: Slide[] = [
                 Will you lead the era?
               </h1>
             </div>
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
 
         {/* PERSISTENT FOOTER METRICS */}
-        <motion.div 
+        <m.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.8, duration: 1 }}
@@ -1302,7 +1302,7 @@ export const slidesData: Slide[] = [
             <Globe className="w-4 h-4 opacity-40 animate-spin-slow" />
             <span>Academic Excellence // 2026</span>
           </div>
-        </motion.div>
+        </m.div>
       </div>
     ),
     notes: "The only question left is: will we shape this future, or just react to it when it's too late?"
