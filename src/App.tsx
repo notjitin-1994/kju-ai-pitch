@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion';
 import { slidesData } from './constants/slides';
 import { Slide } from './components/Slide';
 import { Navigation } from './components/Navigation';
@@ -70,10 +70,11 @@ export default function App() {
   const progress = ((currentSlide + 1) / slidesData.length) * 100;
 
   return (
-    <div 
-      ref={fullscreenRef}
-      className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#4F46E5]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
-    >
+    <LazyMotion features={domAnimation}>
+      <div 
+        ref={fullscreenRef}
+        className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#4F46E5]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
+      >
       {/* Dynamic Font Injection */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;500;700&display=swap');
@@ -145,5 +146,6 @@ export default function App() {
         </div>
       )}
     </div>
+    </LazyMotion>
   );
 }
