@@ -68,7 +68,7 @@ export const Slide: React.FC<SlideProps> = ({ slide, direction }) => {
       )}
 
       {/* 2. Atmospheric Lighting Leaks (Global Consistency) */}
-      <div className="absolute top-1/4 -right-20 w-[800px] h-[800px] bg-[#4F46E5]/15 blur-[150px] rounded-full pointer-events-none z-10" />
+      <div className="absolute top-1/4 -right-20 w-[800px] h-[800px] bg-[#A7DADB]/15 blur-[150px] rounded-full pointer-events-none z-10" />
       <div className="absolute bottom-1/4 -left-20 w-[600px] h-[600px] bg-[#A7DADB]/10 blur-[120px] rounded-full pointer-events-none z-10" />
 
       {/* 3. Content Layer */}

@@ -143,7 +143,7 @@ export const slidesData: Slide[] = [
                   <div className="absolute inset-0 bg-[#020C1B]/40 backdrop-blur-[6px]" />
                 </div>
                 <div className="relative z-10 p-12 h-full flex flex-col justify-between text-left">
-                  <div className="p-8 bg-[#4F46E5]/20 rounded-[40px] w-fit border border-[#4F46E5]/30">
+                  <div className="p-8 bg-[#A7DADB]/20 rounded-[40px] w-fit border border-[#A7DADB]/30">
                     <item.icon size={64} className="text-[#A7DADB]" />
                   </div>
                   <div className="space-y-6">
@@ -213,7 +213,7 @@ export const slidesData: Slide[] = [
                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover grayscale brightness-[0.2] blur-[3px] group-hover:scale-110 transition-transform duration-1000" />
                <div className="absolute inset-0 bg-gradient-to-br from-[#020C1B]/80 to-transparent" />
             </div>
-            <div className="absolute -right-20 -top-20 text-[#4F46E5]/5 group-hover:text-[#4F46E5]/10 transition-colors duration-1000">
+            <div className="absolute -right-20 -top-20 text-[#A7DADB]/5 group-hover:text-[#A7DADB]/10 transition-colors duration-1000">
                <TrendingUp size={400} />
             </div>
             <div className="relative z-10 space-y-12">
@@ -320,7 +320,7 @@ export const slidesData: Slide[] = [
     content: (
       <div className="grid grid-cols-2 gap-24 h-full items-center">
         <div className="relative h-full flex flex-col justify-center text-left">
-          <div className="bg-[#4F46E5]/40 backdrop-blur-2xl p-20 rounded-[100px] border border-white/10 shadow-2xl relative overflow-hidden group text-left">
+          <div className="bg-[#A7DADB]/40 backdrop-blur-2xl p-20 rounded-[100px] border border-white/10 shadow-2xl relative overflow-hidden group text-left">
             <div className="absolute inset-0 z-0">
                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80&w=1200" className="w-full h-full object-cover grayscale brightness-[0.25] blur-[3px] group-hover:scale-110 transition-transform duration-1000" />
                <div className="absolute inset-0 bg-gradient-to-br from-[#020C1B]/80 to-transparent" />
@@ -374,7 +374,7 @@ export const slidesData: Slide[] = [
             whileInView={{ opacity: 1, y: 0 }}
             className="mb-16 backdrop-blur-md bg-white/5 border border-white/10 px-10 py-5 rounded-sm text-center"
           >
-            <span className="text-6xl text-[#b0c5c6] font-display line-through decoration-[#4F46E5] decoration-8 opacity-60 uppercase tracking-[0.3em]">
+            <span className="text-6xl text-[#b0c5c6] font-display line-through decoration-[#A7DADB] decoration-8 opacity-60 uppercase tracking-[0.3em]">
               Don't launch "AI Courses"
             </span>
           </m.div>
@@ -428,10 +428,10 @@ export const slidesData: Slide[] = [
               className="absolute inset-0 w-full h-full object-cover grayscale opacity-30 brightness-[0.3] group-hover:scale-110 group-hover:opacity-50 transition-all duration-1000"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#020C1B] via-[#020C1B]/40 to-transparent z-10" />
-            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#4F46E5] rounded-full blur-[100px] opacity-0 group-hover:opacity-20 transition-opacity duration-700" />
+            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-[#A7DADB] rounded-full blur-[100px] opacity-0 group-hover:opacity-20 transition-opacity duration-700" />
             <div className="relative z-20 h-full p-10 flex flex-col justify-between text-left">
               <div className="flex justify-between items-start">
-                <div className="p-4 rounded-2xl bg-[#4F46E5]/20 border border-[#A7DADB]/20 group-hover:bg-[#4F46E5] group-hover:border-[#A7DADB]/40 transition-all duration-500 transform group-hover:-translate-y-1">
+                <div className="p-4 rounded-2xl bg-[#A7DADB]/20 border border-[#A7DADB]/20 group-hover:bg-[#A7DADB] group-hover:border-[#A7DADB]/40 transition-all duration-500 transform group-hover:-translate-y-1">
                   <item.icon size={36} className="text-[#A7DADB]" />
                 </div>
                 <span className="text-6xl font-serif italic text-[#A7DADB]/20 group-hover:text-[#A7DADB]/40 transition-colors duration-700 drop-shadow-[0_0_15px_rgba(167,218,219,0.3)]">
@@ -474,7 +474,7 @@ export const slidesData: Slide[] = [
               { icon: Database, title: "Data Layer", detail: "Unified knowledge access." }
             ].map((item, i) => (
               <div key={i} className="flex gap-8 items-center p-8 bg-[#142433] rounded-[32px] border border-white/10 hover:border-[#A7DADB]/40 transition-all duration-500 group text-left">
-                <div className="bg-[#4F46E5] p-6 rounded-[24px] group-hover:scale-105 transition-transform duration-500">
+                <div className="bg-[#A7DADB] p-6 rounded-[24px] group-hover:scale-105 transition-transform duration-500">
                   <item.icon size={40} className="text-white" strokeWidth={1.5} />
                 </div>
                 <div className="space-y-1">
@@ -503,7 +503,7 @@ export const slidesData: Slide[] = [
             <p className="text-6xl text-[#A7DADB] font-bold uppercase tracking-[0.2em] mt-2 font-display">
               Efficiency Surge
             </p>
-            <div className="mt-12 w-24 h-1.5 bg-[#4F46E5] rounded-full shadow-[0_0_15px_rgba(79,70,229,0.8)] mx-auto" />
+            <div className="mt-12 w-24 h-1.5 bg-[#A7DADB] rounded-full shadow-[0_0_15px_rgba(79,70,229,0.8)] mx-auto" />
           </div>
         </div>
       </div>
@@ -581,7 +581,7 @@ export const slidesData: Slide[] = [
               { icon: <RefreshCw size={36} />, title: "AI Update Ecosystem", desc: "Continuous software and methodology evolution" }
             ].map((item, index) => (
               <div key={index} className="flex items-center gap-10 group transition-all duration-500 text-left">
-                <div className="p-6 rounded-[32px] bg-[#4F46E5] text-white border border-[#4F46E5]/40 shadow-xl group-hover:scale-105 transition-all">
+                <div className="p-6 rounded-[32px] bg-[#A7DADB] text-white border border-[#A7DADB]/40 shadow-xl group-hover:scale-105 transition-all">
                   {item.icon}
                 </div>
                 <div className="space-y-1 text-left">
@@ -594,7 +594,7 @@ export const slidesData: Slide[] = [
         </div>
         <div className="col-span-5 text-left">
           <div className="relative p-12 rounded-[80px] bg-[#142433]/80 border border-white/10 backdrop-blur-3xl overflow-hidden group shadow-2xl h-[700px] flex flex-col items-center justify-center text-left">
-            <div className="absolute top-0 right-0 -mr-32 -mt-32 w-96 h-96 bg-[#4F46E5]/15 blur-[120px] rounded-full group-hover:bg-[#4F46E5]/25 transition-all duration-1000" />
+            <div className="absolute top-0 right-0 -mr-32 -mt-32 w-96 h-96 bg-[#A7DADB]/15 blur-[120px] rounded-full group-hover:bg-[#A7DADB]/25 transition-all duration-1000" />
             <div className="absolute bottom-0 left-0 -ml-32 -mb-32 w-80 h-80 bg-[#A7DADB]/10 blur-[100px] rounded-full" />
             <div className="relative z-10 w-full flex flex-col items-center text-center">
               <m.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-12 flex items-center gap-3 text-center">
@@ -621,7 +621,7 @@ export const slidesData: Slide[] = [
                   <div className="text-center"><p className="text-white font-display text-2xl font-medium text-center text-center">Administrative</p><p className="text-[#b0c5c6] font-body text-xl uppercase tracking-tighter opacity-60 text-center text-center">Recovery Mode</p></div>
                 </div>
                 <div className="flex flex-col items-center text-center space-y-3 text-center">
-                  <div className="p-3 rounded-2xl bg-white/5 border border-white/10"><Target className="w-6 h-6 text-[#4F46E5]" /></div>
+                  <div className="p-3 rounded-2xl bg-white/5 border border-white/10"><Target className="w-6 h-6 text-[#A7DADB]" /></div>
                   <div className="text-center"><p className="text-white font-display text-2xl font-medium text-center text-center">Pedagogical</p><p className="text-[#b0c5c6] font-body text-xl uppercase tracking-tighter opacity-60 text-center text-center">Strategic Focus</p></div>
                 </div>
               </div>
@@ -648,7 +648,7 @@ export const slidesData: Slide[] = [
             { title: "Enterprise Lab", desc: "Direct delivery in enterprise-grade sandboxes.", icon: Cpu }
           ].map((item, i) => (
             <div key={i} className="flex gap-10 items-start group text-left text-left">
-              <div className="bg-[#A7DADB] p-6 rounded-3xl group-hover:bg-[#4F46E5] group-hover:text-white transition-all border border-white/5 shadow-xl text-[#020C1B]">
+              <div className="bg-[#A7DADB] p-6 rounded-3xl group-hover:bg-[#A7DADB] group-hover:text-white transition-all border border-white/5 shadow-xl text-[#020C1B]">
                 <item.icon size={48} />
               </div>
               <div className="space-y-4 text-left">
@@ -764,7 +764,7 @@ export const slidesData: Slide[] = [
     content: (
       <div className="h-full flex flex-col justify-center relative px-12 py-8 text-left">
         {/* Atmospheric Light Leaks */}
-        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#4F46E5]/10 blur-[120px] rounded-full text-left" />
+        <div className="absolute top-1/4 -left-20 w-96 h-96 bg-[#A7DADB]/10 blur-[120px] rounded-full text-left" />
         <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-[#A7DADB]/10 blur-[120px] rounded-full text-left text-left" />
 
         <div className="relative grid grid-cols-2 gap-20 w-full h-full items-center text-left text-left text-left">
@@ -829,7 +829,7 @@ export const slidesData: Slide[] = [
                   key={idx} 
                   className="group flex items-center gap-10 text-left"
                 >
-                  <div className="p-5 rounded-2xl border border-[#A7DADB]/30 bg-[#4F46E5]/20 text-[#A7DADB] shadow-[0_0_15px_rgba(167,218,219,0.1)] group-hover:shadow-[0_0_25px_rgba(167,218,219,0.2)] transition-all text-left">
+                  <div className="p-5 rounded-2xl border border-[#A7DADB]/30 bg-[#A7DADB]/20 text-[#A7DADB] shadow-[0_0_15px_rgba(167,218,219,0.1)] group-hover:shadow-[0_0_25px_rgba(167,218,219,0.2)] transition-all text-left">
                     {item.icon}
                   </div>
                   <div className="flex flex-col text-left">
@@ -1232,7 +1232,7 @@ export const slidesData: Slide[] = [
         {/* ATMOSPHERIC BACKGROUND LAYERS */}
         <div className="absolute inset-0 z-0">
           <div className="absolute inset-0 backdrop-blur-md bg-[#020C1B]/40" />
-          <div className="absolute top-[-10%] left-[-10%] w-[1200px] h-[1200px] rounded-full bg-[#4F46E5]/15 blur-[200px]" />
+          <div className="absolute top-[-10%] left-[-10%] w-[1200px] h-[1200px] rounded-full bg-[#A7DADB]/15 blur-[200px]" />
           <div className="absolute bottom-[-10%] right-[-10%] w-[1000px] h-[1000px] rounded-full bg-[#A7DADB]/10 blur-[180px]" />
         </div>
 
@@ -1257,7 +1257,7 @@ export const slidesData: Slide[] = [
               transition={{ 
                 duration: 5, repeat: Infinity, ease: "easeInOut" 
               }}
-              className="absolute inset-[-40px] bg-gradient-to-tr from-[#A7DADB] to-[#4F46E5] rounded-full blur-[100px]" 
+              className="absolute inset-[-40px] bg-gradient-to-tr from-[#A7DADB] to-[#A7DADB] rounded-full blur-[100px]" 
             />
             <div className="relative flex items-center justify-center gap-16 transition-all duration-1000 group-hover:scale-105">
               <img src="/kjc-logo.png" alt="KJC" className="h-48 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(167,218,219,0.4)]" />

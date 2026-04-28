@@ -6,7 +6,7 @@ A world-class, industry-leading aesthetic for AI-driven institutional transforma
 ## Color Palette
 - **Primary Background**: Deep Slate (`#020C1B`)
 - **Accent 1 (Brand)**: Smart Teal (`#A7DADB`)
-- **Accent 2 (Action)**: Action Indigo (`#4F46E5`)
+- **Accent 2 (Action)**: Smart Teal (`#A7DADB`)
 - **Secondary Text**: Muted Silver (`#b0c5c6`)
 - **Surface**: Surface Slate (`#142433`)
 
@@ -17,7 +17,7 @@ A world-class, industry-leading aesthetic for AI-driven institutional transforma
 
 ## Core Aesthetics
 1. **Glassmorphism**: Use semi-transparent `#142433` surfaces with `backdrop-blur-xl` and 1px borders of `white/10` or `smartTeal/20`.
-2. **Atmospheric Lighting**: Deep radial gradients and blur-based "light leaks" using Action Indigo and Smart Teal (5-10% opacity).
+2. **Atmospheric Lighting**: Deep radial gradients and blur-based "light leaks" using Smart Teal and Smart Teal (5-10% opacity).
 3. **Motion**: Smooth, spring-based transitions using `framer-motion`. Staggered reveals for all list items and grid cards.
 4. **Imagery**: High-impact, full-bleed or large-scale Unsplash imagery with grayscale and brightness filters to maintain high text contrast.
 5. **No Emojis**: Use exclusively Lucide React icons for a professional, technical feel.

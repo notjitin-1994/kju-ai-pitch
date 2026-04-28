@@ -39,7 +39,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         <button 
           onClick={onNext}
           disabled={currentSlide === totalSlides - 1}
-          className="p-3 rounded-full bg-[#4F46E5] text-white hover:bg-[#4F46E5]/80 disabled:opacity-30 transition-colors shadow-[0_0_15px_rgba(79,70,229,0.4)]"
+          className="p-3 rounded-full bg-[#A7DADB] text-white hover:bg-[#A7DADB]/80 disabled:opacity-30 transition-colors shadow-[0_0_15px_rgba(79,70,229,0.4)]"
         >
           <ChevronRight size={24} />
         </button>

@@ -73,7 +73,7 @@ export default function App() {
     <LazyMotion features={domAnimation}>
       <div 
         ref={fullscreenRef}
-        className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#4F46E5]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
+        className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#A7DADB]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
       >
       {/* Dynamic Font Injection */}
       <style>{`
@@ -83,7 +83,7 @@ export default function App() {
         
         .custom-scrollbar::-webkit-scrollbar { width: 12px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #4F46E5; border-radius: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #A7DADB; border-radius: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #A7DADB; }
 
         /* Ensure no scroll on root */
@@ -116,7 +116,7 @@ export default function App() {
       {/* Main Content Area */}
       <main className={`flex-grow flex items-center justify-center relative overflow-hidden ${isPresentMode ? 'h-full w-full' : ''}`}>
         {/* Decorative ambient light */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-[#4F46E5]/10 rounded-full blur-[180px] pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1200px] h-[1200px] bg-[#A7DADB]/10 rounded-full blur-[180px] pointer-events-none"></div>
         
         <ScalingContainer>
           <AnimatePresence initial={false} custom={direction} mode="wait">
