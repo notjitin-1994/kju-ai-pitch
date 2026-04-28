@@ -39,7 +39,7 @@ export default function App() {
   const progress = ((currentSlide + 1) / slidesData.length) * 100;
 
   return (
-    <div className="bg-[#020C1B] text-white font-body h-screen flex flex-col overflow-hidden selection:bg-[#4F46E5]/30">
+    <div className="bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#4F46E5]/30 fixed inset-0">
       {/* Dynamic Font Injection */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;500;700&display=swap');
@@ -50,6 +50,9 @@ export default function App() {
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #4F46E5; border-radius: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #A7DADB; }
+
+        /* Ensure no scroll on root */
+        #root { height: 100%; width: 100%; overflow: hidden; position: fixed; inset: 0; }
       `}</style>
 
       {/* Progress Bar */}

@@ -170,8 +170,8 @@ export const slidesData: Slide[] = [
     bgImage: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=2000",
     content: (
       <div className="h-full flex flex-col justify-center text-left">
-        <div className="space-y-12 max-w-lg">
-          <p className="text-5xl text-[#b0c5c6] font-body font-light leading-tight">
+        <div className="space-y-12 max-w-5xl">
+          <p className="text-[52px] text-[#b0c5c6] font-body font-light leading-tight whitespace-nowrap">
             This disconnect creates a <span className="text-white font-normal italic font-serif">massive gap</span> in the ecosystem.
           </p>
           <div className="space-y-8">
