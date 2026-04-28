@@ -7,6 +7,7 @@ interface NavigationProps {
   onPrev: () => void;
   onNext: () => void;
   onToggleNotes: () => void;
+  onTogglePresent: () => void;
   showNotes: boolean;
 }
 
@@ -16,6 +17,7 @@ export const Navigation: React.FC<NavigationProps> = ({
   onPrev,
   onNext,
   onToggleNotes,
+  onTogglePresent,
   showNotes,
 }) => {
   return (
@@ -43,7 +45,14 @@ export const Navigation: React.FC<NavigationProps> = ({
         </button>
       </div>
 
-      <div>
+      <div className="flex gap-4">
+        <button 
+          onClick={onTogglePresent}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-[#142433] text-[#b0c5c6] hover:text-white transition-colors"
+          title="Full Screen Presentation"
+        >
+          <span className="hidden md:inline">Present</span>
+        </button>
         <button 
           onClick={onToggleNotes}
           className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-colors ${
