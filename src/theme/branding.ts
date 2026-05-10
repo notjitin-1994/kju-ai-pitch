@@ -1,7 +1,7 @@
 export const theme = {
   colors: {
     smartTeal: '#A7DADB',
-    actionIndigo: '#A7DADB',
+    actionIndigo: '#6366f1', // Brand Accent Indigo
     deepSlate: '#020C1B',
     surfaceSlate: '#142433',
     secondaryText: '#b0c5c6',

@@ -1,23 +1,111 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { AnimatePresence, LazyMotion, domAnimation } from 'framer-motion';
+import { AnimatePresence, LazyMotion, domAnimation, motion } from 'framer-motion';
 import { slidesData } from './constants/slides';
 import { Slide } from './components/Slide';
 import { Navigation } from './components/Navigation';
 import { Notes } from './components/Notes';
 import { Logo } from './components/Logo';
 import { ScalingContainer } from './components/ScalingContainer';
+import { PresenterLayout } from './components/PresenterLayout';
+import { Clock, SkipForward, LayoutPanelLeft } from 'lucide-react';
+
+import { SlideStepProvider } from './context/SlideStepContext';
 
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [subStep, setSubStep] = useState(0);
   const [[slideIndex, direction], setSlide] = useState([0, 0]);
   const [showNotes, setShowNotes] = useState(false);
   const [isPresentMode, setIsPresentMode] = useState(false);
+  const [view, setView] = useState('audience');
   const fullscreenRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'presenter') {
+      setView('presenter');
+    }
+  }, []);
+  
+  // Sync logic using BroadcastChannel
+  useEffect(() => {
+    const channel = new BroadcastChannel('presentation-sync');
+    
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data.type === 'SYNC_SLIDE') {
+        if (event.data.index !== currentSlide) {
+          setCurrentSlide(event.data.index);
+          setSlide([event.data.index, event.data.index > currentSlide ? 1 : -1]);
+        }
+        if (event.data.subStep !== subStep) {
+          setSubStep(event.data.subStep);
+        }
+      }
+    };
+    
+    channel.addEventListener('message', handleMessage);
+    channel.postMessage({ type: 'SYNC_SLIDE', index: currentSlide, subStep });
+
+    return () => {
+      channel.removeEventListener('message', handleMessage);
+      channel.close();
+    };
+  }, [currentSlide, subStep]);
+
   const paginate = (newDirection: number) => {
+    // Define max sub-steps for specific slides
+    const slideConfig: Record<number, number> = {
+      2: 3,  // Slide 3
+      4: 4,  // Slide 5
+      5: 4,  // Slide 6
+      6: 3,  // Slide 7
+      7: 3,  // Slide 8
+      8: 3,  // Slide 9 (3 Pillars)
+      9: 1,  // Slide 10 (Pillar 1 - Reveal card)
+      10: 3, // Slide 11 (Pillar 2 - 3 items)
+      11: 2, // Slide 12 (Pillar 2 Outcomes - Text items, then Gauge)
+      12: 1, // Slide 13 (Pillar 3 - Reveal list)
+      13: 3, // Slide 14 (Subject Mastery - 3 streams)
+      15: 2, // Slide 16 (Roadmap Node 1 & 2)
+      16: 2, // Slide 17 (Roadmap Node 3 & 4)
+      17: 2, // Slide 18 (ROI Story - Left, then Right)
+      18: 3, // Slide 19 (The Case - Sections)
+      19: 1, // Slide 20 (Final - Reveal text)
+    };
+
+    // 1. Handle Sub-Step Navigation within the current slide
+    const maxSubStep = slideConfig[currentSlide];
+    if (maxSubStep !== undefined) {
+      if (newDirection === 1 && subStep < maxSubStep) {
+        setSubStep(prev => prev + 1);
+        return;
+      }
+      if (newDirection === -1 && subStep > 0) {
+        setSubStep(prev => prev - 1);
+        return;
+      }
+    }
+
+    // Special handling for exiting presentation on Slide 20 (Index 19)
+    if (currentSlide === 19 && newDirection === 1 && subStep === 1) {
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      }
+      setIsPresentMode(false);
+      // We don't return here so it goes to Slide 21
+    }
+
+    // 2. Handle Slide Transitions
     const nextIndex = currentSlide + newDirection;
     if (nextIndex >= 0 && nextIndex < slidesData.length) {
+      // Determine starting sub-step for the next slide
+      // If going Forward (1): Start at 0
+      // If going Backward (-1): Start at max sub-step for that slide
+      const nextMaxSubStep = slideConfig[nextIndex];
+      const startSubStep = (newDirection === -1 && nextMaxSubStep !== undefined) ? nextMaxSubStep : 0;
+
       setCurrentSlide(nextIndex);
+      setSubStep(startSubStep);
       setSlide([nextIndex, newDirection]);
     }
   };
@@ -64,17 +152,32 @@ export default function App() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentSlide]);
+  }, [currentSlide, subStep]); // Added subStep to dependencies
 
   const slide = slidesData[currentSlide];
   const progress = ((currentSlide + 1) / slidesData.length) * 100;
 
+  if (view === 'presenter') {
+    return (
+      <LazyMotion features={domAnimation}>
+        <SlideStepProvider subStep={subStep}>
+          <PresenterLayout 
+            currentSlide={currentSlide} 
+            paginate={paginate} 
+            notes={slide.notes} 
+          />
+        </SlideStepProvider>
+      </LazyMotion>
+    );
+  }
+
   return (
     <LazyMotion features={domAnimation}>
-      <div 
-        ref={fullscreenRef}
-        className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#A7DADB]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
-      >
+      <SlideStepProvider subStep={subStep}>
+        <div 
+          ref={fullscreenRef}
+          className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#A7DADB]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
+        >
       {/* Dynamic Font Injection */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;500;700&display=swap');
@@ -146,6 +249,7 @@ export default function App() {
         </div>
       )}
     </div>
+    </SlideStepProvider>
     </LazyMotion>
   );
 }
