@@ -11,6 +11,7 @@ import { Clock, SkipForward, LayoutPanelLeft } from 'lucide-react';
 
 import { SlideStepProvider } from './context/SlideStepContext';
 import SmartslateTerms from './pages/TermsPage';
+import { cn } from './lib/utils';
 
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
