@@ -10,6 +10,7 @@ import { PresenterLayout } from './components/PresenterLayout';
 import { Clock, SkipForward, LayoutPanelLeft } from 'lucide-react';
 
 import { SlideStepProvider } from './context/SlideStepContext';
+import SmartslateTerms from './pages/TermsPage';
 
 export default function App() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -18,7 +19,16 @@ export default function App() {
   const [showNotes, setShowNotes] = useState(false);
   const [isPresentMode, setIsPresentMode] = useState(false);
   const [view, setView] = useState('audience');
+  const [pathname, setPathname] = useState(window.location.pathname);
   const fullscreenRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleLocationChange = () => {
+      setPathname(window.location.pathname);
+    };
+    window.addEventListener('popstate', handleLocationChange);
+    return () => window.removeEventListener('popstate', handleLocationChange);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -27,7 +37,7 @@ export default function App() {
     }
   }, []);
   
-  // Sync logic using BroadcastChannel
+  // ... rest of the existing useEffect for sync logic ...
   useEffect(() => {
     const channel = new BroadcastChannel('presentation-sync');
     
@@ -156,6 +166,10 @@ export default function App() {
 
   const slide = slidesData[currentSlide];
   const progress = ((currentSlide + 1) / slidesData.length) * 100;
+
+  if (pathname === '/terms') {
+    return <SmartslateTerms />;
+  }
 
   if (view === 'presenter') {
     return (

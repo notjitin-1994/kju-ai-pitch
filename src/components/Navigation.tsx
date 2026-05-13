@@ -1,6 +1,5 @@
 import React from 'react';
-import { ChevronLeft, ChevronRight, Mic, LayoutDashboard } from 'lucide-react';
-import { ShimmerButton } from './ui/shimmer-button';
+import { ChevronLeft, ChevronRight, Mic } from 'lucide-react';
 
 interface NavigationProps {
   currentSlide: number;
@@ -21,8 +20,11 @@ export const Navigation: React.FC<NavigationProps> = ({
   onTogglePresent,
   showNotes,
 }) => {
-  const launchPresenter = () => {
+  const handlePresent = () => {
+    // Launch presenter view first
     window.open('/?view=presenter', 'PresenterWindow', 'width=1200,height=800');
+    // Then request fullscreen on the main window
+    onTogglePresent();
   };
 
   return (
@@ -31,15 +33,6 @@ export const Navigation: React.FC<NavigationProps> = ({
         <span className="text-[#b0c5c6] font-bold text-lg whitespace-nowrap min-w-[100px]">
           {currentSlide + 1} <span className="text-[#142433] mx-1">/</span> <span className="text-sm font-normal text-[#b0c5c6]">{totalSlides}</span>
         </span>
-        
-        <ShimmerButton 
-          onClick={launchPresenter}
-          className="h-10 text-xs font-bold uppercase tracking-widest bg-[#142433] border-[#A7DADB]/20"
-          shimmerColor="#A7DADB"
-        >
-          <LayoutDashboard size={14} className="mr-2" />
-          Launch Presenter View
-        </ShimmerButton>
       </div>
 
       <div className="flex gap-4">
@@ -59,11 +52,22 @@ export const Navigation: React.FC<NavigationProps> = ({
         </button>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex gap-4 items-center">
+        <a 
+          href="/terms" 
+          onClick={(e) => {
+            e.preventDefault();
+            window.history.pushState({}, '', '/terms');
+            window.dispatchEvent(new PopStateEvent('popstate'));
+          }}
+          className="text-[#b0c5c6]/40 hover:text-[#A7DADB] transition-colors text-[10px] uppercase tracking-widest mr-4"
+        >
+          Terms
+        </a>
         <button 
-          onClick={onTogglePresent}
+          onClick={handlePresent}
           className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold bg-[#142433] text-[#b0c5c6] hover:text-white transition-colors"
-          title="Full Screen Presentation"
+          title="Launch Presenter View & Full Screen"
         >
           <span className="hidden md:inline">Present</span>
         </button>
