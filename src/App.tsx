@@ -169,7 +169,25 @@ export default function App() {
   const progress = ((currentSlide + 1) / slidesData.length) * 100;
 
   if (pathname === '/terms') {
-    return <SmartslateTerms />;
+    return (
+      <LazyMotion features={domAnimation}>
+        <div className="bg-[#020C1B] text-white font-body min-h-screen w-full selection:bg-[#A7DADB]/30 relative z-0">
+          <style>{`
+            html, body { 
+              height: auto !important; 
+              overflow: auto !important; 
+              position: relative !important;
+            }
+            #root { 
+              height: auto !important; 
+              overflow: visible !important; 
+              position: relative !important; 
+            }
+          `}</style>
+          <SmartslateTerms />
+        </div>
+      </LazyMotion>
+    );
   }
 
   if (view === 'presenter') {
