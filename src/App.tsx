@@ -190,7 +190,11 @@ export default function App() {
       <SlideStepProvider subStep={subStep}>
         <div 
           ref={fullscreenRef}
-          className={`bg-[#020C1B] text-white font-body h-[100dvh] w-full flex flex-col overflow-hidden selection:bg-[#A7DADB]/30 fixed inset-0 ${isPresentMode ? 'z-[100]' : ''}`}
+          className={cn(
+            "bg-[#020C1B] text-white font-body min-h-screen w-full flex flex-col selection:bg-[#A7DADB]/30",
+            pathname !== '/terms' && "h-[100dvh] overflow-hidden fixed inset-0",
+            isPresentMode && "z-[100]"
+          )}
         >
       {/* Dynamic Font Injection */}
       <style>{`
@@ -203,8 +207,8 @@ export default function App() {
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #A7DADB; border-radius: 6px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #A7DADB; }
 
-        /* Ensure no scroll on root */
-        #root { height: 100%; width: 100%; overflow: hidden; position: fixed; inset: 0; }
+        /* Ensure no scroll on root for presentation */
+        ${pathname !== '/terms' ? '#root { height: 100%; width: 100%; overflow: hidden; position: fixed; inset: 0; }' : ''}
 
         /* Hide UI in native fullscreen */
         div:fullscreen .hide-in-fullscreen { display: none; }

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { Logo } from '../components/Logo';
 
 /**
  * Utility for Tailwind classes merging
@@ -104,18 +105,13 @@ const SmartslateTerms: React.FC = () => {
       <nav className="sticky top-0 w-full z-40 px-10 py-6 flex justify-between items-center backdrop-blur-md border-b border-white/5">
         <BlurFade delay={0.1}>
           <div 
-            className="flex items-center gap-2 cursor-pointer transition-transform active:scale-95" 
+            className="cursor-pointer transition-transform active:scale-95" 
             onClick={() => {
               window.history.pushState({}, '', '/');
               window.dispatchEvent(new PopStateEvent('popstate'));
             }}
           >
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#A7DADB] to-[#142433] flex items-center justify-center shadow-lg shadow-[#A7DADB]/10">
-              <ShieldAlert className="w-5 h-5 text-[#020C1B]" />
-            </div>
-            <span className="font-['Quicksand'] font-bold text-xl tracking-tight text-white uppercase">
-              Smartslate<span className="text-[#A7DADB]">.io</span>
-            </span>
+            <Logo />
           </div>
         </BlurFade>
         <BlurFade delay={0.2}>
