@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;1,300;1,400&family=Quicksand:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,26 +18,39 @@
 }
 
 :root {
-  background-color: #020C1B;
-  color: white;
+  --smart-teal: #A7DADB;
+  --action-indigo: #6366f1;
+  --deep-slate: #020C1B;
+  --surface-slate: #142433;
+  --secondary-text: #b0c5c6;
 }
 
 html, body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  min-height: 100vh;
   width: 100%;
-  overflow: hidden;
+  background-color: #020C1B;
+  color: white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-body {
-  background-color: #020C1B;
+  overflow-x: hidden;
 }
 
 @layer base {
   html {
     font-family: 'Lato', sans-serif;
   }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Quicksand', sans-serif;
+  }
 }
+
+.font-display { font-family: 'Quicksand', sans-serif; }
+.font-body { font-family: 'Lato', sans-serif; }
+
+.custom-scrollbar::-webkit-scrollbar { width: 8px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #A7DADB/30; border-radius: 4px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #A7DADB/50; }
+
