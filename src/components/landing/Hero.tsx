@@ -1,88 +1,177 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
-import { ShimmerButton } from '../ui/shimmer-button';
+import { Play, ArrowUpRight } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
+import { FlickeringGrid } from '../ui/flickering-grid';
+import { MeshGradient } from '../ui/atmosphere';
+
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export const Hero = () => {
+  const [videoOpen, setVideoOpen] = useState(false);
+
   return (
-    <section className="relative min-h-screen flex flex-col justify-center px-8 md:px-24 py-32 overflow-hidden bg-[#020C1B]">
-      {/* Atmospheric Background */}
-      <div className="absolute top-[-10%] left-[-10%] w-[1000px] h-[1000px] rounded-full bg-[#A7DADB]/5 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[800px] h-[800px] rounded-full bg-[#6366f1]/5 blur-[120px] pointer-events-none" />
-      
-      <div className="relative z-10 max-w-7xl w-full grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        <div className="space-y-8">
+    <section
+      id="hero"
+      className="relative min-h-[100dvh] flex items-center px-6 md:px-12 lg:px-24 pt-32 pb-24 overflow-hidden"
+    >
+      {/* Atmosphere */}
+      <MeshGradient intensity="med" />
+      <div className="absolute inset-0 pointer-events-none [mask-image:linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.18)_55%,transparent_100%)]">
+        <FlickeringGrid
+          color="rgb(167, 218, 219)"
+          squareSize={3}
+          gridGap={8}
+          flickerChance={0.15}
+          maxOpacity={0.18}
+        />
+      </div>
+
+      {/* Asymmetric 7/5 grid */}
+      <div className="relative z-10 max-w-[1440px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-y-16 gap-x-12 lg:gap-x-20 items-center">
+        {/* Left: editorial copy */}
+        <div className="lg:col-span-7 space-y-9">
+          {/* Overline */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="flex items-center gap-4"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: easeOut }}
+            className="flex items-center gap-3"
           >
-            <div className="p-2 rounded-lg bg-[#A7DADB]/10 border border-[#A7DADB]/20">
-              <Sparkles size={20} className="text-[#A7DADB]" />
-            </div>
-            <span className="text-[#A7DADB] font-display font-bold uppercase tracking-[0.3em] text-sm">
-              Project: Institutional Intelligence
+            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+            <span className="font-display text-[11px] md:text-xs tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+              01  ·  A Strategic Partnership
             </span>
+            <span aria-hidden className="hidden md:inline-block h-px w-12 bg-gradient-to-r from-[#A7DADB]/40 to-transparent" />
           </motion.div>
 
+          {/* Editorial display heading */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="text-5xl md:text-8xl font-display font-bold text-white leading-[1] tracking-tighter text-left"
+            transition={{ duration: 0.9, delay: 0.08, ease: easeOut }}
+            className="font-display font-bold text-white leading-[0.94] tracking-[-0.025em] text-[clamp(3rem,7vw,7.25rem)]"
           >
-            The AI <br />
-            <span className="italic font-serif text-[#A7DADB]">Transformation</span>
+            An era is
+            <br />
+            <span className="font-serif-display italic font-normal text-[#A7DADB]">
+              being written.
+            </span>
           </motion.h1>
 
+          {/* Sub copy */}
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-            className="text-xl text-[#b0c5c6] font-body font-light max-w-xl leading-relaxed text-left"
+            transition={{ duration: 0.8, delay: 0.18, ease: easeOut }}
+            className="font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.55] max-w-[58ch]"
           >
-            Deploying a world-class cognitive ecosystem at Kristu Jayanti College. 
-            Defining the future of intelligence in higher education through the 3-Pillar Model.
+            Smartslate, in partnership with{" "}
+            <span className="text-white font-normal">Kristu Jayanti University</span>, presents{" "}
+            <span className="font-serif-display italic text-white">Project Institutional Intelligence</span>:
+            a three-pillar architecture for the AI-native campus.
           </motion.p>
 
+          {/* CTA cluster */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-            className="pt-8"
+            transition={{ duration: 0.8, delay: 0.28, ease: easeOut }}
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pt-2"
           >
-            <ShimmerButton className="shadow-2xl" background="#6366f1">
-              <span className="whitespace-pre-wrap text-center text-sm font-bold uppercase tracking-[0.1em] text-white lg:text-lg py-2 px-4">
-                Reach Out
+            <button
+              type="button"
+              onClick={() => setVideoOpen(true)}
+              className="group relative inline-flex items-center gap-3 rounded-full px-6 py-3.5 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-sm tracking-[0.18em] uppercase"
+              style={{
+                boxShadow: "0 12px 30px -10px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)",
+                transition: "transform 160ms var(--ease-out-expo), box-shadow 200ms var(--ease-out-expo)",
+              }}
+            >
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#020C1B]/90">
+                <Play className="h-3 w-3 fill-[#A7DADB] text-[#A7DADB] translate-x-[0.5px]" strokeWidth={0} />
               </span>
-            </ShimmerButton>
+              <span>Watch the Film</span>
+              <span className="ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">02:52</span>
+            </button>
+
+            <a
+              href="#problem"
+              className="group inline-flex items-center gap-2 font-display font-bold text-sm tracking-[0.18em] uppercase text-[#b0c5c6] hover:text-white"
+              style={{ transition: "color 200ms var(--ease-out-expo)" }}
+            >
+              <span>Read the proposal</span>
+              <ArrowUpRight
+                className="h-4 w-4"
+                strokeWidth={2}
+                style={{ transition: "transform 220ms var(--ease-out-expo)" }}
+              />
+            </a>
+          </motion.div>
+
+          {/* Trust strip */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.6, ease: easeOut }}
+            className="pt-12 mt-2 border-t border-white/[0.06] grid grid-cols-3 gap-x-6 max-w-xl"
+          >
+            {[
+              { k: "Pillars", v: "03" },
+              { k: "Efficiency Gain", v: "70%" },
+              { k: "Era", v: "2026" },
+            ].map((m) => (
+              <div key={m.k} className="flex flex-col gap-1.5 pt-5">
+                <span className="font-display text-[10px] tracking-[0.35em] uppercase text-[#b0c5c6]/60 font-bold">
+                  {m.k}
+                </span>
+                <span className="font-display text-2xl md:text-3xl text-white tabular-nums tracking-tight">
+                  {m.v}
+                </span>
+              </div>
+            ))}
           </motion.div>
         </div>
 
+        {/* Right: video as cinematic still */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full"
+          initial={{ opacity: 0, scale: 0.97, y: 24 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1.1, delay: 0.18, ease: easeOut }}
+          className="lg:col-span-5 relative"
         >
-          <div className="absolute -inset-4 bg-gradient-to-tr from-[#A7DADB]/20 to-transparent blur-2xl rounded-[40px] opacity-50" />
+          {/* Soft halo */}
+          <div
+            aria-hidden
+            className="absolute -inset-12 -z-10 blur-3xl opacity-60"
+            style={{
+              background:
+                "radial-gradient(circle at 70% 30%, rgba(167,218,219,0.18) 0%, transparent 55%), radial-gradient(circle at 30% 80%, rgba(232,199,137,0.10) 0%, transparent 55%)",
+            }}
+          />
           <HeroVideoDialog
             videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-video.mp4"
-            thumbnailSrc="https://images.unsplash.com/photo-1620712943543-bcc4628c9759?auto=format&fit=crop&q=80&w=1280"
-            thumbnailAlt="KJU AI Transformation Video"
-            animationStyle="from-center"
+            thumbnailSrc="/video-thumbnail.jpg"
+            thumbnailAlt="Project Institutional Intelligence  ·  Watch the film"
+            durationLabel="02:52"
+            externallyOpen={videoOpen}
+            onOpenChange={setVideoOpen}
           />
+
+          {/* Caption */}
+          <div className="mt-6 flex items-center justify-between text-[10px] md:text-[11px] tracking-[0.32em] uppercase text-[#b0c5c6]/70 font-display font-bold">
+            <span>Smartslate × KJU</span>
+            <span className="tabular-nums">KJU_COGNITIVE_V1.0</span>
+          </div>
         </motion.div>
       </div>
 
-      {/* Decorative HUD Element */}
+      {/* Bottom HUD line */}
       <motion.div
-        initial={{ scaleX: 0 }}
+        initial={{ scaleX: 0, transformOrigin: "left" }}
         animate={{ scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 1, ease: "circOut" }}
-        className="absolute bottom-24 left-8 md:left-24 right-8 md:right-24 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/20 to-transparent"
+        transition={{ duration: 1.6, delay: 0.6, ease: easeOut }}
+        className="absolute bottom-12 left-6 md:left-12 lg:left-24 right-6 md:right-12 lg:right-24 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/25 to-transparent"
       />
     </section>
   );

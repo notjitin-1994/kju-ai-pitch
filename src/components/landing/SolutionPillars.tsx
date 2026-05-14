@@ -1,106 +1,205 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Building2, Users, GraduationCap, ArrowRight } from 'lucide-react';
+import { Building2, Users, GraduationCap, ArrowUpRight } from 'lucide-react';
+import { MeshGradient, Vignette } from '../ui/atmosphere';
+
+const easeOut = [0.16, 1, 0.3, 1] as const;
 
 const pillars = [
   {
-    id: "01",
-    title: "AI-Enabled Campus",
-    sub: "Operations & Management",
+    id: '01',
+    title: 'AI-Enabled Campus',
+    sub: 'Operations & Management',
     icon: Building2,
-    img: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&q=80&w=800",
-    detail: "Intelligent concierge, success modeling, and unified institutional knowledge data layer."
+    img: '/v2-pillar-1.jpg',
+    body: 'A 24/7 cognitive concierge, at-risk student modelling, and a unified institutional data layer. The campus runs on intelligence, not paperwork.',
+    metric: { k: 'Operational Lift', v: '70%' },
+    span: 'lg:col-span-7',
+    feature: true,
   },
   {
-    id: "02",
-    title: "AI-Augmented Faculty",
-    sub: "Teaching & Efficiency",
+    id: '02',
+    title: 'AI-Augmented Faculty',
+    sub: 'Teaching & Efficiency',
     icon: Users,
-    img: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=800",
-    detail: "Masterclasses, specialized pedagogy, and AI-assisted task flows for lesson planning."
+    img: '/v2-pillar-2.jpg',
+    body: 'Subject-specific masterclasses, AI-designed assessment cycles, and a continuous update ecosystem. The hours buried in prep return to the craft of teaching.',
+    metric: { k: 'Time Reclaimed', v: '40–60%' },
+    span: 'lg:col-span-5',
+    feature: false,
   },
   {
-    id: "03",
-    title: "AI-First Students",
-    sub: "Learning & Outcomes",
+    id: '03',
+    title: 'AI-First Students',
+    sub: 'Learning & Outcomes',
     icon: GraduationCap,
-    img: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=800",
-    detail: "Mandatory literacy, project-based models, and direct enterprise lab experience."
-  }
+    img: '/v2-pillar-3.jpg',
+    body: 'Mandatory AI literacy across every stream, real-world AI-augmented assignments, and an enterprise lab with industry-grade tooling. Graduates do not use AI; they practise it.',
+    metric: { k: 'Outcome', v: 'Practitioners' },
+    span: 'lg:col-span-12',
+    feature: false,
+    horizontal: true,
+  },
 ];
 
 export const SolutionPillars = () => {
   return (
-    <section className="relative py-32 px-8 md:px-24 bg-[#020C1B]">
-      <div className="relative z-10 max-w-7xl mx-auto space-y-24">
-        <div className="space-y-4">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-4xl md:text-6xl font-display font-bold text-white tracking-tight text-left"
-          >
-            The <span className="text-[#A7DADB] italic font-serif">3-Pillar Model</span>
-          </motion.h2>
-          <motion.p
-             initial={{ opacity: 0, x: -20 }}
-             whileInView={{ opacity: 0.6, x: 0 }}
-             transition={{ duration: 0.8, delay: 0.2 }}
-             className="text-xl text-[#b0c5c6] font-body font-light max-w-2xl text-left"
-          >
-            A comprehensive institutional architecture designed to move the college from adaptation to dominance.
-          </motion.p>
+    <section
+      id="solution"
+      className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden"
+    >
+      <MeshGradient intensity="low" />
+
+      <div className="relative z-10 max-w-[1440px] mx-auto">
+        {/* Chapter header */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
+          <div className="lg:col-span-3 lg:col-start-1">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, ease: easeOut }}
+              className="flex items-center gap-3"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                Chapter 03
+              </span>
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
+              className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+            >
+              The 3-Pillar Model
+            </motion.p>
+          </div>
+
+          <div className="lg:col-span-9">
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, ease: easeOut }}
+              className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
+            >
+              Architect the
+              <br />
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">
+                Cognitive Campus.
+              </span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
+              className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
+            >
+              Three interconnected pillars. One operating system. Intelligence is no longer a
+              subject on the timetable, it is the substrate the institution runs on.
+            </motion.p>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {pillars.map((pillar, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: idx * 0.2 }}
-              className="relative group h-[600px] rounded-[40px] border border-[#A7DADB]/20 bg-[#142433]/40 backdrop-blur-xl overflow-hidden transition-all duration-700 hover:border-[#A7DADB]/50 shadow-2xl"
-            >
-              <img 
-                src={pillar.img} 
-                alt={pillar.title}
-                className="absolute inset-0 w-full h-full object-cover grayscale opacity-20 brightness-[0.3] group-hover:scale-110 group-hover:opacity-40 transition-all duration-1000"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#020C1B] via-transparent to-transparent z-10" />
-              
-              <div className="relative z-20 h-full p-12 flex flex-col justify-between items-start text-left">
-                <div className="flex justify-between items-start w-full">
-                  <div className="p-5 rounded-2xl bg-[#A7DADB]/10 border border-[#A7DADB]/20 group-hover:bg-[#A7DADB] group-hover:border-[#A7DADB]/40 transition-all duration-500 transform group-hover:-translate-y-1">
-                    <pillar.icon size={32} className="text-[#A7DADB] group-hover:text-[#020C1B]" />
-                  </div>
-                  <span className="text-6xl font-serif italic text-[#A7DADB]/10 group-hover:text-[#A7DADB]/30 transition-colors duration-700">
-                    {pillar.id}
-                  </span>
+        {/* Asymmetric bento */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+          {pillars.map((p, i) => {
+            const Icon = p.icon;
+            const isHorizontal = p.horizontal;
+            return (
+              <motion.article
+                key={p.id}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.85, delay: i * 0.08, ease: easeOut }}
+                className={`${p.span} group relative isolate overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0a1729]/70 backdrop-blur-xl glass-refract`}
+              >
+                {/* Image layer */}
+                <div className={`${isHorizontal ? 'lg:absolute lg:inset-y-0 lg:left-0 lg:w-5/12' : 'absolute inset-0'} overflow-hidden`}>
+                  <img
+                    src={p.img}
+                    alt={p.title}
+                    className="h-full w-full object-cover scale-100 group-hover:scale-[1.04]"
+                    style={{
+                      filter: 'contrast(1.1) saturate(0.85) brightness(0.55)',
+                      transition: 'transform 1200ms var(--ease-out-expo), filter 700ms var(--ease-out-expo)',
+                    }}
+                  />
+                  {/* Gradient cap */}
+                  <div
+                    aria-hidden
+                    className="absolute inset-0"
+                    style={{
+                      background: isHorizontal
+                        ? 'linear-gradient(90deg, rgba(10,23,41,0.3) 0%, rgba(10,23,41,0.95) 90%)'
+                        : 'linear-gradient(180deg, rgba(10,23,41,0.25) 0%, rgba(10,23,41,0.92) 75%, rgba(10,23,41,1) 100%)',
+                    }}
+                  />
                 </div>
+                <Vignette strength={0.4} />
 
-                <div className="space-y-6">
-                  <div className="space-y-2">
-                    <h3 className="text-3xl md:text-4xl font-display font-bold text-white uppercase tracking-tight text-left">
-                      {pillar.title}
+                {/* Content */}
+                <div
+                  className={`relative z-10 ${
+                    isHorizontal
+                      ? 'lg:ml-[41.6667%] p-10 md:p-14 lg:py-16'
+                      : 'p-8 md:p-10'
+                  } flex flex-col ${isHorizontal ? 'gap-6' : 'gap-8'} ${
+                    p.feature ? 'min-h-[480px] md:min-h-[560px]' : isHorizontal ? '' : 'min-h-[480px] md:min-h-[560px]'
+                  }`}
+                >
+                  {/* Top row */}
+                  <div className="flex items-start justify-between gap-6">
+                    <div
+                      className="inline-flex items-center justify-center h-12 w-12 rounded-xl border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07]"
+                      style={{ transition: 'background-color 350ms var(--ease-out-expo), border-color 350ms var(--ease-out-expo)' }}
+                    >
+                      <Icon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
+                    </div>
+                    <span className="font-serif-display italic text-[#A7DADB]/15 text-[5rem] md:text-[6rem] leading-none tracking-tighter group-hover:text-[#A7DADB]/30"
+                      style={{ transition: 'color 700ms var(--ease-out-expo)' }}
+                    >
+                      {p.id}
+                    </span>
+                  </div>
+
+                  {/* Middle: title + body */}
+                  <div className={`flex-1 flex flex-col ${isHorizontal ? '' : 'justify-end'}`}>
+                    <p className="font-display text-[11px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold">
+                      {p.sub}
+                    </p>
+                    <h3 className="mt-3 font-display font-bold text-white text-3xl md:text-4xl tracking-tight uppercase">
+                      {p.title}
                     </h3>
-                    <div className="h-1 w-12 bg-[#A7DADB] group-hover:w-24 transition-all duration-700" />
-                    <p className="text-[#A7DADB] font-mono text-sm tracking-widest uppercase opacity-70">
-                      {pillar.sub}
+                    <p className="mt-5 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.6] max-w-[48ch]">
+                      {p.body}
                     </p>
                   </div>
-                  <p className="text-lg md:text-xl text-[#b0c5c6] font-body font-light leading-relaxed">
-                    {pillar.detail}
-                  </p>
-                  <motion.div 
-                    whileHover={{ x: 5 }}
-                    className="flex items-center gap-2 text-[#A7DADB] font-display font-bold text-sm uppercase tracking-widest cursor-pointer group/link"
-                  >
-                    Explore Pillar <ArrowRight size={16} className="group-hover/link:translate-x-1 transition-transform" />
-                  </motion.div>
+
+                  {/* Bottom: metric + link */}
+                  <div className="flex items-end justify-between gap-6 pt-6 border-t border-white/[0.06]">
+                    <div className="flex flex-col">
+                      <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/55 font-bold">
+                        {p.metric.k}
+                      </span>
+                      <span className="mt-1.5 font-display text-2xl md:text-3xl text-white tabular-nums tracking-tight">
+                        {p.metric.v}
+                      </span>
+                    </div>
+                    <span className="inline-flex items-center gap-2 font-display text-xs tracking-[0.3em] uppercase font-bold text-[#A7DADB] press-scale">
+                      Detail
+                      <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+
+              </motion.article>
+            );
+          })}
         </div>
       </div>
     </section>

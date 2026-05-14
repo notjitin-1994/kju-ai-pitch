@@ -1,100 +1,168 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Brain, Users, Building2, ShieldAlert, Zap, Target } from 'lucide-react';
+import { MeshGradient } from '../ui/atmosphere';
 
-const problems = [
+const easeOut = [0.16, 1, 0.3, 1] as const;
+
+const failures = [
   {
-    category: "Students",
-    icon: Brain,
-    items: [
-      { title: "Skill Mismatch", desc: "Theoretical learning disconnected from AI reality.", icon: ShieldAlert },
-      { title: "Zero AI Exposure", desc: "Producing graduates unequipped for the modern toolset.", icon: Zap },
-      { title: "Brand Erosion", desc: "Decreased student marketability in high-stakes roles.", icon: Target }
-    ]
+    num: '01',
+    label: 'Students',
+    status: 'Unguided adoption.',
+    body: 'A generation using artificial intelligence in the shadows. Without guidance. Without ethical framing. Without the practitioner skill that industry now demands at the entry rung.',
+    align: 'left' as const,
   },
   {
-    category: "Faculty",
-    icon: Users,
-    items: [
-      { title: "Manual Preparation", desc: "Curriculum velocity stalled by legacy administrative debt.", icon: ShieldAlert },
-      { title: "Assessment Debt", desc: "Manual grading cycles draining high-value faculty time.", icon: Zap },
-      { title: "Static Pedagogy", desc: "Traditional methods failing to bridge the applied AI gap.", icon: Target }
-    ]
+    num: '02',
+    label: 'Faculty',
+    status: 'Held back.',
+    body: 'Educators ready to lead, buried by yesterday’s tooling. Manual preparation, static pedagogy, and assessment debt drain the very hours that compound into pedagogical mastery.',
+    align: 'right' as const,
   },
   {
-    category: "Brand",
-    icon: Building2,
-    items: [
-      { title: "Legacy Drift", desc: "Institutional reputation lagging behind industry innovation.", icon: ShieldAlert },
-      { title: "Market Gap", desc: "Risk of brand stagnation in a rapidly evolving market.", icon: Zap },
-      { title: "Opportunity Cost", desc: "The cost of delayed transition to AI-native models.", icon: Target }
-    ]
-  }
+    num: '03',
+    label: 'Institutions',
+    status: 'Velocity mismatch.',
+    body: 'Change measured in years, while industry moves in months. The compounding gap erodes brand and legacy every single semester it remains unaddressed.',
+    align: 'left' as const,
+  },
 ];
 
 export const ProblemMatrix = () => {
   return (
-    <section className="relative py-32 px-8 md:px-24 bg-[#020C1B]">
-      <div className="relative z-10 max-w-7xl mx-auto space-y-24">
-        <div className="space-y-4">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-4xl md:text-6xl font-display font-bold text-white tracking-tight text-left"
-          >
-            The <span className="text-[#A7DADB] italic font-serif">Innovation Gap</span>
-          </motion.h2>
-          <motion.div 
-            initial={{ width: 0 }}
-            whileInView={{ width: 120 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            className="h-1 bg-[#A7DADB]"
-          />
-        </div>
+    <section
+      id="problem"
+      className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden"
+    >
+      <MeshGradient intensity="low" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {problems.map((group, idx) => (
+      <div className="relative z-10 max-w-[1440px] mx-auto">
+        {/* Chapter header */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-24 md:mb-32">
+          <div className="lg:col-span-3 lg:col-start-1">
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: idx * 0.2 }}
-              className="space-y-12"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, ease: easeOut }}
+              className="flex items-center gap-3"
             >
-              <div className="flex items-center gap-4">
-                <div className="p-4 rounded-2xl bg-[#A7DADB]/10 border border-[#A7DADB]/20 shadow-[0_0_20px_rgba(167,218,219,0.1)]">
-                  <group.icon size={32} className="text-[#A7DADB]" />
-                </div>
-                <h3 className="text-3xl font-display font-bold text-white uppercase tracking-widest">{group.category}</h3>
-              </div>
-
-              <div className="space-y-8">
-                {group.items.map((item, itemIdx) => (
-                  <motion.div
-                    key={itemIdx}
-                    whileHover={{ x: 10 }}
-                    className="p-8 rounded-[32px] bg-[#142433]/40 backdrop-blur-xl border border-white/5 hover:border-[#A7DADB]/30 transition-all group"
-                  >
-                    <div className="flex gap-6 items-start">
-                      <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-500 group-hover:bg-red-500 group-hover:text-white transition-all">
-                        <item.icon size={20} />
-                      </div>
-                      <div className="space-y-2">
-                        <h4 className="text-xl font-display font-bold text-white uppercase tracking-tight">{item.title}</h4>
-                        <p className="text-[#b0c5c6] font-body font-light leading-relaxed">{item.desc}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                Chapter 02
+              </span>
             </motion.div>
-          ))}
-        </div>
-      </div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
+              className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+            >
+              The Innovation Gap
+            </motion.p>
+          </div>
 
-      {/* Background Decorative Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-radial-gradient from-[#A7DADB]/5 to-transparent pointer-events-none" />
+          <div className="lg:col-span-9">
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, ease: easeOut }}
+              className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
+            >
+              Three forces.
+              <br />
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">
+                One systemic moment of truth.
+              </span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
+              className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
+            >
+              Across every campus in India, three failures are converging. They are not separate
+              problems. They are facets of one systemic moment, compounding every semester it goes
+              unaddressed.
+            </motion.p>
+          </div>
+        </div>
+
+        {/* Editorial failure rows */}
+        <div className="space-y-2">
+          {failures.map((f, i) => {
+            const isLeft = f.align === 'left';
+            return (
+              <motion.article
+                key={f.num}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
+                className="relative grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-10 py-14 md:py-20 border-t border-white/[0.07] group"
+              >
+                {/* Hover accent line */}
+                <span
+                  aria-hidden
+                  className="absolute top-0 left-0 h-px bg-[#A7DADB]/70 w-0 group-hover:w-full"
+                  style={{ transition: 'width 800ms var(--ease-out-expo)' }}
+                />
+
+                {/* Numeral */}
+                <div
+                  className={`${
+                    isLeft ? 'lg:col-span-4 lg:col-start-1' : 'lg:col-span-4 lg:col-start-9'
+                  } flex flex-col gap-3`}
+                >
+                  <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB]/80 font-bold">
+                    Failure
+                  </span>
+                  <span className="font-serif-display italic text-white/95 leading-none text-[clamp(7rem,16vw,12rem)] tracking-[-0.04em]">
+                    {f.num}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div
+                  className={`${
+                    isLeft ? 'lg:col-span-7 lg:col-start-6' : 'lg:col-span-7 lg:col-start-1 lg:row-start-1'
+                  } flex flex-col justify-center max-w-[58ch]`}
+                >
+                  <h3 className="font-display font-bold text-white text-3xl md:text-5xl tracking-tight uppercase">
+                    {f.label}
+                  </h3>
+                  <p className="mt-2 font-serif-display italic text-[#A7DADB] text-xl md:text-2xl">
+                    {f.status}
+                  </p>
+                  <p className="mt-6 font-body font-light text-[#b0c5c6] text-base md:text-lg leading-[1.65]">
+                    {f.body}
+                  </p>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        {/* Closing line */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          className="mt-24 md:mt-32 pt-12 border-t border-white/[0.07] flex flex-col md:flex-row items-start md:items-end justify-between gap-8"
+        >
+          <p className="font-display text-2xl md:text-4xl text-white max-w-[28ch] leading-[1.15] tracking-tight">
+            Three failures.{' '}
+            <span className="font-serif-display italic text-[#A7DADB]">One moment of truth.</span>
+          </p>
+          <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/55 font-bold whitespace-nowrap">
+            Section 02 / 04
+          </span>
+        </motion.div>
+      </div>
     </section>
   );
 };

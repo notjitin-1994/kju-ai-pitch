@@ -1,114 +1,211 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Gauge, Clock, Target, Rocket } from 'lucide-react';
+import { Gauge, Clock, Trophy } from 'lucide-react';
+import { NumberTicker } from '../ui/number-ticker';
+import { MeshGradient } from '../ui/atmosphere';
 
-const metrics = [
+const easeOut = [0.16, 1, 0.3, 1] as const;
+
+type Metric = {
+  display: 'number' | 'range' | 'ordinal';
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  rangeFrom?: number;
+  rangeTo?: number;
+  ordinal?: { lead: string; tail: string };
+  label: string;
+  detail: string;
+  icon: typeof Gauge;
+};
+
+const metrics: Metric[] = [
   {
-    value: "70%",
-    label: "Efficiency Surge",
-    sub: "Operational Benchmarking",
+    display: 'number',
+    value: 70,
+    suffix: '%',
+    label: 'Operational Lift',
+    detail: 'Efficiency gained across institutional operations through the AI-Enabled Campus stack.',
     icon: Gauge,
-    color: "#A7DADB"
   },
   {
-    value: "40-60%",
-    label: "Time Reclaimed",
-    sub: "Faculty Administrative Recovery",
+    display: 'range',
+    value: 60,
+    rangeFrom: 40,
+    rangeTo: 60,
+    suffix: '%',
+    label: 'Time Reclaimed',
+    detail: 'Faculty preparation hours redirected from administrative burden to high-value teaching.',
     icon: Clock,
-    color: "#A7DADB"
   },
   {
-    value: "100%",
-    label: "Core Upgrade",
-    sub: "Institutional Ecosystem Status",
-    icon: Target,
-    color: "#A7DADB"
-  }
+    display: 'ordinal',
+    value: 1,
+    ordinal: { lead: '1', tail: 'st' },
+    label: 'AI-Native Institution',
+    detail: 'A first-mover position no competitor can purchase after the fact. The brand weight of the era.',
+    icon: Trophy,
+  },
 ];
+
+const MetricNumber: React.FC<{ m: Metric }> = ({ m }) => {
+  if (m.display === 'number') {
+    return (
+      <span className="font-display font-bold text-white tabular-nums tracking-[-0.04em] leading-[0.85] text-[clamp(7rem,16vw,15rem)]">
+        <NumberTicker value={m.value} />
+        <span className="text-[#A7DADB] text-[0.55em] align-top translate-y-2">{m.suffix}</span>
+      </span>
+    );
+  }
+  if (m.display === 'range') {
+    return (
+      <span className="font-display font-bold text-white tabular-nums tracking-[-0.04em] leading-[0.85] text-[clamp(6rem,13vw,12rem)]">
+        {m.rangeFrom}
+        <span className="text-[#A7DADB]/50 mx-2 font-thin">/</span>
+        {m.rangeTo}
+        <span className="text-[#A7DADB] text-[0.55em] align-top translate-y-2">{m.suffix}</span>
+      </span>
+    );
+  }
+  return (
+    <span className="font-display font-bold text-white leading-[0.85] tracking-[-0.04em] text-[clamp(7rem,16vw,15rem)]">
+      {m.ordinal!.lead}
+      <span className="font-serif-display italic font-normal text-[#A7DADB] text-[0.5em]">
+        {m.ordinal!.tail}
+      </span>
+    </span>
+  );
+};
 
 export const Outcomes = () => {
   return (
-    <section className="relative py-32 px-8 md:px-24 bg-[#020C1B]">
-      <div className="relative z-10 max-w-7xl mx-auto space-y-24">
-        <div className="space-y-4">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-4xl md:text-6xl font-display font-bold text-white tracking-tight text-left"
-          >
-            The <span className="text-[#A7DADB] italic font-serif">Cognitive Surge</span>
-          </motion.h2>
-          <motion.p
-             initial={{ opacity: 0, x: -20 }}
-             whileInView={{ opacity: 0.6, x: 0 }}
-             transition={{ duration: 0.8, delay: 0.2 }}
-             className="text-xl text-[#b0c5c6] font-body font-light max-w-2xl text-left"
-          >
-            Quantifiable impact across every layer of the institutional footprint.
-          </motion.p>
-        </div>
+    <section
+      id="outcomes"
+      className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden"
+    >
+      <MeshGradient intensity="low" />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {metrics.map((metric, idx) => (
+      <div className="relative z-10 max-w-[1440px] mx-auto">
+        {/* Chapter header */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
+          <div className="lg:col-span-3 lg:col-start-1">
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: idx * 0.2 }}
-              className="relative p-12 rounded-[50px] bg-[#142433]/60 backdrop-blur-2xl border border-white/10 overflow-hidden group hover:border-[#A7DADB]/40 transition-all duration-700 h-[500px] flex flex-col justify-center items-start text-left"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, ease: easeOut }}
+              className="flex items-center gap-3"
             >
-              {/* Background Glow */}
-              <div className="absolute top-0 right-0 -mr-24 -mt-24 w-64 h-64 bg-[#A7DADB]/10 blur-[80px] group-hover:bg-[#A7DADB]/20 transition-all duration-1000" />
-              
-              <div className="relative z-10 space-y-8">
-                <div className="p-4 rounded-2xl bg-[#A7DADB]/10 border border-[#A7DADB]/20 w-fit">
-                  <metric.icon size={32} className="text-[#A7DADB]" />
-                </div>
-                
-                <div className="space-y-2">
-                  <motion.span 
-                    initial={{ scale: 0.5, opacity: 0 }}
-                    whileInView={{ scale: 1, opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.5 + idx * 0.2, ease: [0.16, 1, 0.3, 1] }}
-                    className="text-7xl md:text-8xl font-display font-bold text-white block leading-none tracking-tighter"
-                  >
-                    {metric.value}
-                  </motion.span>
-                  <h4 className="text-2xl md:text-3xl font-display font-bold text-[#A7DADB] uppercase tracking-wider">
-                    {metric.label}
-                  </h4>
-                </div>
-
-                <p className="text-lg text-[#b0c5c6] font-body font-light uppercase tracking-widest opacity-60">
-                  {metric.sub}
-                </p>
-              </div>
-
-              {/* Decorative HUD Lines */}
-              <div className="absolute bottom-8 left-12 right-12 h-px bg-white/5" />
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                Chapter 04
+              </span>
             </motion.div>
-          ))}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
+              className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+            >
+              By the Numbers
+            </motion.p>
+          </div>
+
+          <div className="lg:col-span-9">
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, ease: easeOut }}
+              className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
+            >
+              Measurable.
+              <br />
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">
+                Guaranteed.
+              </span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
+              className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
+            >
+              Three numbers carry the weight of the case. They land in operational performance,
+              faculty capacity, and institutional positioning.
+            </motion.p>
+          </div>
         </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
+        {/* Editorial metric rows */}
+        <div className="space-y-2">
+          {metrics.map((m, i) => {
+            const Icon = m.icon;
+            return (
+              <motion.article
+                key={m.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
+                className="relative grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-10 py-14 md:py-20 border-t border-white/[0.07] group"
+              >
+                <span
+                  aria-hidden
+                  className="absolute top-0 left-0 h-px bg-[#A7DADB]/70 w-0 group-hover:w-full"
+                  style={{ transition: 'width 800ms var(--ease-out-expo)' }}
+                />
+
+                {/* Numeral */}
+                <div className="lg:col-span-7 lg:col-start-1 flex items-center">
+                  <MetricNumber m={m} />
+                </div>
+
+                {/* Content */}
+                <div className="lg:col-span-4 lg:col-start-9 flex flex-col justify-center max-w-[44ch]">
+                  <div className="inline-flex items-center justify-center h-10 w-10 rounded-lg border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07] mb-5">
+                    <Icon className="h-4 w-4 text-[#A7DADB]" strokeWidth={1.5} />
+                  </div>
+                  <p className="font-display text-[11px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold">
+                    Metric 0{i + 1}
+                  </p>
+                  <h3 className="mt-2 font-display font-bold text-white text-2xl md:text-3xl tracking-tight">
+                    {m.label}
+                  </h3>
+                  <p className="mt-4 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.65]">
+                    {m.detail}
+                  </p>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        {/* Closing pull quote */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="p-16 rounded-[60px] bg-gradient-to-br from-[#142433] to-[#020C1B] border border-white/5 flex flex-col md:flex-row items-center justify-between gap-12"
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          className="mt-24 md:mt-32 pt-12 border-t border-white/[0.07] grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-10"
         >
-          <div className="space-y-4 max-w-2xl text-left">
-            <h3 className="text-3xl md:text-4xl font-display font-bold text-white text-left">
-              Ready to redefine the <span className="text-[#A7DADB] italic font-serif">standard?</span>
-            </h3>
-            <p className="text-xl text-[#b0c5c6] font-body font-light text-left">
-              Kristu Jayanti has the choice to lead the next era of Indian higher education. 
-              The infrastructure is ready. The playbook is proven.
-            </p>
-          </div>
-          <div className="p-8 rounded-full bg-[#A7DADB]/10 border border-[#A7DADB]/20 animate-pulse">
-            <Rocket size={48} className="text-[#A7DADB]" />
-          </div>
+          <span
+            aria-hidden
+            className="lg:col-span-1 lg:col-start-1 font-serif-display italic text-[#A7DADB]/60 leading-none text-[clamp(4rem,7vw,6rem)] -translate-y-2"
+          >
+            “
+          </span>
+          <p className="lg:col-span-9 lg:col-start-2 font-serif-display italic text-white text-2xl md:text-4xl leading-[1.25] tracking-tight max-w-[40ch]">
+            Not progress.{' '}
+            <span className="text-[#A7DADB]">
+              Positioning that no competitor can purchase after the fact.
+            </span>
+          </p>
+          <span className="lg:col-span-2 lg:col-start-11 self-end font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/55 font-bold whitespace-nowrap">
+            Section 04 / 04
+          </span>
         </motion.div>
       </div>
     </section>
