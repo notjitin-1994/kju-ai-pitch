@@ -9,10 +9,11 @@ import { Outcomes } from '../components/landing/Outcomes';
 import { CTA } from '../components/landing/CTA';
 import { GrainOverlay } from '../components/ui/atmosphere';
 
-const navLinks: { href: string; label: string }[] = [
+const navLinks: { href: string; label: string; route?: boolean }[] = [
   { href: '#problem', label: 'Premise' },
   { href: '#solution', label: 'Solution' },
   { href: '#outcomes', label: 'Outcomes' },
+  { href: '/pricing', label: 'Pricing', route: true },
 ];
 
 const Navbar: React.FC = () => {
@@ -45,21 +46,37 @@ const Navbar: React.FC = () => {
         </a>
 
         <div className="hidden lg:flex items-center gap-10">
-          {navLinks.map((l) => (
-            <a
-              key={l.href}
-              href={l.href}
-              className="group relative font-display text-xs tracking-[0.3em] uppercase font-bold text-[#b0c5c6]/85 hover:text-white"
-              style={{ transition: 'color 200ms var(--ease-out-expo)' }}
-            >
-              {l.label}
-              <span
-                aria-hidden
-                className="absolute -bottom-2 left-0 right-0 h-px bg-[#A7DADB] origin-left scale-x-0 group-hover:scale-x-100"
-                style={{ transition: 'transform 350ms var(--ease-out-expo)' }}
-              />
-            </a>
-          ))}
+          {navLinks.map((l) =>
+            l.route ? (
+              <Link
+                key={l.href}
+                to={l.href}
+                className="group relative font-display text-xs tracking-[0.3em] uppercase font-bold text-[#b0c5c6]/85 hover:text-white"
+                style={{ transition: 'color 200ms var(--ease-out-expo)' }}
+              >
+                {l.label}
+                <span
+                  aria-hidden
+                  className="absolute -bottom-2 left-0 right-0 h-px bg-[#A7DADB] origin-left scale-x-0 group-hover:scale-x-100"
+                  style={{ transition: 'transform 350ms var(--ease-out-expo)' }}
+                />
+              </Link>
+            ) : (
+              <a
+                key={l.href}
+                href={l.href}
+                className="group relative font-display text-xs tracking-[0.3em] uppercase font-bold text-[#b0c5c6]/85 hover:text-white"
+                style={{ transition: 'color 200ms var(--ease-out-expo)' }}
+              >
+                {l.label}
+                <span
+                  aria-hidden
+                  className="absolute -bottom-2 left-0 right-0 h-px bg-[#A7DADB] origin-left scale-x-0 group-hover:scale-x-100"
+                  style={{ transition: 'transform 350ms var(--ease-out-expo)' }}
+                />
+              </a>
+            )
+          )}
         </div>
 
         <div className="flex items-center gap-5">
