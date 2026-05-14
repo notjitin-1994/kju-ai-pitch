@@ -42,11 +42,6 @@ const Navbar: React.FC = () => {
       >
         <a href="#hero" aria-label="Smartslate home" className="flex items-center gap-3">
           <Logo />
-          <span aria-hidden className="hidden md:inline-block h-5 w-px bg-white/10" />
-          <span className="hidden md:inline-flex items-center gap-2 font-display text-[10px] tracking-[0.35em] uppercase text-[#b0c5c6]/65 font-bold">
-            <span className="h-1 w-1 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-            Project Institutional Intelligence
-          </span>
         </a>
 
         <div className="hidden lg:flex items-center gap-10">
@@ -68,13 +63,6 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-5">
-          <Link
-            to="/pitch-deck"
-            className="hidden md:inline-flex font-display text-xs tracking-[0.3em] uppercase font-bold text-[#b0c5c6]/85 hover:text-white"
-            style={{ transition: 'color 200ms var(--ease-out-expo)' }}
-          >
-            Pitch Deck
-          </Link>
           <a
             href="#contact"
             className="press-scale inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-[#A7DADB] text-[#020C1B] font-display text-xs tracking-[0.22em] uppercase font-bold"

@@ -67,9 +67,7 @@ export const Hero = () => {
             className="font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.55] max-w-[58ch]"
           >
             Smartslate, in partnership with{" "}
-            <span className="text-white font-normal">Kristu Jayanti University</span>, presents{" "}
-            <span className="font-serif-display italic text-white">Project Institutional Intelligence</span>:
-            a three-pillar architecture for the AI-native campus.
+            <span className="text-white font-normal">Kristu Jayanti University</span>, presents a three-pillar architecture for the AI-native campus.
           </motion.p>
 
           {/* CTA cluster */}
