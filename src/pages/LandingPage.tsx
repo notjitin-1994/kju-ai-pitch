@@ -8,6 +8,7 @@ import { SolutionPillars } from '../components/landing/SolutionPillars';
 import { Outcomes } from '../components/landing/Outcomes';
 import { CTA } from '../components/landing/CTA';
 import { GrainOverlay } from '../components/ui/atmosphere';
+import { CursorSpotlight } from '../components/ui/CursorSpotlight';
 
 const navLinks: { href: string; label: string; route?: boolean }[] = [
   { href: '#problem', label: 'Premise' },
@@ -104,7 +105,7 @@ const ScrollProgress: React.FC = () => {
   return (
     <motion.div
       style={{ scaleX: x, transformOrigin: 'left' }}
-      className="fixed top-0 left-0 right-0 h-[2px] z-[95] bg-gradient-to-r from-[#A7DADB]/0 via-[#A7DADB] to-[#e8c789]"
+      className="fixed top-0 left-0 right-0 h-[2px] z-[95] bg-gradient-to-r from-[#A7DADB]/0 via-[#A7DADB] to-[#A7DADB]/70"
     />
   );
 };
@@ -112,6 +113,7 @@ const ScrollProgress: React.FC = () => {
 const LandingPage: React.FC = () => {
   return (
     <div className="relative bg-[#020C1B] min-h-screen selection:bg-[#A7DADB]/30 selection:text-[#A7DADB]">
+      <CursorSpotlight />
       <ScrollProgress />
       <Navbar />
       <main>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useCallback } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Play, ArrowUpRight } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
 import { FlickeringGrid } from '../ui/flickering-grid';
@@ -10,10 +10,31 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 export const Hero = () => {
   const [videoOpen, setVideoOpen] = useState(false);
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springX = useSpring(mouseX, { stiffness: 60, damping: 24 });
+  const springY = useSpring(mouseY, { stiffness: 60, damping: 24 });
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+      mouseX.set(((e.clientX - rect.left - rect.width / 2) / rect.width) * 18);
+      mouseY.set(((e.clientY - rect.top - rect.height / 2) / rect.height) * 12);
+    },
+    [mouseX, mouseY]
+  );
+
+  const handleMouseLeave = useCallback(() => {
+    mouseX.set(0);
+    mouseY.set(0);
+  }, [mouseX, mouseY]);
+
   return (
     <section
       id="hero"
       className="relative min-h-[100dvh] flex items-center px-6 md:px-12 lg:px-24 pt-32 pb-24 overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
     >
       {/* Atmosphere */}
       <MeshGradient intensity="med" />
@@ -131,11 +152,12 @@ export const Hero = () => {
           </motion.div>
         </div>
 
-        {/* Right: video as cinematic still */}
+        {/* Right: video as cinematic still — parallax on mouse */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.18, ease: easeOut }}
+          style={{ x: springX, y: springY }}
           className="lg:col-span-5 relative"
         >
           {/* Soft halo */}
@@ -144,7 +166,7 @@ export const Hero = () => {
             className="absolute -inset-12 -z-10 blur-3xl opacity-60"
             style={{
               background:
-                "radial-gradient(circle at 70% 30%, rgba(167,218,219,0.18) 0%, transparent 55%), radial-gradient(circle at 30% 80%, rgba(232,199,137,0.10) 0%, transparent 55%)",
+                "radial-gradient(circle at 70% 30%, rgba(167,218,219,0.18) 0%, transparent 55%), radial-gradient(circle at 30% 80%, rgba(167,218,219,0.10) 0%, transparent 55%)",
             }}
           />
           <HeroVideoDialog

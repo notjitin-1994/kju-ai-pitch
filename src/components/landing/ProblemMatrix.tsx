@@ -1,5 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown } from 'lucide-react';
 import { MeshGradient } from '../ui/atmosphere';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
@@ -10,13 +11,29 @@ const failures = [
     label: 'Students',
     status: 'Unguided adoption.',
     body: 'A generation using artificial intelligence in the shadows. Without guidance. Without ethical framing. Without the practitioner skill that industry now demands at the entry rung.',
+    img: '/problem-students.jpg',
+    imgAlt: 'Indian university students in a crowded lecture hall',
+    details: [
+      'AI used without institutional framework or ethical guardrails',
+      'No verifiable credential to differentiate graduates',
+      'Employers increasingly require practitioner-level AI fluency',
+      'Peer institutions are building certification programmes now',
+    ],
     align: 'left' as const,
   },
   {
     num: '02',
     label: 'Faculty',
     status: 'Held back.',
-    body: 'Educators ready to lead, buried by yesterday’s tooling. Manual preparation, static pedagogy, and assessment debt drain the very hours that compound into pedagogical mastery.',
+    body: "Educators ready to lead, buried by yesterday’s tooling. Manual preparation, static pedagogy, and assessment debt drain the very hours that compound into pedagogical mastery.",
+    img: '/problem-faculty.jpg',
+    imgAlt: 'Overworked Indian teacher managing paperwork',
+    details: [
+      '40–60% of weekly preparation time consumed by manual tasks',
+      'No AI-assisted content generation or assessment design tools',
+      "Professional development budgets don't reach frontier tools",
+      'Faculty motivation erodes when tooling lags behind students',
+    ],
     align: 'right' as const,
   },
   {
@@ -24,11 +41,21 @@ const failures = [
     label: 'Institutions',
     status: 'Velocity mismatch.',
     body: 'Change measured in years, while industry moves in months. The compounding gap erodes brand and legacy every single semester it remains unaddressed.',
+    img: '/problem-institution.jpg',
+    imgAlt: 'Traditional Indian college campus exterior',
+    details: [
+      'Accreditation bodies moving to AI-readiness as a metric by 2027',
+      'Employer hiring criteria shifting to AI-competency baseline',
+      'First-mover positioning cannot be purchased after the fact',
+      'Compounding semester-on-semester brand erosion is silent but terminal',
+    ],
     align: 'left' as const,
   },
 ];
 
 export const ProblemMatrix = () => {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
   return (
     <section
       id="problem"
@@ -86,15 +113,17 @@ export const ProblemMatrix = () => {
             >
               Across every campus in India, three failures are converging. They are not separate
               problems. They are facets of one systemic moment, compounding every semester it goes
-              unaddressed.
+              unaddressed.{' '}
+              <span className="text-[#A7DADB]/70 text-sm">Click each to explore.</span>
             </motion.p>
           </div>
         </div>
 
         {/* Editorial failure rows */}
-        <div className="space-y-2">
+        <div className="space-y-0">
           {failures.map((f, i) => {
             const isLeft = f.align === 'left';
+            const isOpen = openIdx === i;
             return (
               <motion.article
                 key={f.num}
@@ -102,45 +131,136 @@ export const ProblemMatrix = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
-                className="relative grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-10 py-14 md:py-20 border-t border-white/[0.07] group"
+                className="relative border-t border-white/[0.07]"
               >
-                {/* Hover accent line */}
+                {/* Hover + active accent line */}
                 <span
                   aria-hidden
-                  className="absolute top-0 left-0 h-px bg-[#A7DADB]/70 w-0 group-hover:w-full"
-                  style={{ transition: 'width 800ms var(--ease-out-expo)' }}
+                  className={`absolute top-0 left-0 h-px bg-[#A7DADB] transition-all duration-700 ${isOpen ? 'w-full opacity-60' : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-60'}`}
+                  style={{ transition: 'width 800ms var(--ease-out-expo), opacity 400ms' }}
                 />
 
-                {/* Numeral */}
-                <div
-                  className={`${
-                    isLeft ? 'lg:col-span-4 lg:col-start-1' : 'lg:col-span-4 lg:col-start-9'
-                  } flex flex-col gap-3`}
+                {/* Clickable header row */}
+                <button
+                  type="button"
+                  onClick={() => setOpenIdx(isOpen ? null : i)}
+                  className="w-full text-left group py-14 md:py-20 cursor-pointer"
+                  aria-expanded={isOpen}
                 >
-                  <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB]/80 font-bold">
-                    Failure
-                  </span>
-                  <span className="font-serif-display italic text-white/95 leading-none text-[clamp(7rem,16vw,12rem)] tracking-[-0.04em]">
-                    {f.num}
-                  </span>
-                </div>
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-10">
+                    {/* Numeral */}
+                    <div
+                      className={`${
+                        isLeft ? 'lg:col-span-4 lg:col-start-1' : 'lg:col-span-4 lg:col-start-9'
+                      } flex flex-col gap-3`}
+                    >
+                      <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB]/80 font-bold">
+                        Failure
+                      </span>
+                      <span
+                        className="font-serif-display italic text-white/95 leading-none tracking-[-0.04em]"
+                        style={{
+                          fontSize: 'clamp(7rem,16vw,12rem)',
+                          transition: 'color 400ms var(--ease-out-expo)',
+                          color: isOpen ? '#A7DADB' : undefined,
+                        }}
+                      >
+                        {f.num}
+                      </span>
+                    </div>
 
-                {/* Content */}
-                <div
-                  className={`${
-                    isLeft ? 'lg:col-span-7 lg:col-start-6' : 'lg:col-span-7 lg:col-start-1 lg:row-start-1'
-                  } flex flex-col justify-center max-w-[58ch]`}
-                >
-                  <h3 className="font-display font-bold text-white text-3xl md:text-5xl tracking-tight uppercase">
-                    {f.label}
-                  </h3>
-                  <p className="mt-2 font-serif-display italic text-[#A7DADB] text-xl md:text-2xl">
-                    {f.status}
-                  </p>
-                  <p className="mt-6 font-body font-light text-[#b0c5c6] text-base md:text-lg leading-[1.65]">
-                    {f.body}
-                  </p>
-                </div>
+                    {/* Content */}
+                    <div
+                      className={`${
+                        isLeft
+                          ? 'lg:col-span-7 lg:col-start-6'
+                          : 'lg:col-span-7 lg:col-start-1 lg:row-start-1'
+                      } flex flex-col justify-center max-w-[58ch]`}
+                    >
+                      <h3 className="font-display font-bold text-white text-3xl md:text-5xl tracking-tight uppercase">
+                        {f.label}
+                      </h3>
+                      <p className="mt-2 font-serif-display italic text-[#A7DADB] text-xl md:text-2xl">
+                        {f.status}
+                      </p>
+                      <p className="mt-6 font-body font-light text-[#b0c5c6] text-base md:text-lg leading-[1.65]">
+                        {f.body}
+                      </p>
+                    </div>
+
+                    {/* Expand toggle indicator */}
+                    <div className="lg:col-span-1 lg:col-start-12 flex items-center justify-end">
+                      <motion.div
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={{ duration: 0.4, ease: easeOut }}
+                        className="h-9 w-9 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0"
+                      >
+                        <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
+                      </motion.div>
+                    </div>
+                  </div>
+                </button>
+
+                {/* Expanded detail panel */}
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="panel"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.55, ease: easeOut }}
+                      className="overflow-hidden"
+                    >
+                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-14 md:pb-20">
+                        {/* Detail bullets */}
+                        <div className="flex flex-col gap-5">
+                          <p className="font-display text-[10px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold mb-1">
+                            The specific failure
+                          </p>
+                          <ul className="space-y-4">
+                            {f.details.map((d) => (
+                              <li key={d} className="flex items-start gap-3">
+                                <span className="mt-[7px] h-px w-5 bg-[#A7DADB]/50 shrink-0" />
+                                <span className="font-body font-light text-[#b0c5c6] text-base leading-[1.6]">
+                                  {d}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Image */}
+                        <div className="relative rounded-[20px] overflow-hidden bg-[#0a1729] min-h-[220px] lg:min-h-0">
+                          <img
+                            src={f.img}
+                            alt={f.imgAlt}
+                            className="absolute inset-0 w-full h-full object-cover"
+                            style={{
+                              filter: 'contrast(1.08) saturate(0.8) brightness(0.55)',
+                            }}
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).style.display = 'none';
+                            }}
+                          />
+                          <div
+                            aria-hidden
+                            className="absolute inset-0"
+                            style={{
+                              background:
+                                'linear-gradient(135deg, rgba(2,12,27,0.3) 0%, rgba(10,23,41,0.85) 100%)',
+                            }}
+                          />
+                          <div className="absolute bottom-6 left-6">
+                            <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#A7DADB]/70 font-bold">
+                              Failure {f.num} · {f.label}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.article>
             );
           })}

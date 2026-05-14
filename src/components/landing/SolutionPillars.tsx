@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Building2, Users, GraduationCap, ArrowUpRight } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 
@@ -41,6 +41,50 @@ const pillars = [
     horizontal: true,
   },
 ];
+
+interface TiltCardProps {
+  children: React.ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}
+
+const TiltCard: React.FC<TiltCardProps> = ({ children, className, style }) => {
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const rotateX = useMotionValue(0);
+  const rotateY = useMotionValue(0);
+  const springX = useSpring(rotateX, { stiffness: 100, damping: 25, restDelta: 0.001 });
+  const springY = useSpring(rotateY, { stiffness: 100, damping: 25, restDelta: 0.001 });
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const halfW = rect.width / 2;
+    const halfH = rect.height / 2;
+    rotateY.set(((e.clientX - rect.left - halfW) / halfW) * 6);
+    rotateX.set(-((e.clientY - rect.top - halfH) / halfH) * 6);
+  };
+
+  const handleMouseLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
+  };
+
+  return (
+    <div className="perspective-1000">
+      <motion.div
+        ref={cardRef}
+        className={className}
+        style={{ ...style, rotateX: springX, rotateY: springY, transformStyle: 'preserve-3d' }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        {children}
+      </motion.div>
+    </div>
+  );
+};
 
 export const SolutionPillars = () => {
   return (
@@ -99,105 +143,141 @@ export const SolutionPillars = () => {
               className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
             >
               Three interconnected pillars. One operating system. Intelligence is no longer a
-              subject on the timetable, it is the substrate the institution runs on.
+              subject on the timetable — it is the substrate the institution runs on.{' '}
+              <span className="text-[#A7DADB]/70 text-sm">Hover to feel.</span>
             </motion.p>
           </div>
         </div>
 
-        {/* Asymmetric bento */}
+        {/* Asymmetric bento with 3D tilt */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
           {pillars.map((p, i) => {
             const Icon = p.icon;
             const isHorizontal = p.horizontal;
             return (
-              <motion.article
+              <motion.div
                 key={p.id}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ duration: 0.85, delay: i * 0.08, ease: easeOut }}
-                className={`${p.span} group relative isolate overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0a1729]/70 backdrop-blur-xl glass-refract`}
+                className={p.span}
               >
-                {/* Image layer */}
-                <div className={`${isHorizontal ? 'lg:absolute lg:inset-y-0 lg:left-0 lg:w-5/12' : 'absolute inset-0'} overflow-hidden`}>
-                  <img
-                    src={p.img}
-                    alt={p.title}
-                    className="h-full w-full object-cover scale-100 group-hover:scale-[1.04]"
-                    style={{
-                      filter: 'contrast(1.1) saturate(0.85) brightness(0.55)',
-                      transition: 'transform 1200ms var(--ease-out-expo), filter 700ms var(--ease-out-expo)',
-                    }}
-                  />
-                  {/* Gradient cap */}
+                <TiltCard
+                  className="group relative isolate overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0a1729]/70 backdrop-blur-xl glass-refract h-full"
+                >
+                  {/* Image layer */}
+                  <div
+                    className={`${
+                      isHorizontal
+                        ? 'lg:absolute lg:inset-y-0 lg:left-0 lg:w-5/12'
+                        : 'absolute inset-0'
+                    } overflow-hidden`}
+                  >
+                    <img
+                      src={p.img}
+                      alt={p.title}
+                      className="h-full w-full object-cover scale-100 group-hover:scale-[1.04]"
+                      style={{
+                        filter: 'contrast(1.1) saturate(0.85) brightness(0.55)',
+                        transition:
+                          'transform 1200ms var(--ease-out-expo), filter 700ms var(--ease-out-expo)',
+                      }}
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).style.display = 'none';
+                      }}
+                    />
+                    {/* Gradient cap */}
+                    <div
+                      aria-hidden
+                      className="absolute inset-0"
+                      style={{
+                        background: isHorizontal
+                          ? 'linear-gradient(90deg, rgba(10,23,41,0.3) 0%, rgba(10,23,41,0.95) 90%)'
+                          : 'linear-gradient(180deg, rgba(10,23,41,0.25) 0%, rgba(10,23,41,0.92) 75%, rgba(10,23,41,1) 100%)',
+                      }}
+                    />
+                  </div>
+                  <Vignette strength={0.4} />
+
+                  {/* Sheen on hover */}
                   <div
                     aria-hidden
-                    className="absolute inset-0"
+                    className="pointer-events-none absolute inset-0 z-20 opacity-0 group-hover:opacity-100 rounded-[28px]"
                     style={{
-                      background: isHorizontal
-                        ? 'linear-gradient(90deg, rgba(10,23,41,0.3) 0%, rgba(10,23,41,0.95) 90%)'
-                        : 'linear-gradient(180deg, rgba(10,23,41,0.25) 0%, rgba(10,23,41,0.92) 75%, rgba(10,23,41,1) 100%)',
+                      background:
+                        'linear-gradient(135deg, rgba(167,218,219,0.05) 0%, transparent 50%)',
+                      transition: 'opacity 400ms var(--ease-out-expo)',
                     }}
                   />
-                </div>
-                <Vignette strength={0.4} />
 
-                {/* Content */}
-                <div
-                  className={`relative z-10 ${
-                    isHorizontal
-                      ? 'lg:ml-[41.6667%] p-10 md:p-14 lg:py-16'
-                      : 'p-8 md:p-10'
-                  } flex flex-col ${isHorizontal ? 'gap-6' : 'gap-8'} ${
-                    p.feature ? 'min-h-[480px] md:min-h-[560px]' : isHorizontal ? '' : 'min-h-[480px] md:min-h-[560px]'
-                  }`}
-                >
-                  {/* Top row */}
-                  <div className="flex items-start justify-between gap-6">
-                    <div
-                      className="inline-flex items-center justify-center h-12 w-12 rounded-xl border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07]"
-                      style={{ transition: 'background-color 350ms var(--ease-out-expo), border-color 350ms var(--ease-out-expo)' }}
-                    >
-                      <Icon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
-                    </div>
-                    <span className="font-serif-display italic text-[#A7DADB]/15 text-[5rem] md:text-[6rem] leading-none tracking-tighter group-hover:text-[#A7DADB]/30"
-                      style={{ transition: 'color 700ms var(--ease-out-expo)' }}
-                    >
-                      {p.id}
-                    </span>
-                  </div>
-
-                  {/* Middle: title + body */}
-                  <div className={`flex-1 flex flex-col ${isHorizontal ? '' : 'justify-end'}`}>
-                    <p className="font-display text-[11px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold">
-                      {p.sub}
-                    </p>
-                    <h3 className="mt-3 font-display font-bold text-white text-3xl md:text-4xl tracking-tight uppercase">
-                      {p.title}
-                    </h3>
-                    <p className="mt-5 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.6] max-w-[48ch]">
-                      {p.body}
-                    </p>
-                  </div>
-
-                  {/* Bottom: metric + link */}
-                  <div className="flex items-end justify-between gap-6 pt-6 border-t border-white/[0.06]">
-                    <div className="flex flex-col">
-                      <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/55 font-bold">
-                        {p.metric.k}
-                      </span>
-                      <span className="mt-1.5 font-display text-2xl md:text-3xl text-white tabular-nums tracking-tight">
-                        {p.metric.v}
+                  {/* Content */}
+                  <div
+                    className={`relative z-10 ${
+                      isHorizontal
+                        ? 'lg:ml-[41.6667%] p-10 md:p-14 lg:py-16'
+                        : 'p-8 md:p-10'
+                    } flex flex-col ${isHorizontal ? 'gap-6' : 'gap-8'} ${
+                      p.feature
+                        ? 'min-h-[480px] md:min-h-[560px]'
+                        : isHorizontal
+                        ? ''
+                        : 'min-h-[480px] md:min-h-[560px]'
+                    }`}
+                  >
+                    {/* Top row */}
+                    <div className="flex items-start justify-between gap-6">
+                      <div
+                        className="inline-flex items-center justify-center h-12 w-12 rounded-xl border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07] group-hover:bg-[#A7DADB]/[0.12] group-hover:border-[#A7DADB]/35"
+                        style={{
+                          transition:
+                            'background-color 350ms var(--ease-out-expo), border-color 350ms var(--ease-out-expo)',
+                        }}
+                      >
+                        <Icon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
+                      </div>
+                      <span
+                        className="font-serif-display italic text-[#A7DADB]/15 leading-none tracking-tighter group-hover:text-[#A7DADB]/30"
+                        style={{
+                          fontSize: 'clamp(5rem,10vw,6rem)',
+                          transition: 'color 700ms var(--ease-out-expo)',
+                        }}
+                      >
+                        {p.id}
                       </span>
                     </div>
-                    <span className="inline-flex items-center gap-2 font-display text-xs tracking-[0.3em] uppercase font-bold text-[#A7DADB] press-scale">
-                      Detail
-                      <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
-                    </span>
-                  </div>
-                </div>
 
-              </motion.article>
+                    {/* Middle: title + body */}
+                    <div className={`flex-1 flex flex-col ${isHorizontal ? '' : 'justify-end'}`}>
+                      <p className="font-display text-[11px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold">
+                        {p.sub}
+                      </p>
+                      <h3 className="mt-3 font-display font-bold text-white text-3xl md:text-4xl tracking-tight uppercase">
+                        {p.title}
+                      </h3>
+                      <p className="mt-5 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.6] max-w-[48ch]">
+                        {p.body}
+                      </p>
+                    </div>
+
+                    {/* Bottom: metric + link */}
+                    <div className="flex items-end justify-between gap-6 pt-6 border-t border-white/[0.06]">
+                      <div className="flex flex-col">
+                        <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/55 font-bold">
+                          {p.metric.k}
+                        </span>
+                        <span className="mt-1.5 font-display text-2xl md:text-3xl text-white tabular-nums tracking-tight">
+                          {p.metric.v}
+                        </span>
+                      </div>
+                      <span className="inline-flex items-center gap-2 font-display text-xs tracking-[0.3em] uppercase font-bold text-[#A7DADB] press-scale">
+                        Detail
+                        <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} />
+                      </span>
+                    </div>
+                  </div>
+                </TiltCard>
+              </motion.div>
             );
           })}
         </div>

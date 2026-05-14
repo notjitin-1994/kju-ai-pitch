@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom';
 import {
   ArrowUpRight, ArrowLeft, Check, Mail,
   Users, Shield, Cpu, BookOpen, Activity,
-  Cloud, Server, Database,
+  Cloud, Server, Database, ChevronDown,
 } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { MeshGradient, Vignette, GrainOverlay } from '../components/ui/atmosphere';
 import { FlickeringGrid } from '../components/ui/flickering-grid';
+import { CursorSpotlight } from '../components/ui/CursorSpotlight';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -47,7 +48,7 @@ const commitmentPillars = [
   {
     title: 'Data-Backed Reporting',
     body: 'Quarterly business reviews with full adoption data and uplift evidence provided to KJU leadership.',
-    accent: '#e8c789',
+    accent: '#A7DADB',
   },
   {
     title: 'No Technology Markup',
@@ -101,7 +102,7 @@ const paths = [
     techNote: 'Cloud API Phase A: ₹3.3L / year → AceCloud GPU Phase B: ~₹9L by Year 3',
     yearOneTotal: '₹97.3L',
     featured: false,
-    accent: '#e8c789',
+    accent: '#A7DADB',
   },
   {
     id: '3',
@@ -131,13 +132,25 @@ const kpiMetrics = [
     detail:
       'Routine student queries — schedules, fees, hostel, registrations — resolved autonomously in <30 seconds, 24/7. Staff redirected to high-value student interactions.',
     accent: '#A7DADB',
+    expandedStats: [
+      { label: 'Autonomous resolution rate', value: '>90%' },
+      { label: 'Response time', value: '<30 sec' },
+      { label: 'Staff hours redirected', value: '~60%' },
+      { label: 'Measured from', value: 'Day 1' },
+    ],
   },
   {
     num: '40–60%',
     label: 'Faculty preparation time saved',
     detail:
       'Measured weekly against a pre-deployment baseline. Lesson plans generated in <20 minutes vs 2–3 hours pre-deployment. Reclaimed hours go directly back to student mentorship.',
-    accent: '#e8c789',
+    accent: '#A7DADB',
+    expandedStats: [
+      { label: 'Lesson plan time', value: '<20 min' },
+      { label: 'Pre-deployment baseline', value: '2–3 hrs' },
+      { label: 'Annual hours reclaimed', value: '~200 hrs' },
+      { label: 'Time value per faculty', value: '₹1.2L/yr' },
+    ],
   },
   {
     num: '>80%',
@@ -145,6 +158,12 @@ const kpiMetrics = [
     detail:
       'AI literacy embedded across all streams — not an elective. Every student builds a verifiable, institutionally-issued credential that differentiates KJU alumni in every hiring cycle.',
     accent: '#A7DADB',
+    expandedStats: [
+      { label: 'Curriculum coverage', value: 'All streams' },
+      { label: 'Credential type', value: 'Institutional' },
+      { label: 'Industry alignment', value: 'Infosys / Deloitte' },
+      { label: 'Target cohort', value: 'All graduates' },
+    ],
   },
 ] as const;
 
@@ -219,7 +238,7 @@ const ScrollProgress: React.FC = () => {
   return (
     <motion.div
       style={{ scaleX, transformOrigin: 'left' }}
-      className="fixed top-0 left-0 right-0 h-[2px] z-[95] bg-gradient-to-r from-[#A7DADB]/0 via-[#A7DADB] to-[#e8c789]"
+      className="fixed top-0 left-0 right-0 h-[2px] z-[95] bg-gradient-to-r from-[#A7DADB]/0 via-[#A7DADB] to-[#A7DADB]/70"
     />
   );
 };
@@ -283,9 +302,21 @@ const PricingHero: React.FC = () => (
   <section className="relative min-h-[100dvh] flex items-center px-6 md:px-12 lg:px-24 overflow-hidden pt-24">
     <MeshGradient intensity="med" />
     <div className="absolute inset-0 pointer-events-none [mask-image:radial-gradient(ellipse_at_65%_50%,rgba(0,0,0,0.55)_0%,transparent_68%)]">
-      <FlickeringGrid color="rgb(232,199,137)" squareSize={3} gridGap={11} flickerChance={0.09} maxOpacity={0.1} />
+      <FlickeringGrid color="rgb(167,218,219)" squareSize={3} gridGap={11} flickerChance={0.09} maxOpacity={0.1} />
     </div>
     <Vignette strength={0.5} />
+
+    {/* Background campus image */}
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <img
+        src="/pricing-campus.jpg"
+        alt=""
+        aria-hidden
+        className="w-full h-full object-cover opacity-20"
+        style={{ filter: 'contrast(1.05) saturate(0.6) brightness(0.4)' }}
+        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+      />
+    </div>
 
     <div className="relative z-10 max-w-[1440px] mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-y-12 gap-x-12 py-20">
       <div className="lg:col-span-7">
@@ -295,8 +326,8 @@ const PricingHero: React.FC = () => (
           transition={{ duration: 0.7, ease: easeOut }}
           className="flex items-center gap-3"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[#e8c789] animate-soft-pulse" />
-          <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#e8c789] font-bold">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+          <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
             Part 2 · Investment & Pricing
           </span>
         </motion.div>
@@ -309,7 +340,7 @@ const PricingHero: React.FC = () => (
         >
           The Economics
           <br />
-          <span className="font-serif-display italic font-normal text-[#e8c789]">of Intelligence.</span>
+          <span className="font-serif-display italic font-normal text-[#A7DADB]">of Intelligence.</span>
         </motion.h1>
 
         <motion.p
@@ -355,7 +386,7 @@ const PricingHero: React.FC = () => (
           className="rounded-[24px] border border-white/[0.08] bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-8 space-y-8"
         >
           {[
-            { v: '₹88L', sub: 'Year 1 Smartslate service fee — all three implementation options', accent: '#e8c789' },
+            { v: '₹88L', sub: 'Year 1 Smartslate service fee — all three implementation options', accent: '#A7DADB' },
             { v: '6 months', sub: 'Phase 1 through Phase 3: Week 1 to Month 12+ full campus deployment', accent: '#A7DADB' },
             { v: '~10,000', sub: 'Users at KJU scale: students, faculty, and administrative staff', accent: '#A7DADB' },
           ].map((s, i) => (
@@ -372,96 +403,158 @@ const PricingHero: React.FC = () => (
   </section>
 );
 
-// ─── Contractual KPIs ─────────────────────────────────────────────────────────
-const ContractualKPIs: React.FC = () => (
-  <section className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
-    <MeshGradient intensity="low" />
-    <div className="relative z-10 max-w-[1440px] mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
-        <div className="lg:col-span-3">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, ease: easeOut }}
-            className="flex items-center gap-3"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#e8c789] animate-soft-pulse" />
-            <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#e8c789] font-bold">
-              Binding Commitments
-            </span>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
-            className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
-          >
-            Not aspirational
-          </motion.p>
-        </div>
-        <div className="lg:col-span-9">
-          <motion.h2
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, ease: easeOut }}
-            className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
-          >
-            Contractual KPIs.
-            <br />
-            <span className="font-serif-display italic font-normal text-[#e8c789]">Reported every quarter.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
-            className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
-          >
-            Every KPI is measured from deployment Day 1. If a target is not on track, Smartslate flags it proactively and delivers a remediation plan within 14 days.
-          </motion.p>
-        </div>
-      </div>
+// ─── Contractual KPIs (click-to-expand) ──────────────────────────────────────
+const ContractualKPIs: React.FC = () => {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
 
-      <div className="space-y-2">
-        {kpiMetrics.map((m, i) => (
-          <motion.article
-            key={m.label}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
-            className="relative grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-10 py-14 md:py-20 border-t border-white/[0.07] group"
-          >
-            <span
-              aria-hidden
-              className="absolute top-0 left-0 h-px w-0 group-hover:w-full"
-              style={{ background: m.accent, opacity: 0.65, transition: 'width 800ms var(--ease-out-expo)' }}
-            />
-            <div className="lg:col-span-4 flex items-center">
-              <span
-                className="font-display font-bold tabular-nums tracking-[-0.04em] leading-[0.85] text-[clamp(5.5rem,13vw,12rem)]"
-                style={{ color: m.accent }}
-              >
-                {m.num}
+  return (
+    <section className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+      <MeshGradient intensity="low" />
+      <div className="relative z-10 max-w-[1440px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
+          <div className="lg:col-span-3">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, ease: easeOut }}
+              className="flex items-center gap-3"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                Binding Commitments
               </span>
-            </div>
-            <div className="lg:col-span-7 lg:col-start-6 flex flex-col justify-center">
-              <h3 className="font-display font-bold text-white text-2xl md:text-3xl tracking-tight">
-                {m.label}
-              </h3>
-              <p className="mt-4 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.65] max-w-[52ch]">
-                {m.detail}
-              </p>
-            </div>
-          </motion.article>
-        ))}
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
+              className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+            >
+              Not aspirational
+            </motion.p>
+          </div>
+          <div className="lg:col-span-9">
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, ease: easeOut }}
+              className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
+            >
+              Contractual KPIs.
+              <br />
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">Reported every quarter.</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
+              className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
+            >
+              Every KPI is measured from deployment Day 1. If a target is not on track, Smartslate flags it proactively and delivers a remediation plan within 14 days.{' '}
+              <span className="text-[#A7DADB]/70 text-sm">Click each to see the detail.</span>
+            </motion.p>
+          </div>
+        </div>
+
+        <div className="space-y-0">
+          {kpiMetrics.map((m, i) => {
+            const isOpen = openIdx === i;
+            return (
+              <motion.article
+                key={m.label}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
+                className="relative border-t border-white/[0.07]"
+              >
+                <span
+                  aria-hidden
+                  className="absolute top-0 left-0 h-px bg-[#A7DADB]"
+                  style={{
+                    width: isOpen ? '100%' : '0%',
+                    opacity: isOpen ? 0.6 : 0,
+                    transition: 'width 800ms var(--ease-out-expo), opacity 400ms',
+                  }}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setOpenIdx(isOpen ? null : i)}
+                  className="w-full text-left py-14 md:py-20 cursor-pointer"
+                  aria-expanded={isOpen}
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-10">
+                    <div className="lg:col-span-4 flex items-center">
+                      <span
+                        className="font-display font-bold tabular-nums tracking-[-0.04em] leading-[0.85] text-[clamp(5.5rem,13vw,12rem)]"
+                        style={{ color: '#A7DADB' }}
+                      >
+                        {m.num}
+                      </span>
+                    </div>
+                    <div className="lg:col-span-7 lg:col-start-6 flex flex-col justify-center">
+                      <h3 className="font-display font-bold text-white text-2xl md:text-3xl tracking-tight">
+                        {m.label}
+                      </h3>
+                      <p className="mt-4 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.65] max-w-[52ch]">
+                        {m.detail}
+                      </p>
+                    </div>
+                    <div className="lg:col-span-1 lg:col-start-12 flex items-center justify-end">
+                      <motion.div
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={{ duration: 0.4, ease: easeOut }}
+                        className="h-9 w-9 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0"
+                      >
+                        <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
+                      </motion.div>
+                    </div>
+                  </div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="kpi-expand"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.5, ease: easeOut }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-14 md:pb-20">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          {m.expandedStats.map((s) => (
+                            <div
+                              key={s.label}
+                              className="rounded-[16px] border border-[#A7DADB]/12 bg-[#A7DADB]/[0.04] p-5"
+                            >
+                              <span className="block font-display font-bold text-[#A7DADB] text-2xl md:text-3xl tabular-nums tracking-tight leading-none">
+                                {s.value}
+                              </span>
+                              <span className="mt-2 block font-body font-light text-[#b0c5c6]/70 text-xs leading-snug">
+                                {s.label}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.article>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 // ─── Fee Schedule ─────────────────────────────────────────────────────────────
 const FeeSchedule: React.FC = () => (
@@ -526,7 +619,7 @@ const FeeSchedule: React.FC = () => (
         transition={{ duration: 0.85, ease: easeOut }}
         className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
       >
-        {commitmentPillars.map((p, i) => (
+        {commitmentPillars.map((p) => (
           <div
             key={p.title}
             className="rounded-[20px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl glass-refract p-7"
@@ -633,8 +726,8 @@ const FeeSchedule: React.FC = () => (
               </div>
             ))}
           </div>
-          <div className="mx-7 mb-7 rounded-[14px] border border-[#e8c789]/18 bg-[#e8c789]/[0.04] px-5 py-4">
-            <p className="font-display text-[10px] tracking-[0.35em] uppercase text-[#e8c789]/70 font-bold mb-2">
+          <div className="mx-7 mb-7 rounded-[14px] border border-[#A7DADB]/18 bg-[#A7DADB]/[0.04] px-5 py-4">
+            <p className="font-display text-[10px] tracking-[0.35em] uppercase text-[#A7DADB]/70 font-bold mb-2">
               Example (Cloud Only)
             </p>
             <p className="font-body text-[#b0c5c6]/55 text-sm leading-relaxed">
@@ -647,318 +740,403 @@ const FeeSchedule: React.FC = () => (
   </section>
 );
 
-// ─── Implementation Paths ─────────────────────────────────────────────────────
-const ImplementationPaths: React.FC = () => (
-  <section id="paths" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
-    <MeshGradient intensity="low" />
-    <div className="relative z-10 max-w-[1440px] mx-auto">
+// ─── Implementation Paths (year-tab selector) ─────────────────────────────────
+const ImplementationPaths: React.FC = () => {
+  const [activeId, setActiveId] = useState<string>('1');
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
-        <div className="lg:col-span-3">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, ease: easeOut }}
-            className="flex items-center gap-3"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-            <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-              Implementation Paths
-            </span>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
-            className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
-          >
-            Cloud → Hybrid → On-Prem
-          </motion.p>
-        </div>
-        <div className="lg:col-span-9">
-          <motion.h2
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, ease: easeOut }}
-            className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
-          >
-            A three-year
-            <br />
-            <span className="font-serif-display italic font-normal text-[#A7DADB]">infrastructure journey.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
-            className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
-          >
-            Start on cloud in Year 1 for the fastest live deployment. Migrate to Indian cloud GPU in Year 2 for full data sovereignty. Graduate to on-campus infrastructure in Year 3+ as a permanent institutional asset. Smartslate service fees are identical at every stage.
-          </motion.p>
-        </div>
-      </div>
+  return (
+    <section id="paths" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+      <MeshGradient intensity="low" />
+      <div className="relative z-10 max-w-[1440px] mx-auto">
 
-      {/* Path cards — equal thirds */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-16">
-        {paths.map((path, i) => {
-          const { Icon } = path;
-          return (
-            <motion.article
-              key={path.id}
-              initial={{ opacity: 0, y: 28 }}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
+          <div className="lg:col-span-3">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.85, delay: i * 0.09, ease: easeOut }}
-              className="group relative isolate overflow-hidden rounded-[28px] bg-[#0a1729]/70 backdrop-blur-xl glass-refract flex flex-col"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, ease: easeOut }}
+              className="flex items-center gap-3"
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                Implementation Paths
+              </span>
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
+              className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+            >
+              Cloud → Hybrid → On-Prem
+            </motion.p>
+          </div>
+          <div className="lg:col-span-9">
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, ease: easeOut }}
+              className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
+            >
+              A three-year
+              <br />
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">infrastructure journey.</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
+              className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
+            >
+              Start on cloud in Year 1 for the fastest live deployment. Migrate to Indian cloud GPU in Year 2 for full data sovereignty. Graduate to on-campus infrastructure in Year 3+ as a permanent institutional asset. Smartslate service fees are identical at every stage.
+            </motion.p>
+          </div>
+        </div>
+
+        {/* Year tab selector */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-100px' }}
+          transition={{ duration: 0.7, ease: easeOut }}
+          className="flex items-center gap-2 mb-10 p-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-md w-fit"
+        >
+          {paths.map((p) => (
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setActiveId(p.id)}
+              className="relative rounded-full px-5 py-2.5 font-display text-xs tracking-[0.25em] uppercase font-bold transition-colors duration-200"
               style={{
-                border: path.featured ? '1px solid rgba(232,199,137,0.28)' : '1px solid rgba(255,255,255,0.08)',
-                boxShadow: path.featured ? 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 80px -24px rgba(232,199,137,0.12)' : undefined,
+                color: activeId === p.id ? '#020C1B' : 'rgba(176,197,198,0.7)',
               }}
             >
-              <div className="flex flex-col gap-6 p-8 md:p-9 flex-1">
-                {/* Header */}
-                <div className="flex items-start justify-between gap-4">
-                  <div
-                    className="inline-flex items-center justify-center h-11 w-11 rounded-xl"
-                    style={{ border: `1px solid ${path.accent}33`, background: `${path.accent}11` }}
-                  >
-                    <Icon className="h-5 w-5" strokeWidth={1.5} style={{ color: path.accent }} />
-                  </div>
-                  {path.featured ? (
-                    <span
-                      className="inline-flex items-center rounded-full px-3 py-1 font-display text-[9px] tracking-[0.35em] uppercase font-bold text-[#e8c789]"
-                      style={{ background: 'rgba(232,199,137,0.08)', border: '1px solid rgba(232,199,137,0.22)' }}
-                    >
-                      Recommended
-                    </span>
-                  ) : (
-                    <span
-                      className="font-display text-[10px] tracking-[0.3em] uppercase font-bold px-3 py-1 rounded-full"
-                      style={{ color: `${path.accent}99`, border: `1px solid ${path.accent}22`, background: `${path.accent}08` }}
-                    >
-                      Path {path.id}
-                    </span>
-                  )}
-                </div>
+              {activeId === p.id && (
+                <motion.span
+                  layoutId="path-tab-bg"
+                  className="absolute inset-0 rounded-full bg-[#A7DADB]"
+                  transition={{ duration: 0.35, ease: easeOut }}
+                />
+              )}
+              <span className="relative z-10">{p.name}</span>
+            </button>
+          ))}
+        </motion.div>
 
-                <div>
-                  <p className="font-display text-[10px] tracking-[0.4em] uppercase font-bold mb-2" style={{ color: `${path.accent}aa` }}>
-                    {path.badge}
-                  </p>
-                  <h3 className="font-display font-bold text-white text-2xl tracking-tight">{path.name}</h3>
-                  <p className="mt-3 font-body font-light text-[#b0c5c6] text-sm leading-[1.65]">{path.description}</p>
-                </div>
-
-                {/* Glance rows */}
-                <div className="space-y-2.5">
-                  {path.glance.map((g) => (
-                    <div key={g.label} className="flex items-center justify-between gap-4 py-2.5 border-t border-white/[0.05]">
-                      <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/50 font-bold">{g.label}</span>
-                      <span className="font-display font-bold text-white text-sm tabular-nums">{g.value}</span>
+        {/* Path cards */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 mb-16">
+          {paths.map((path, i) => {
+            const { Icon } = path;
+            const isActive = activeId === path.id;
+            return (
+              <motion.article
+                key={path.id}
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.85, delay: i * 0.09, ease: easeOut }}
+                onClick={() => setActiveId(path.id)}
+                className="group relative isolate overflow-hidden rounded-[28px] bg-[#0a1729]/70 backdrop-blur-xl glass-refract flex flex-col cursor-pointer"
+                style={{
+                  border: isActive
+                    ? '1px solid rgba(167,218,219,0.35)'
+                    : '1px solid rgba(255,255,255,0.08)',
+                  boxShadow: isActive
+                    ? 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 80px -24px rgba(167,218,219,0.15)'
+                    : undefined,
+                  transition: 'border-color 400ms var(--ease-out-expo), box-shadow 400ms var(--ease-out-expo)',
+                }}
+              >
+                <div className="flex flex-col gap-6 p-8 md:p-9 flex-1">
+                  {/* Header */}
+                  <div className="flex items-start justify-between gap-4">
+                    <div
+                      className="inline-flex items-center justify-center h-11 w-11 rounded-xl"
+                      style={{
+                        border: `1px solid ${isActive ? 'rgba(167,218,219,0.4)' : 'rgba(167,218,219,0.2)'}`,
+                        background: `rgba(167,218,219,${isActive ? '0.15' : '0.07'})`,
+                        transition: 'background 400ms, border-color 400ms',
+                      }}
+                    >
+                      <Icon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
                     </div>
-                  ))}
-                </div>
-
-                {/* Fee summary */}
-                <div className="mt-auto pt-5 border-t border-white/[0.07] space-y-2">
-                  <div className="flex items-center justify-between">
-                    <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/50 font-bold">Smartslate Year 1 Fee</span>
-                    <span className="font-display font-bold text-white tabular-nums">{path.smartslateFee}</span>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/50 font-bold">Year 1 Total</span>
-                    <span className="font-display font-bold tabular-nums text-lg" style={{ color: path.accent }}>{path.yearOneTotal}</span>
-                  </div>
-                  <p className="font-body text-[#b0c5c6]/40 text-[11px] leading-relaxed pt-1">{path.techNote}</p>
-                </div>
-              </div>
-            </motion.article>
-          );
-        })}
-      </div>
-
-      {/* 5-Year Financial Summary */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.9, ease: easeOut }}
-      >
-        <div className="mb-8">
-          <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#b0c5c6]/55 font-bold">
-            5-Year Financial Summary · All figures INR · Smartslate fees identical across all options
-          </span>
-        </div>
-        <div className="overflow-x-auto rounded-[20px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl">
-          <table className="w-full min-w-[640px] border-collapse">
-            <thead>
-              <tr className="border-b border-white/[0.07]">
-                <th className="py-4 px-7 text-left w-[44%]">
-                  <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/35 font-bold">Line Item</span>
-                </th>
-                {(['Cloud Only', 'Phased Hybrid', 'On-Premise'] as const).map((col, ci) => (
-                  <th key={col} className="py-4 px-5 text-right">
-                    <span
-                      className="font-display text-[11px] tracking-[0.3em] uppercase font-bold"
-                      style={{ color: ci === 1 ? '#e8c789' : '#A7DADB' }}
-                    >
-                      {col}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {finRows.map((row, ri) => (
-                <tr
-                  key={ri}
-                  className="border-t border-white/[0.04] group"
-                  style={{ background: row.bold ? 'rgba(167,218,219,0.04)' : undefined }}
-                >
-                  <td className="py-4 px-7">
-                    <span className={`font-display text-sm tracking-tight ${row.bold ? 'font-bold text-white' : 'font-bold text-white/55'}`}>
-                      {row.label}
-                    </span>
-                  </td>
-                  {[row.cloud, row.hybrid, row.onprem].map((val, ci) => (
-                    <td key={ci} className="py-4 px-5 text-right">
+                    {path.featured ? (
                       <span
-                        className={`font-display tabular-nums ${row.bold ? 'font-bold text-lg' : 'font-bold text-sm text-white/75'}`}
-                        style={row.bold ? { color: ci === 1 ? '#e8c789' : '#A7DADB' } : undefined}
+                        className="inline-flex items-center rounded-full px-3 py-1 font-display text-[9px] tracking-[0.35em] uppercase font-bold text-[#A7DADB]"
+                        style={{ background: 'rgba(167,218,219,0.1)', border: '1px solid rgba(167,218,219,0.28)' }}
                       >
-                        {val}
+                        Recommended
                       </span>
-                    </td>
+                    ) : (
+                      <span
+                        className="font-display text-[10px] tracking-[0.3em] uppercase font-bold px-3 py-1 rounded-full text-[#A7DADB]/60"
+                        style={{ border: 'rgba(167,218,219,0.2)', background: 'rgba(167,218,219,0.06)' }}
+                      >
+                        Path {path.id}
+                      </span>
+                    )}
+                  </div>
+
+                  <div>
+                    <p className="font-display text-[10px] tracking-[0.4em] uppercase font-bold mb-2 text-[#A7DADB]/75">
+                      {path.badge}
+                    </p>
+                    <h3 className="font-display font-bold text-white text-2xl tracking-tight">{path.name}</h3>
+                    <p className="mt-3 font-body font-light text-[#b0c5c6] text-sm leading-[1.65]">{path.description}</p>
+                  </div>
+
+                  {/* Glance rows */}
+                  <div className="space-y-2.5">
+                    {path.glance.map((g) => (
+                      <div key={g.label} className="flex items-center justify-between gap-4 py-2.5 border-t border-white/[0.05]">
+                        <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/50 font-bold">{g.label}</span>
+                        <span className="font-display font-bold text-white text-sm tabular-nums">{g.value}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Fee summary */}
+                  <div className="mt-auto pt-5 border-t border-white/[0.07] space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/50 font-bold">Smartslate Year 1 Fee</span>
+                      <span className="font-display font-bold text-white tabular-nums">{path.smartslateFee}</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/50 font-bold">Year 1 Total</span>
+                      <span className="font-display font-bold tabular-nums text-lg text-[#A7DADB]">{path.yearOneTotal}</span>
+                    </div>
+                    <p className="font-body text-[#b0c5c6]/40 text-[11px] leading-relaxed pt-1">{path.techNote}</p>
+                  </div>
+                </div>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        {/* 5-Year Financial Summary */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.9, ease: easeOut }}
+        >
+          <div className="mb-8">
+            <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#b0c5c6]/55 font-bold">
+              5-Year Financial Summary · All figures INR · Smartslate fees identical across all options
+            </span>
+          </div>
+          <div className="overflow-x-auto rounded-[20px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl">
+            <table className="w-full min-w-[640px] border-collapse">
+              <thead>
+                <tr className="border-b border-white/[0.07]">
+                  <th className="py-4 px-7 text-left w-[44%]">
+                    <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/35 font-bold">Line Item</span>
+                  </th>
+                  {(['Cloud Only', 'Phased Hybrid', 'On-Premise'] as const).map((col) => (
+                    <th key={col} className="py-4 px-5 text-right">
+                      <span className="font-display text-[11px] tracking-[0.3em] uppercase font-bold text-[#A7DADB]">
+                        {col}
+                      </span>
+                    </th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
-
-// ─── Programme Pillars ────────────────────────────────────────────────────────
-const ProgrammePillars: React.FC = () => (
-  <section id="programme" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
-    <MeshGradient intensity="low" />
-    <div className="relative z-10 max-w-[1440px] mx-auto">
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
-        <div className="lg:col-span-3">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, ease: easeOut }}
-            className="flex items-center gap-3"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-            <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-              What Is Included
-            </span>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
-            className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
-          >
-            Three pillars, one retainer
-          </motion.p>
-        </div>
-        <div className="lg:col-span-9">
-          <motion.h2
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, ease: easeOut }}
-            className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
-          >
-            Campus. Faculty. Students.
-            <br />
-            <span className="font-serif-display italic font-normal text-[#A7DADB]">All three, together.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
-            className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
-          >
-            Every deliverable is designed to produce measurable outcomes within Year 1. Nothing is aspirational. Everything is contractually defined.
-          </motion.p>
-        </div>
+              </thead>
+              <tbody>
+                {finRows.map((row, ri) => (
+                  <tr
+                    key={ri}
+                    className="border-t border-white/[0.04]"
+                    style={{ background: row.bold ? 'rgba(167,218,219,0.04)' : undefined }}
+                  >
+                    <td className="py-4 px-7">
+                      <span className={`font-display text-sm tracking-tight ${row.bold ? 'font-bold text-white' : 'font-bold text-white/55'}`}>
+                        {row.label}
+                      </span>
+                    </td>
+                    {[row.cloud, row.hybrid, row.onprem].map((val, ci) => (
+                      <td key={ci} className="py-4 px-5 text-right">
+                        <span
+                          className={`font-display tabular-nums ${row.bold ? 'font-bold text-lg text-[#A7DADB]' : 'font-bold text-sm text-white/75'}`}
+                        >
+                          {val}
+                        </span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
       </div>
+    </section>
+  );
+};
 
-      <div className="space-y-2">
-        {programmePillars.map((pillar, i) => {
-          const { Icon } = pillar;
-          return (
-            <motion.article
-              key={pillar.name}
-              initial={{ opacity: 0, y: 30 }}
+// ─── Programme Pillars (accordion) ────────────────────────────────────────────
+const ProgrammePillars: React.FC = () => {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+  return (
+    <section id="programme" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+      <MeshGradient intensity="low" />
+      <div className="relative z-10 max-w-[1440px] mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
+          <div className="lg:col-span-3">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
-              className="relative grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-10 py-12 md:py-16 border-t border-white/[0.07] group"
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, ease: easeOut }}
+              className="flex items-center gap-3"
             >
-              <span
-                aria-hidden
-                className="absolute top-0 left-0 h-px bg-[#A7DADB]/70 w-0 group-hover:w-full"
-                style={{ transition: 'width 800ms var(--ease-out-expo)' }}
-              />
-              <div className="lg:col-span-4 flex flex-col gap-4">
-                <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07]">
-                  <Icon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
-                </div>
-                <div>
-                  <p className="font-display text-[11px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold">{pillar.pillar}</p>
-                  <h3 className="mt-1 font-display font-bold text-white text-2xl md:text-3xl tracking-tight">{pillar.name}</h3>
-                </div>
-              </div>
-              <div className="lg:col-span-8 lg:col-start-5 flex items-center">
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-3 w-full">
-                  {pillar.items.map((item, ii) => (
-                    <li key={ii} className="flex items-center gap-3">
-                      <span className="h-px w-4 bg-[#A7DADB]/40 shrink-0" />
-                      <span className="font-body text-[#b0c5c6] text-base">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </motion.article>
-          );
-        })}
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                What Is Included
+              </span>
+            </motion.div>
+            <motion.p
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
+              className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+            >
+              Three pillars, one retainer
+            </motion.p>
+          </div>
+          <div className="lg:col-span-9">
+            <motion.h2
+              initial={{ opacity: 0, y: 18 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, ease: easeOut }}
+              className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
+            >
+              Campus. Faculty. Students.
+              <br />
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">All three, together.</span>
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
+              className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
+            >
+              Every deliverable is designed to produce measurable outcomes within Year 1. Nothing is aspirational. Everything is contractually defined.{' '}
+              <span className="text-[#A7DADB]/70 text-sm">Click each pillar to expand.</span>
+            </motion.p>
+          </div>
+        </div>
+
+        <div className="space-y-0">
+          {programmePillars.map((pillar, i) => {
+            const { Icon } = pillar;
+            const isOpen = openIdx === i;
+            return (
+              <motion.article
+                key={pillar.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
+                className="relative border-t border-white/[0.07]"
+              >
+                <span
+                  aria-hidden
+                  className="absolute top-0 left-0 h-px bg-[#A7DADB]"
+                  style={{
+                    width: isOpen ? '100%' : '0%',
+                    opacity: isOpen ? 0.6 : 0,
+                    transition: 'width 800ms var(--ease-out-expo), opacity 400ms',
+                  }}
+                />
+
+                <button
+                  type="button"
+                  onClick={() => setOpenIdx(isOpen ? null : i)}
+                  className="w-full text-left py-12 md:py-16 cursor-pointer"
+                  aria-expanded={isOpen}
+                >
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-10">
+                    <div className="lg:col-span-4 flex flex-col gap-4">
+                      <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07]">
+                        <Icon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
+                      </div>
+                      <div>
+                        <p className="font-display text-[11px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold">{pillar.pillar}</p>
+                        <h3 className="mt-1 font-display font-bold text-white text-2xl md:text-3xl tracking-tight">{pillar.name}</h3>
+                      </div>
+                    </div>
+                    <div className="lg:col-span-7 lg:col-start-5 flex items-center">
+                      <p className="font-body font-light text-[#b0c5c6]/70 text-base">
+                        {pillar.items.length} deliverables — click to expand
+                      </p>
+                    </div>
+                    <div className="lg:col-span-1 lg:col-start-12 flex items-center justify-end">
+                      <motion.div
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={{ duration: 0.4, ease: easeOut }}
+                        className="h-9 w-9 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0"
+                      >
+                        <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
+                      </motion.div>
+                    </div>
+                  </div>
+                </button>
+
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      key="pillar-expand"
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.5, ease: easeOut }}
+                      className="overflow-hidden"
+                    >
+                      <div className="pb-14 md:pb-16">
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
+                          {pillar.items.map((item, ii) => (
+                            <li key={ii} className="flex items-center gap-3">
+                              <span className="h-px w-4 bg-[#A7DADB]/40 shrink-0" />
+                              <span className="font-body text-[#b0c5c6] text-base">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.article>
+            );
+          })}
+        </div>
       </div>
-    </div>
-  </section>
-);
+    </section>
+  );
+};
 
 // ─── ROI Calculator ───────────────────────────────────────────────────────────
 const ROICalculator: React.FC = () => {
   const [faculty, setFaculty] = useState(200);
   const [students, setStudents] = useState(8000);
 
-  // 40-60% prep time saved (PDF KPI). 50% midpoint × 10 hrs/week × 40 academic weeks = 200 hrs/faculty/year
   const hoursReclaimed = faculty * 200;
-  // >80% AI literacy certification rate institution-wide (PDF KPI)
   const aiCertStudents = Math.round(students * 0.80);
-  // Faculty time value: 200 hrs × ₹600/hr avg = ₹1.2L per faculty
   const valueInLakhs = Math.round(faculty * 1.2);
-  // Payback on Year 1 Cloud path total (₹91.3L) vs annual faculty time value
   const paybackMonths = Math.min(Math.round((91.3 / (faculty * 1.2)) * 12), 48);
 
   const outputs = [
     { label: 'Faculty Prep Hours Reclaimed', value: hoursReclaimed.toLocaleString('en-IN'), unit: 'hours per year', accent: '#A7DADB' },
-    { label: 'Annual Value of Reclaimed Hours', value: formatINR(valueInLakhs), unit: 'in faculty time value', accent: '#e8c789' },
+    { label: 'Annual Value of Reclaimed Hours', value: formatINR(valueInLakhs), unit: 'in faculty time value', accent: '#A7DADB' },
     { label: 'Students Reaching AI Certification', value: aiCertStudents.toLocaleString('en-IN'), unit: 'graduates per year', accent: '#A7DADB' },
-    { label: 'Estimated Payback Period', value: paybackMonths <= 12 ? `~${paybackMonths}` : `~${paybackMonths}`, unit: paybackMonths <= 12 ? 'months on faculty value alone' : 'months (scale up for faster return)', accent: '#e8c789' },
+    { label: 'Estimated Payback Period', value: `~${paybackMonths}`, unit: paybackMonths <= 12 ? 'months on faculty value alone' : 'months (scale up for faster return)', accent: '#A7DADB' },
   ];
 
   return (
@@ -975,8 +1153,8 @@ const ROICalculator: React.FC = () => {
               transition={{ duration: 0.7, ease: easeOut }}
               className="flex items-center gap-3"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#e8c789] animate-soft-pulse" />
-              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#e8c789] font-bold">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
                 ROI Calculator
               </span>
             </motion.div>
@@ -1000,7 +1178,7 @@ const ROICalculator: React.FC = () => {
             >
               See what you would
               <br />
-              <span className="font-serif-display italic font-normal text-[#e8c789]">reclaim.</span>
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">reclaim.</span>
             </motion.h2>
           </div>
         </div>
@@ -1049,7 +1227,7 @@ const ROICalculator: React.FC = () => {
             </div>
 
             <p className="font-body text-[#b0c5c6]/45 text-sm leading-relaxed">
-              Based on contractual KPIs: 40–60% faculty prep time saved (PDF baseline), {'>'}{80}% AI literacy certification rate, faculty time valued at ₹600/hr. Payback calculated against Year 1 Cloud path total (₹91.3L).
+              Based on contractual KPIs: 40–60% faculty prep time saved, {'>'}80% AI literacy certification rate, faculty time valued at ₹600/hr. Payback calculated against Year 1 Cloud path total (₹91.3L).
             </p>
           </div>
 
@@ -1060,7 +1238,7 @@ const ROICalculator: React.FC = () => {
                 key={o.label}
                 className="rounded-[20px] border border-white/[0.08] bg-[#0a1729]/60 backdrop-blur-xl glass-refract p-7 md:p-8 flex flex-col justify-between min-h-[170px]"
               >
-                <span className="font-display text-[10px] tracking-[0.4em] uppercase font-bold" style={{ color: `${o.accent}88` }}>
+                <span className="font-display text-[10px] tracking-[0.4em] uppercase font-bold text-[#A7DADB]/60">
                   {o.label}
                 </span>
                 <div>
@@ -1071,8 +1249,8 @@ const ROICalculator: React.FC = () => {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -8 }}
                       transition={{ duration: 0.3, ease: easeOut }}
-                      className="block font-display font-bold tabular-nums tracking-tight leading-none"
-                      style={{ fontSize: 'clamp(2rem,4vw,2.75rem)', color: o.accent }}
+                      className="block font-display font-bold tabular-nums tracking-tight leading-none text-[#A7DADB]"
+                      style={{ fontSize: 'clamp(2rem,4vw,2.75rem)' }}
                     >
                       {o.value}
                     </motion.span>
@@ -1093,7 +1271,7 @@ const PricingCTA: React.FC = () => (
   <section className="relative py-40 md:py-52 px-6 md:px-12 lg:px-24 overflow-hidden">
     <MeshGradient intensity="med" />
     <div className="absolute inset-0 pointer-events-none [mask-image:radial-gradient(ellipse_at_center,rgba(0,0,0,0.7)_0%,transparent_75%)]">
-      <FlickeringGrid color="rgb(232,199,137)" squareSize={3} gridGap={9} flickerChance={0.12} maxOpacity={0.16} />
+      <FlickeringGrid color="rgb(167,218,219)" squareSize={3} gridGap={9} flickerChance={0.12} maxOpacity={0.16} />
     </div>
     <Vignette strength={0.6} />
 
@@ -1122,7 +1300,7 @@ const PricingCTA: React.FC = () => (
         <span className="font-serif-display italic font-normal text-[#A7DADB]">lead the era?</span>
       </motion.h2>
 
-      {/* 3-step next steps from PDF */}
+      {/* 3-step next steps */}
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -1146,7 +1324,7 @@ const PricingCTA: React.FC = () => (
             title: 'KJU Goes AI-First',
             body: 'Phase 1 begins on contract signing day. The window to be the first AI-native institution in your tier is open now.',
           },
-        ].map((s, i) => (
+        ].map((s) => (
           <div key={s.step} className="rounded-[20px] border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract p-7">
             <span className="font-serif-display italic font-normal text-[5rem] leading-none" style={{ color: 'rgba(167,218,219,0.12)' }}>
               {s.step}
@@ -1224,6 +1402,7 @@ const PricingCTA: React.FC = () => (
 // ─── Page ─────────────────────────────────────────────────────────────────────
 const PricingPage: React.FC = () => (
   <div className="relative bg-[#020C1B] min-h-screen selection:bg-[#A7DADB]/30 selection:text-[#A7DADB]">
+    <CursorSpotlight />
     <ScrollProgress />
     <Navbar />
     <main>
