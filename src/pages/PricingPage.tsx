@@ -69,9 +69,9 @@ const paths = [
     id: '1',
     Icon: Cloud,
     name: 'Cloud Only',
-    badge: 'Quickest · Most Cost Effective · Recommended',
+    badge: 'Year 1 · Recommended Start',
     description:
-      'Zero capital expenditure. Live in 3–5 days. All AI inference via Claude API (Haiku for concierge, Sonnet for faculty tools). Application on AWS India.',
+      'Zero capital expenditure. Live in 3–5 days. All AI inference via Claude API (Haiku for concierge, Sonnet for faculty tools). Application on AWS India. The fastest path to a live, measurable transformation.',
     glance: [
       { label: 'Time to Live', value: '14–21 Days' },
       { label: 'KJU Capital Outlay', value: '₹0' },
@@ -81,16 +81,16 @@ const paths = [
     smartslateFee: '~₹88L',
     techNote: 'Claude API + AWS Hosting: ₹3.3L / year (Year 1), grows with adoption',
     yearOneTotal: '₹91.3L',
-    featured: false,
+    featured: true,
     accent: '#A7DADB',
   },
   {
     id: '2',
     Icon: Server,
     name: 'Phased Hybrid',
-    badge: 'Reduced External Dependency · Data Never Leaves India',
+    badge: 'Year 2 · Data Sovereignty Migration',
     description:
-      'Start on cloud. Migrate to Indian cloud GPU (AceCloud A100) when usage triggers cost crossover. Full India data residency from Phase B. Zero CapEx.',
+      'Migrate from cloud to Indian cloud GPU (AceCloud A100) when usage triggers cost crossover. Full India data residency from Phase B. Builds on the Year 1 cloud foundation with zero additional CapEx.',
     glance: [
       { label: 'Time to Live', value: '14–21 Days' },
       { label: 'KJU Capital Outlay', value: '₹0' },
@@ -100,16 +100,16 @@ const paths = [
     smartslateFee: '~₹94L',
     techNote: 'Cloud API Phase A: ₹3.3L / year → AceCloud GPU Phase B: ~₹9L by Year 3',
     yearOneTotal: '₹97.3L',
-    featured: true,
+    featured: false,
     accent: '#e8c789',
   },
   {
     id: '3',
     Icon: Database,
     name: 'On-Prem Infrastructure',
-    badge: 'Institutional Asset · On-Premise',
+    badge: 'Year 3+ · Full Institutional Ownership',
     description:
-      '4× RTX 5090 GPU cluster at KJU campus. All models run locally — data never leaves the institution. Permanent capital asset. Visible proof of AI-native status.',
+      '4× RTX 5090 GPU cluster at KJU campus. All models run locally — data never leaves the institution. Permanent capital asset built after the programme is proven and embedded at scale.',
     glance: [
       { label: 'Time to Live', value: '4–5 Weeks' },
       { label: 'KJU Capital Outlay', value: '₹35L (to vendors)' },
@@ -674,7 +674,7 @@ const ImplementationPaths: React.FC = () => (
             transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
             className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
           >
-            Choose your infrastructure
+            Cloud → Hybrid → On-Prem
           </motion.p>
         </div>
         <div className="lg:col-span-9">
@@ -685,9 +685,9 @@ const ImplementationPaths: React.FC = () => (
             transition={{ duration: 0.85, ease: easeOut }}
             className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
           >
-            Three paths.
+            A three-year
             <br />
-            <span className="font-serif-display italic font-normal text-[#A7DADB]">Same transformation.</span>
+            <span className="font-serif-display italic font-normal text-[#A7DADB]">infrastructure journey.</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 16 }}
@@ -696,7 +696,7 @@ const ImplementationPaths: React.FC = () => (
             transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
             className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
           >
-            Smartslate service fees are identical across all three options. The difference is in how the underlying AI infrastructure is built — each with a different CapEx profile, data sovereignty posture, and time-to-live.
+            Start on cloud in Year 1 for the fastest live deployment. Migrate to Indian cloud GPU in Year 2 for full data sovereignty. Graduate to on-campus infrastructure in Year 3+ as a permanent institutional asset. Smartslate service fees are identical at every stage.
           </motion.p>
         </div>
       </div>
