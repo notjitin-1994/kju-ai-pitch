@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-  ArrowUpRight, ArrowLeft, Check, Mail,
+  ArrowUpRight, ArrowLeft, Check, Mail, X as XIcon,
   Users, Shield, Cpu, BookOpen, Activity,
   Cloud, Server, Database, ChevronDown,
   Clock, Coins, Gauge, Megaphone, Newspaper,
@@ -41,6 +42,45 @@ const phases = [
     includes: 'Institution-wide rollout, all-faculty training, literacy programme',
   },
 ] as const;
+
+type PhaseDeliverable = { item: string; dueLabel: string };
+const phaseDeliverables: Record<string, PhaseDeliverable[]> = {
+  '1': [
+    { item: 'AI Readiness Assessment Report',                      dueLabel: 'Week 2' },
+    { item: 'Infrastructure Audit & Gap Analysis',                 dueLabel: 'Week 2' },
+    { item: 'Stakeholder Workshop & Findings Report',              dueLabel: 'Week 3' },
+    { item: 'Institutional Frontier Map (vs. top AI universities)',dueLabel: 'Week 3' },
+    { item: 'Department Priority Matrix',                          dueLabel: 'Week 4' },
+    { item: 'Custom 12-Month AI Transformation Roadmap',          dueLabel: 'Week 4' },
+    { item: 'KPI Baseline Measurement & Documentation',            dueLabel: 'Week 4' },
+  ],
+  '2': [
+    { item: 'AI Governance Framework & Data Policy',               dueLabel: 'Week 6'  },
+    { item: 'AI Platform Live (Student Concierge + Faculty Tools)', dueLabel: 'Week 6'  },
+    { item: 'Unified Knowledge Base — 3-Department Pilot',         dueLabel: 'Week 7'  },
+    { item: 'Predictive Success Dashboard (Beta)',                  dueLabel: 'Week 8'  },
+    { item: 'Mid-Programme Adoption Rate Report',                  dueLabel: 'Week 8'  },
+    { item: 'Subject Playbook: Arts',                              dueLabel: 'Week 10' },
+    { item: 'Subject Playbook: Commerce',                          dueLabel: 'Week 10' },
+    { item: 'Subject Playbook: Science',                           dueLabel: 'Week 11' },
+    { item: 'Faculty Training Programme — 3 Departments Complete', dueLabel: 'Week 12' },
+    { item: 'First ROI Report vs. KPI Baseline',                   dueLabel: 'Week 12' },
+  ],
+  '3': [
+    { item: 'Institution-Wide Platform Rollout (All Departments)', dueLabel: 'Month 4'  },
+    { item: 'Unified Knowledge Base (Institution-Wide)',           dueLabel: 'Month 4'  },
+    { item: 'Student AI Literacy Curriculum Integration',          dueLabel: 'Month 5'  },
+    { item: 'National Media Activation & PR Campaign Launch',      dueLabel: 'Month 5'  },
+    { item: 'Predictive Success Dashboard — Full Deployment',      dueLabel: 'Month 5'  },
+    { item: 'All-Faculty AI Training Programme (Complete)',        dueLabel: 'Month 6'  },
+    { item: 'Enterprise AI Lab Setup (Infosys / Deloitte Standard)',dueLabel: 'Month 6' },
+    { item: 'Quarterly Business Review #1',                        dueLabel: 'Month 6'  },
+    { item: 'AI-Native Campus Certification Launch',               dueLabel: 'Month 7'  },
+    { item: 'Institutional AI Credential Programme',               dueLabel: 'Month 8'  },
+    { item: 'All-Student AI Competency Assessment',                dueLabel: 'Month 10' },
+    { item: 'Annual ROI Report & Renewal Recommendations',         dueLabel: 'Month 12' },
+  ],
+};
 
 const commitmentPillars = [
   {
@@ -559,189 +599,366 @@ const ContractualKPIs: React.FC = () => {
   );
 };
 
-// ─── Fee Schedule ─────────────────────────────────────────────────────────────
-const FeeSchedule: React.FC = () => (
-  <section id="fee-structure" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
-    <MeshGradient intensity="low" />
-    <div className="relative z-10 max-w-[1440px] mx-auto">
-
-      {/* Section header */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
-        <div className="lg:col-span-3">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, ease: easeOut }}
-            className="flex items-center gap-3"
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-            <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-              The Fee Structure
-            </span>
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
-            className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
-          >
-            One structure, all options
-          </motion.p>
-        </div>
-        <div className="lg:col-span-9">
-          <motion.h2
-            initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, ease: easeOut }}
-            className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
-          >
-            Phase-by-phase.
-            <br />
-            <span className="font-serif-display italic font-normal text-[#A7DADB]">Fixed and transparent.</span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-100px' }}
-            transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
-            className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
-          >
-            Smartslate service fees are fixed per phase across all three implementation options. Your choice of Cloud, Hybrid, or On-Prem determines only the underlying technology costs — which KJU pays directly to vendors at zero markup.
-          </motion.p>
-        </div>
-      </div>
-
-      {/* Commitment pillars */}
+// ─── Phase Deliverables Modal ─────────────────────────────────────────────────
+const PhaseModal: React.FC<{ phaseId: string; onClose: () => void }> = ({ phaseId, onClose }) => {
+  const ph = phases.find(p => p.id === phaseId)!;
+  const delivs = phaseDeliverables[phaseId] ?? [];
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3, ease: easeOut }}
+      className="fixed inset-0 z-[199] bg-black/82 backdrop-blur-2xl flex items-center justify-center p-4 md:p-8"
+      onClick={onClose}
+    >
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.85, ease: easeOut }}
-        className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+        initial={{ opacity: 0, y: 36, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: 18, scale: 0.97 }}
+        transition={{ duration: 0.48, ease: easeOut }}
+        className="relative w-full max-w-[640px] max-h-[88dvh] overflow-y-auto rounded-[28px] border border-[#A7DADB]/20 bg-[#060f1e]"
+        style={{ boxShadow: '0 50px 100px -24px rgba(0,0,0,0.9), inset 0 1px 0 rgba(167,218,219,0.1)' }}
+        onClick={e => e.stopPropagation()}
       >
-        {commitmentPillars.map((p) => (
-          <div
-            key={p.title}
-            className="rounded-[20px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl glass-refract p-7"
-          >
-            <div className="flex items-center gap-2.5 mb-4">
-              <span className="h-1.5 w-1.5 rounded-full" style={{ background: p.accent }} />
-              <span className="font-display text-[10px] tracking-[0.4em] uppercase font-bold" style={{ color: p.accent }}>
-                {p.title}
-              </span>
+        {/* Sticky header */}
+        <div className="sticky top-0 z-10 px-7 pt-7 pb-6 border-b border-white/[0.06] bg-[#060f1e]/95 backdrop-blur-2xl">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+                <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#A7DADB]/70 font-bold">
+                  Phase {ph.id} · {ph.timeline}
+                </span>
+              </div>
+              <h3 className="font-display font-bold text-white text-2xl md:text-3xl tracking-tight leading-tight">
+                {ph.name}
+              </h3>
+              <p className="mt-1.5 font-display font-bold text-[#A7DADB] text-xl tabular-nums">{ph.fee}</p>
             </div>
-            <p className="font-body font-light text-[#b0c5c6] text-sm leading-[1.65]">{p.body}</p>
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close"
+              className="shrink-0 press-scale inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] hover:bg-white/[0.1] px-4 py-2 text-white/60 hover:text-white"
+              style={{ transition: 'background-color 200ms, color 200ms' }}
+            >
+              <XIcon className="h-3.5 w-3.5" strokeWidth={1.75} />
+              <span className="font-display text-[9px] tracking-[0.35em] uppercase font-bold">Close</span>
+            </button>
           </div>
-        ))}
-      </motion.div>
+        </div>
 
-      {/* Phase fee table */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
-        transition={{ duration: 0.9, ease: easeOut }}
-        className="grid grid-cols-1 lg:grid-cols-12 gap-8"
-      >
-        {/* Smartslate service fees */}
-        <div className="lg:col-span-7 rounded-[24px] border border-[#A7DADB]/18 bg-[#0a1729]/70 backdrop-blur-xl glass-refract overflow-hidden">
-          <div className="px-8 py-5 border-b border-white/[0.06]">
-            <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-              Smartslate Service Fees — Paid to Smartslate, Fixed per Phase
-            </span>
-          </div>
-          <div className="divide-y divide-white/[0.05]">
-            {phases.map((ph) => (
-              <div key={ph.id} className="grid grid-cols-12 gap-4 px-8 py-5 items-start group hover:bg-white/[0.02] transition-colors duration-200">
-                <div className="col-span-2">
-                  <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
-                    Phase {ph.id}
+        {/* Deliverables list */}
+        <div className="px-7 pt-6 pb-4">
+          <p className="font-display text-[10px] tracking-[0.42em] uppercase text-[#b0c5c6]/45 font-bold mb-5">
+            Deliverables & Milestones
+          </p>
+          <div className="space-y-0">
+            {delivs.map((d, i) => (
+              <motion.div
+                key={d.item}
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.38, delay: 0.08 + i * 0.04, ease: easeOut }}
+                className="flex items-center gap-4 py-4 border-b border-white/[0.045] last:border-0"
+              >
+                <div className="shrink-0 h-5 w-5 rounded-full border border-[#A7DADB]/30 bg-[#A7DADB]/[0.08] flex items-center justify-center">
+                  <Check className="h-2.5 w-2.5 text-[#A7DADB]" strokeWidth={2.5} />
+                </div>
+                <p className="flex-1 min-w-0 font-body text-white/82 text-sm leading-snug">{d.item}</p>
+                <span className="shrink-0 inline-flex items-center px-2.5 py-1 rounded-full bg-[#A7DADB]/[0.07] border border-[#A7DADB]/15">
+                  <span className="font-display text-[10px] tracking-[0.25em] uppercase text-[#A7DADB]/75 font-bold tabular-nums">
+                    {d.dueLabel}
                   </span>
-                  <p className="mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">
-                    {ph.timeline}
-                  </p>
+                </span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer note */}
+        <div className="px-7 pb-7">
+          <div className="rounded-[14px] bg-[#A7DADB]/[0.04] border border-[#A7DADB]/12 px-5 py-4">
+            <p className="font-body text-[#b0c5c6]/55 text-xs leading-relaxed">
+              All deliverables are contractually binding and included in the Phase {ph.id} service fee of{' '}
+              <span className="text-[#A7DADB] font-bold">{ph.fee}</span>. Dates are measured from programme start date.
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+};
+
+// ─── Fee Schedule ─────────────────────────────────────────────────────────────
+const FeeSchedule: React.FC = () => {
+  const [openPhaseId, setOpenPhaseId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!openPhaseId) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpenPhaseId(null); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [openPhaseId]);
+
+  useEffect(() => {
+    document.body.style.overflow = openPhaseId ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [openPhaseId]);
+
+  return (
+    <>
+      <section id="fee-structure" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+        <MeshGradient intensity="low" />
+        <div className="relative z-10 max-w-[1440px] mx-auto">
+
+          {/* Section header */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
+            <div className="lg:col-span-3">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.7, ease: easeOut }}
+                className="flex items-center gap-3"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+                <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                  The Fee Structure
+                </span>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
+                className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+              >
+                One structure, all options
+              </motion.p>
+            </div>
+            <div className="lg:col-span-9">
+              <motion.h2
+                initial={{ opacity: 0, y: 18 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.85, ease: easeOut }}
+                className="font-display font-bold text-white leading-[1] tracking-[-0.025em] text-[clamp(2.5rem,5vw,5rem)]"
+              >
+                Phase-by-phase.
+                <br />
+                <span className="font-serif-display italic font-normal text-[#A7DADB]">Fixed and transparent.</span>
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
+                className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
+              >
+                Smartslate service fees are fixed per phase across all three implementation options. Your choice of Cloud, Hybrid, or On-Prem determines only the underlying technology costs — which KJU pays directly to vendors at zero markup.{' '}
+                <span className="text-[#A7DADB]/70 text-base">Click each phase to see every deliverable.</span>
+              </motion.p>
+            </div>
+          </div>
+
+          {/* Commitment pillars */}
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.85, ease: easeOut }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+          >
+            {commitmentPillars.map((p) => (
+              <div
+                key={p.title}
+                className="rounded-[20px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl glass-refract p-7"
+              >
+                <div className="flex items-center gap-2.5 mb-4">
+                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: p.accent }} />
+                  <span className="font-display text-[10px] tracking-[0.4em] uppercase font-bold" style={{ color: p.accent }}>
+                    {p.title}
+                  </span>
                 </div>
-                <div className="col-span-7">
-                  <p className="font-display font-bold text-white text-base tracking-tight">{ph.name}</p>
-                  <p className="mt-1 font-body font-light text-[#b0c5c6]/70 text-sm leading-snug">{ph.includes}</p>
-                </div>
-                <div className="col-span-3 text-right">
-                  <span className="font-display font-bold text-[#A7DADB] text-xl tabular-nums">{ph.fee}</span>
-                </div>
+                <p className="font-body font-light text-[#b0c5c6] text-sm leading-[1.65]">{p.body}</p>
               </div>
             ))}
+          </motion.div>
 
-            {/* Year 1 total */}
-            <div className="grid grid-cols-12 gap-4 px-8 py-5 items-center bg-[#A7DADB]/[0.05] border-t border-[#A7DADB]/18">
-              <div className="col-span-2">
-                <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#A7DADB]/70 font-bold">
-                  Year 1
+          {/* Phase fee table */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.9, ease: easeOut }}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8"
+          >
+            {/* Smartslate service fees */}
+            <div className="lg:col-span-7 rounded-[24px] border border-[#A7DADB]/18 bg-[#0a1729]/70 backdrop-blur-xl glass-refract overflow-hidden">
+              {/* Table header */}
+              <div className="px-8 py-5 border-b border-white/[0.06] flex items-center justify-between gap-4">
+                <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                  Smartslate Service Fees — Fixed per Phase
+                </span>
+                <span className="shrink-0 inline-flex items-center gap-1.5 opacity-60">
+                  <span className="h-1 w-1 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+                  <span className="font-display text-[9px] tracking-[0.3em] uppercase text-[#A7DADB]/70 font-bold hidden sm:block">
+                    Click a phase
+                  </span>
                 </span>
               </div>
-              <div className="col-span-7">
-                <p className="font-display font-bold text-white text-base tracking-tight">Complete Transformation Programme</p>
-                <p className="mt-0.5 font-body text-[#b0c5c6]/55 text-sm">6 months · Phases 1 through 3</p>
-              </div>
-              <div className="col-span-3 text-right">
-                <span className="font-display font-bold text-[#A7DADB] text-2xl tabular-nums">₹88L</span>
+
+              {/* Clickable phase rows */}
+              <div className="divide-y divide-white/[0.05]">
+                {phases.map((ph, i) => (
+                  <motion.button
+                    key={ph.id}
+                    type="button"
+                    onClick={() => setOpenPhaseId(ph.id)}
+                    initial={{ opacity: 0, x: -8 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.55, delay: i * 0.08, ease: easeOut }}
+                    className="group relative w-full text-left grid grid-cols-12 gap-4 px-8 py-6 items-center cursor-pointer hover:bg-[#A7DADB]/[0.03]"
+                    style={{ transition: 'background-color 220ms var(--ease-out-expo)' }}
+                    aria-label={`View ${ph.name} deliverables`}
+                  >
+                    {/* Left edge bar — grows in on hover */}
+                    <span
+                      aria-hidden
+                      className="absolute left-0 top-[15%] bottom-[15%] w-[2px] bg-[#A7DADB]/55 rounded-full origin-center scale-y-0 group-hover:scale-y-100"
+                      style={{ transition: 'transform 380ms var(--ease-out-expo)' }}
+                    />
+
+                    {/* Phase + timeline */}
+                    <div className="col-span-2">
+                      <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
+                        Phase {ph.id}
+                      </span>
+                      <p className="mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">
+                        {ph.timeline}
+                      </p>
+                    </div>
+
+                    {/* Name + description + hover chip */}
+                    <div className="col-span-7">
+                      <p
+                        className="font-display font-bold text-white text-base tracking-tight group-hover:text-[#A7DADB]"
+                        style={{ transition: 'color 220ms var(--ease-out-expo)' }}
+                      >
+                        {ph.name}
+                      </p>
+                      <p className="mt-1 font-body font-light text-[#b0c5c6]/70 text-sm leading-snug">{ph.includes}</p>
+                      <div
+                        className="mt-2.5 inline-flex items-center gap-1.5 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 pointer-events-none"
+                        style={{ transition: 'opacity 280ms var(--ease-out-expo), transform 280ms var(--ease-out-expo)' }}
+                      >
+                        <span className="h-[5px] w-[5px] rounded-full bg-[#A7DADB]/60" />
+                        <span className="font-display text-[9px] tracking-[0.32em] uppercase text-[#A7DADB]/65 font-bold">
+                          View deliverables
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Fee + arrow icon */}
+                    <div className="col-span-3 flex items-center justify-end gap-3">
+                      <span className="font-display font-bold text-[#A7DADB] text-xl tabular-nums">{ph.fee}</span>
+                      <div
+                        className="h-8 w-8 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center group-hover:border-[#A7DADB]/35 group-hover:bg-[#A7DADB]/[0.09]"
+                        style={{ transition: 'border-color 280ms, background-color 280ms' }}
+                      >
+                        <ArrowUpRight
+                          className="h-3.5 w-3.5 text-white/25 group-hover:text-[#A7DADB]"
+                          strokeWidth={2}
+                          style={{ transition: 'color 280ms var(--ease-out-expo)' }}
+                        />
+                      </div>
+                    </div>
+                  </motion.button>
+                ))}
+
+                {/* Year 1 total */}
+                <div className="grid grid-cols-12 gap-4 px-8 py-5 items-center bg-[#A7DADB]/[0.05] border-t border-[#A7DADB]/18">
+                  <div className="col-span-2">
+                    <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#A7DADB]/70 font-bold">
+                      Year 1
+                    </span>
+                  </div>
+                  <div className="col-span-7">
+                    <p className="font-display font-bold text-white text-base tracking-tight">Complete Transformation Programme</p>
+                    <p className="mt-0.5 font-body text-[#b0c5c6]/55 text-sm">6 months · Phases 1 through 3</p>
+                  </div>
+                  <div className="col-span-3 text-right">
+                    <span className="font-display font-bold text-[#A7DADB] text-2xl tabular-nums">₹88L</span>
+                  </div>
+                </div>
+
+                {/* Retainer */}
+                <div className="grid grid-cols-12 gap-4 px-8 py-5 items-center">
+                  <div className="col-span-2">
+                    <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
+                      Annual
+                    </span>
+                    <p className="mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">Year 2+</p>
+                  </div>
+                  <div className="col-span-7">
+                    <p className="font-display font-bold text-white text-base tracking-tight">Partnership Retainer</p>
+                    <p className="mt-1 font-body font-light text-[#b0c5c6]/70 text-sm leading-snug">
+                      Updates, new faculty onboarding, QBRs, advisory, playbook revisions
+                    </p>
+                  </div>
+                  <div className="col-span-3 text-right">
+                    <span className="font-display font-bold text-white/75 text-xl tabular-nums">₹44L / yr</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Retainer */}
-            <div className="grid grid-cols-12 gap-4 px-8 py-5 items-center">
-              <div className="col-span-2">
-                <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
-                  Annual
+            {/* KJU direct tech costs */}
+            <div className="lg:col-span-5 rounded-[24px] border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract overflow-hidden">
+              <div className="px-7 py-5 border-b border-white/[0.06]">
+                <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#b0c5c6]/55 font-bold">
+                  KJU Direct Technology Costs
                 </span>
-                <p className="mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">Year 2+</p>
-              </div>
-              <div className="col-span-7">
-                <p className="font-display font-bold text-white text-base tracking-tight">Partnership Retainer</p>
-                <p className="mt-1 font-body font-light text-[#b0c5c6]/70 text-sm leading-snug">
-                  Updates, new faculty onboarding, QBRs, advisory, playbook revisions
+                <p className="mt-2 font-body text-[#b0c5c6]/45 text-xs leading-relaxed">
+                  Paid by KJU directly to technology vendors. Smartslate charges no markup.
                 </p>
               </div>
-              <div className="col-span-3 text-right">
-                <span className="font-display font-bold text-white/75 text-xl tabular-nums">₹44L / yr</span>
+              <div className="px-7 py-6 space-y-4">
+                {directTechItems.map((item) => (
+                  <div key={item} className="flex items-start gap-3">
+                    <span className="mt-1.5 h-1 w-3 bg-[#b0c5c6]/25 shrink-0 rounded-full" />
+                    <span className="font-body text-[#b0c5c6]/60 text-sm leading-snug">{item}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mx-7 mb-7 rounded-[14px] border border-[#A7DADB]/18 bg-[#A7DADB]/[0.04] px-5 py-4">
+                <p className="font-display text-[10px] tracking-[0.35em] uppercase text-[#A7DADB]/70 font-bold mb-2">
+                  Example (Cloud Only)
+                </p>
+                <p className="font-body text-[#b0c5c6]/55 text-sm leading-relaxed">
+                  Claude API + AWS Hosting: <span className="text-white/75 font-bold">₹3.3L / year</span> in Year 1, scaling to <span className="text-white/75 font-bold">~₹10L / year</span> by Year 3 as usage grows.
+                </p>
               </div>
             </div>
-          </div>
+          </motion.div>
         </div>
+      </section>
 
-        {/* KJU direct tech costs */}
-        <div className="lg:col-span-5 rounded-[24px] border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract overflow-hidden">
-          <div className="px-7 py-5 border-b border-white/[0.06]">
-            <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#b0c5c6]/55 font-bold">
-              KJU Direct Technology Costs
-            </span>
-            <p className="mt-2 font-body text-[#b0c5c6]/45 text-xs leading-relaxed">
-              Paid by KJU directly to technology vendors. Smartslate charges no markup.
-            </p>
-          </div>
-          <div className="px-7 py-6 space-y-4">
-            {directTechItems.map((item) => (
-              <div key={item} className="flex items-start gap-3">
-                <span className="mt-1.5 h-1 w-3 bg-[#b0c5c6]/25 shrink-0 rounded-full" />
-                <span className="font-body text-[#b0c5c6]/60 text-sm leading-snug">{item}</span>
-              </div>
-            ))}
-          </div>
-          <div className="mx-7 mb-7 rounded-[14px] border border-[#A7DADB]/18 bg-[#A7DADB]/[0.04] px-5 py-4">
-            <p className="font-display text-[10px] tracking-[0.35em] uppercase text-[#A7DADB]/70 font-bold mb-2">
-              Example (Cloud Only)
-            </p>
-            <p className="font-body text-[#b0c5c6]/55 text-sm leading-relaxed">
-              Claude API + AWS Hosting: <span className="text-white/75 font-bold">₹3.3L / year</span> in Year 1, scaling to <span className="text-white/75 font-bold">~₹10L / year</span> by Year 3 as usage grows.
-            </p>
-          </div>
-        </div>
-      </motion.div>
-    </div>
-  </section>
-);
+      {/* Phase deliverables modal — portal to escape any CSS-transform containing blocks */}
+      {createPortal(
+        <AnimatePresence>
+          {openPhaseId && (
+            <PhaseModal key={openPhaseId} phaseId={openPhaseId} onClose={() => setOpenPhaseId(null)} />
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
+    </>
+  );
+};
 
 // ─── Implementation Paths (year-tab selector) ─────────────────────────────────
 const ImplementationPaths: React.FC = () => {
