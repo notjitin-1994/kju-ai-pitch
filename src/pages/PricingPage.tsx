@@ -214,6 +214,7 @@ const programmePillars = [
   {
     Icon: Cpu,
     num: '01',
+    photo: '/pricing-pillar-campus.jpg',
     pillar: 'Operations & Management',
     name: 'AI-Enabled Campus',
     headline: 'Every routine query answered autonomously, in under 30 seconds, around the clock.',
@@ -228,6 +229,7 @@ const programmePillars = [
   {
     Icon: Users,
     num: '02',
+    photo: '/pricing-pillar-faculty.jpg',
     pillar: 'Teaching & Efficiency',
     name: 'AI-Augmented Faculty',
     headline: 'Lesson prep drops from 3 hours to 20 minutes. Every faculty member, every week.',
@@ -242,6 +244,7 @@ const programmePillars = [
   {
     Icon: BookOpen,
     num: '03',
+    photo: '/pricing-pillar-students.jpg',
     pillar: 'Learning & Outcomes',
     name: 'AI-First Students',
     headline: 'Every KJU graduate leaves with a verifiable, industry-aligned AI credential at graduation.',
@@ -256,6 +259,7 @@ const programmePillars = [
   {
     Icon: Shield,
     num: '04',
+    photo: '/pricing-pillar-partner.jpg',
     pillar: 'Partnership Continuity',
     name: 'Annual Retainer',
     headline: 'The programme evolves as AI evolves — no renegotiation, no gaps, no institutional drift.',
@@ -367,8 +371,8 @@ const PricingHero: React.FC = () => (
         src="/pricing-campus.jpg"
         alt=""
         aria-hidden
-        className="w-full h-full object-cover opacity-20"
-        style={{ filter: 'contrast(1.05) saturate(0.6) brightness(0.4)' }}
+        className="w-full h-full object-cover opacity-35"
+        style={{ filter: 'contrast(1.1) saturate(0.7) brightness(0.55)' }}
         onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
       />
     </div>
@@ -465,6 +469,22 @@ const ContractualKPIs: React.FC = () => {
   return (
     <section className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
+      {/* Subtle campus photo — right-side atmosphere */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <img
+          src="/pricing-campus.jpg"
+          alt=""
+          aria-hidden
+          className="absolute right-0 top-0 h-full w-[55%] object-cover object-left"
+          style={{ opacity: 0.22, filter: 'saturate(0.35) brightness(0.6) contrast(1.2)' }}
+          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(90deg, #020C1B 0%, rgba(2,12,27,0.85) 30%, rgba(2,12,27,0.2) 65%, transparent 100%)' }}
+        />
+      </div>
       <div className="relative z-10 max-w-[1440px] mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
           <div className="lg:col-span-3">
@@ -1356,7 +1376,21 @@ const ProgrammePillars: React.FC = () => {
                 className="rounded-[28px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl glass-refract overflow-hidden"
               >
                 {/* Panel top: icon + name + headline */}
-                <div className="relative px-8 pt-8 pb-7 border-b border-white/[0.05]">
+                <div className="relative px-8 pt-8 pb-7 border-b border-white/[0.05] overflow-hidden">
+                  {/* Contextual photo — right-side magazine blend */}
+                  <img
+                    src={active.photo}
+                    alt=""
+                    aria-hidden
+                    className="absolute top-0 right-0 h-full w-[52%] object-cover pointer-events-none"
+                    style={{ opacity: 0.5, filter: 'saturate(0.5) brightness(0.55) contrast(1.1)' }}
+                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                  />
+                  <div
+                    aria-hidden
+                    className="absolute inset-0 pointer-events-none"
+                    style={{ background: 'linear-gradient(105deg, #0a1729 22%, rgba(10,23,41,0.85) 40%, rgba(10,23,41,0.3) 65%, rgba(10,23,41,0.5) 100%)' }}
+                  />
                   {/* Decorative glow */}
                   <div
                     aria-hidden
@@ -1510,6 +1544,25 @@ const ProgrammePillars: React.FC = () => {
                       className="overflow-hidden"
                     >
                       <div className="pb-10">
+                        {/* Photo strip */}
+                        <div className="relative mb-5 rounded-[16px] overflow-hidden h-36">
+                          <img
+                            src={p.photo}
+                            alt=""
+                            aria-hidden
+                            className="absolute inset-0 w-full h-full object-cover"
+                            style={{ filter: 'saturate(0.7) brightness(0.7) contrast(1.05)' }}
+                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+                          />
+                          <div
+                            aria-hidden
+                            className="absolute inset-0"
+                            style={{ background: 'linear-gradient(180deg, transparent 20%, rgba(2,12,27,0.85) 100%)' }}
+                          />
+                          <div className="absolute bottom-3 left-4">
+                            <span className="font-display text-[9px] tracking-[0.4em] uppercase text-[#A7DADB]/65 font-bold">{p.pillar}</span>
+                          </div>
+                        </div>
                         {/* Headline */}
                         <p className="mb-5 font-body font-light text-[#b0c5c6] text-sm leading-relaxed">{p.headline}</p>
 
@@ -2057,6 +2110,22 @@ const ROICalculator: React.FC = () => {
 const PricingCTA: React.FC = () => (
   <section className="relative py-40 md:py-52 px-6 md:px-12 lg:px-24 overflow-hidden">
     <MeshGradient intensity="med" />
+    {/* Aspirational campus background */}
+    <div className="absolute inset-0 z-0 pointer-events-none">
+      <img
+        src="/pricing-cta.jpg"
+        alt=""
+        aria-hidden
+        className="w-full h-full object-cover object-center"
+        style={{ opacity: 0.32, filter: 'saturate(0.65) brightness(0.55) contrast(1.1)' }}
+        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{ background: 'radial-gradient(ellipse at 50% 80%, transparent 0%, rgba(2,12,27,0.7) 55%, #020C1B 100%)' }}
+      />
+    </div>
     <div className="absolute inset-0 pointer-events-none [mask-image:radial-gradient(ellipse_at_center,rgba(0,0,0,0.7)_0%,transparent_75%)]">
       <FlickeringGrid color="rgb(167,218,219)" squareSize={3} gridGap={9} flickerChance={0.12} maxOpacity={0.16} />
     </div>
