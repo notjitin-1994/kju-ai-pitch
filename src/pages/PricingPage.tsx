@@ -213,46 +213,58 @@ const kpiMetrics = [
 const programmePillars = [
   {
     Icon: Cpu,
+    num: '01',
     pillar: 'Operations & Management',
     name: 'AI-Enabled Campus',
+    headline: 'Every routine query answered autonomously, in under 30 seconds, around the clock.',
+    stat: { value: '≥70%', label: 'Admin overhead reduction — contractual KPI, measured from Day 1' },
     items: [
-      '24/7 Student Concierge (>90% autonomous resolution)',
-      'Predictive Success Dashboard (<72hr at-risk flagging)',
-      'Unified Institutional Knowledge Base',
-      '≥70% admin overhead reduction',
+      { title: '24/7 Student Concierge', detail: '>90% of queries resolved autonomously — schedules, fees, hostel, registrations — with no staff involvement required.' },
+      { title: 'Predictive Success Dashboard', detail: 'At-risk students flagged within 72 hours of early indicators. Proactive intervention, not reactive fire-fighting.' },
+      { title: 'Unified Knowledge Base', detail: 'All institutional data — policies, calendars, courses, ordinances — in one AI-queryable layer, accessible to everyone.' },
+      { title: '≥70% Overhead Reduction', detail: 'Contractually measured from Day 1. Staff redirected from repetitive queries to high-value student interactions.' },
     ],
   },
   {
     Icon: Users,
+    num: '02',
     pillar: 'Teaching & Efficiency',
     name: 'AI-Augmented Faculty',
+    headline: 'Lesson prep drops from 3 hours to 20 minutes. Every faculty member, every week.',
+    stat: { value: '40–60%', label: 'Preparation time saved — measured weekly against a pre-deployment baseline' },
     items: [
-      '8-Week Subject-Specific Training Programme',
-      'Subject Playbooks: Arts, Commerce & Science',
-      'AI-Assisted Preparation (<20 min vs 2–3 hrs)',
-      '40–60% Preparation Time Saved',
+      { title: '8-Week Training Programme', detail: 'Subject-specific AI mastery for each department — not generic workshops. Built around what faculty actually teach.' },
+      { title: 'Three Subject Playbooks', detail: 'Tailored AI implementation guides for Arts, Commerce, and Science — ready to use from Week 8 onwards.' },
+      { title: 'AI-Assisted Preparation', detail: 'Lesson plans in <20 min. Assessments drafted in seconds. Research compressed from days to minutes.' },
+      { title: '~200 Hours Returned / Year', detail: 'Per faculty member — a contractual baseline. Reclaimed hours go directly back to mentorship, research, and student outcomes.' },
     ],
   },
   {
     Icon: BookOpen,
+    num: '03',
     pillar: 'Learning & Outcomes',
     name: 'AI-First Students',
+    headline: 'Every KJU graduate leaves with a verifiable, industry-aligned AI credential at graduation.',
+    stat: { value: '>80%', label: 'Students AI-certified institution-wide — all streams, all years' },
     items: [
-      'Mandatory AI Literacy Curriculum (all streams)',
-      'AI-Augmented Assignments: applied skills, not shortcuts',
-      'Enterprise-Grade AI Lab (Infosys / Deloitte standard)',
-      'Certified AI Competency Credential at graduation',
+      { title: 'Mandatory AI Literacy Curriculum', detail: 'Embedded across all streams — not an elective. AI becomes a core competency of every KJU degree programme.' },
+      { title: 'AI-Augmented Assignments', detail: 'Applied problem-solving, not shortcuts. Students build real capability and critical judgment, not AI dependency.' },
+      { title: 'Enterprise-Grade AI Lab', detail: 'Infosys and Deloitte standard. Students graduate fully ready for the AI-native workforce they\'ll enter from day one.' },
+      { title: 'Institutional AI Credential', detail: 'A verifiable, KJU-issued certification that differentiates every graduate in every hiring cycle — permanently.' },
     ],
   },
   {
     Icon: Shield,
+    num: '04',
     pillar: 'Partnership Continuity',
-    name: 'Annual Retainer (Year 2+)',
+    name: 'Annual Retainer',
+    headline: 'The programme evolves as AI evolves — no renegotiation, no gaps, no institutional drift.',
+    stat: { value: '₹44L / yr', label: 'Annual retainer fee — Year 2 onwards, covering all four continuity pillars' },
     items: [
-      'Continuous AI Model Updates',
-      'New Faculty Cohort Onboarding',
-      'Quarterly Business Reviews',
-      'Priority Support & Advisory',
+      { title: 'Continuous AI Model Updates', detail: 'As frontier models improve, KJU\'s platform updates automatically — no redeployment or additional retraining required.' },
+      { title: 'New Faculty Cohort Onboarding', detail: 'Every incoming faculty cohort trained to Year 1 standard. Zero drift in AI capability across the institution over time.' },
+      { title: 'Quarterly Business Reviews', detail: 'Full adoption data, KPI performance, and forward-looking strategic recommendations delivered every quarter.' },
+      { title: 'Priority Support & Advisory', detail: 'Direct line to Smartslate leadership. Rapid-response SLA for anything that surfaces in a live institutional deployment.' },
     ],
   },
 ] as const;
@@ -1197,14 +1209,19 @@ const ImplementationPaths: React.FC = () => {
   );
 };
 
-// ─── Programme Pillars (accordion) ────────────────────────────────────────────
+// ─── Programme Pillars ────────────────────────────────────────────────────────
 const ProgrammePillars: React.FC = () => {
-  const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [desktopIdx, setDesktopIdx] = useState(0);
+  const [mobileIdx, setMobileIdx] = useState<number | null>(null);
+  const active = programmePillars[desktopIdx];
+  const ActiveIcon = active.Icon;
 
   return (
     <section id="programme" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
       <div className="relative z-10 max-w-[1440px] mx-auto">
+
+        {/* ── Section header ── */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
           <div className="lg:col-span-3">
             <motion.div
@@ -1248,87 +1265,278 @@ const ProgrammePillars: React.FC = () => {
               transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
               className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
             >
-              Every deliverable is designed to produce measurable outcomes within Year 1. Nothing is aspirational. Everything is contractually defined.{' '}
-              <span className="text-[#A7DADB]/70 text-sm">Click each pillar to expand.</span>
+              Every deliverable is designed to produce measurable outcomes within Year 1. Nothing is aspirational. Everything is contractually defined.
             </motion.p>
           </div>
         </div>
 
-        <div className="space-y-0">
-          {programmePillars.map((pillar, i) => {
-            const { Icon } = pillar;
-            const isOpen = openIdx === i;
+        {/* ── Desktop: left-nav + right panel ── */}
+        <motion.div
+          initial={{ opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.9, ease: easeOut }}
+          className="hidden lg:grid lg:grid-cols-12 gap-6 items-start"
+        >
+          {/* Left: pillar selector */}
+          <nav className="lg:col-span-4 rounded-[24px] overflow-hidden border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract">
+            {programmePillars.map((p, i) => {
+              const isActive = desktopIdx === i;
+              return (
+                <button
+                  key={p.num}
+                  type="button"
+                  onClick={() => setDesktopIdx(i)}
+                  className={`group relative w-full text-left px-7 py-6 cursor-pointer ${i < programmePillars.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
+                  style={{
+                    backgroundColor: isActive ? 'rgba(167,218,219,0.055)' : 'transparent',
+                    transition: 'background-color 280ms var(--ease-out-expo)',
+                  }}
+                >
+                  {/* Active left border */}
+                  <span
+                    aria-hidden
+                    className="absolute left-0 inset-y-[14%] w-[2.5px] bg-[#A7DADB] rounded-r-full"
+                    style={{ opacity: isActive ? 1 : 0, transition: 'opacity 280ms var(--ease-out-expo)' }}
+                  />
+
+                  <div className="flex items-start gap-4">
+                    {/* Large number */}
+                    <span
+                      className="font-display font-bold tabular-nums leading-none shrink-0 mt-1 text-[2rem]"
+                      style={{
+                        color: isActive ? 'rgba(167,218,219,0.85)' : 'rgba(176,197,198,0.18)',
+                        transition: 'color 280ms var(--ease-out-expo)',
+                      }}
+                    >
+                      {p.num}
+                    </span>
+
+                    <div className="flex-1 min-w-0">
+                      <p
+                        className="font-display text-[9.5px] tracking-[0.4em] uppercase font-bold leading-none"
+                        style={{ color: isActive ? 'rgba(167,218,219,0.65)' : 'rgba(176,197,198,0.35)', transition: 'color 280ms' }}
+                      >
+                        {p.pillar}
+                      </p>
+                      <h3
+                        className="mt-1 font-display font-bold text-[1.05rem] tracking-tight leading-tight"
+                        style={{ color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.45)', transition: 'color 280ms var(--ease-out-expo)' }}
+                      >
+                        {p.name}
+                      </h3>
+                      {/* Stat preview — fades in when active */}
+                      <div
+                        className="overflow-hidden"
+                        style={{
+                          maxHeight: isActive ? '2.5rem' : '0',
+                          opacity: isActive ? 1 : 0,
+                          marginTop: isActive ? '0.5rem' : 0,
+                          transition: 'max-height 400ms var(--ease-out-expo), opacity 320ms, margin-top 400ms var(--ease-out-expo)',
+                        }}
+                      >
+                        <span className="font-display font-bold text-[#A7DADB] text-xl tabular-nums">{p.stat.value}</span>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Right: animated content panel */}
+          <div className="lg:col-span-8">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={desktopIdx}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.42, ease: easeOut }}
+                className="rounded-[28px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl glass-refract overflow-hidden"
+              >
+                {/* Panel top: icon + name + headline */}
+                <div className="relative px-8 pt-8 pb-7 border-b border-white/[0.05]">
+                  {/* Decorative glow */}
+                  <div
+                    aria-hidden
+                    className="absolute -top-16 -right-16 h-56 w-56 rounded-full bg-[#A7DADB] pointer-events-none"
+                    style={{ filter: 'blur(72px)', opacity: 0.07 }}
+                  />
+                  <div className="relative flex items-start gap-5">
+                    <div className="shrink-0 h-14 w-14 rounded-2xl border border-[#A7DADB]/22 bg-[#A7DADB]/[0.08] flex items-center justify-center">
+                      <ActiveIcon className="h-6 w-6 text-[#A7DADB]" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <span className="font-display text-[10px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold">{active.pillar}</span>
+                      <h3 className="mt-0.5 font-display font-bold text-white leading-tight tracking-tight text-2xl md:text-[1.7rem]">
+                        {active.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="relative mt-5 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.65] max-w-[52ch]">
+                    {active.headline}
+                  </p>
+                </div>
+
+                {/* Stat callout */}
+                <div className="px-8 py-5 flex items-center gap-5 border-b border-white/[0.05] bg-[#A7DADB]/[0.025]">
+                  <span
+                    className="font-display font-bold tabular-nums text-[#A7DADB] leading-none shrink-0"
+                    style={{ fontSize: 'clamp(2.6rem, 4.5vw, 3.75rem)' }}
+                  >
+                    {active.stat.value}
+                  </span>
+                  <div className="h-10 w-px bg-[#A7DADB]/18 shrink-0" />
+                  <p className="font-body font-light text-[#b0c5c6]/70 text-sm leading-snug max-w-[34ch]">
+                    {active.stat.label}
+                  </p>
+                </div>
+
+                {/* Feature card grid */}
+                <div className="p-6">
+                  <div className="grid grid-cols-2 gap-3">
+                    {active.items.map((item, ii) => (
+                      <motion.div
+                        key={item.title}
+                        initial={{ opacity: 0, y: 14 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.38, delay: 0.12 + ii * 0.07, ease: easeOut }}
+                        className="rounded-[16px] border border-white/[0.06] bg-white/[0.025] p-5"
+                        style={{ transition: 'background-color 200ms, border-color 200ms' }}
+                        onMouseEnter={e => {
+                          (e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(255,255,255,0.04)';
+                          (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(167,218,219,0.14)';
+                        }}
+                        onMouseLeave={e => {
+                          (e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(255,255,255,0.025)';
+                          (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(255,255,255,0.06)';
+                        }}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="shrink-0 mt-0.5 h-[18px] w-[18px] rounded-full border border-[#A7DADB]/30 bg-[#A7DADB]/[0.09] flex items-center justify-center">
+                            <Check className="h-2 w-2 text-[#A7DADB]" strokeWidth={3} />
+                          </div>
+                          <div>
+                            <p className="font-display font-bold text-white text-[0.8rem] tracking-tight leading-snug">
+                              {item.title}
+                            </p>
+                            <p className="mt-1.5 font-body font-light text-[#b0c5c6]/60 text-[0.72rem] leading-relaxed">
+                              {item.detail}
+                            </p>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </motion.div>
+
+        {/* ── Mobile: enhanced accordion ── */}
+        <div className="lg:hidden space-y-0">
+          {programmePillars.map((p, i) => {
+            const isOpen = mobileIdx === i;
+            const PIcon = p.Icon;
             return (
               <motion.article
-                key={pillar.name}
-                initial={{ opacity: 0, y: 30 }}
+                key={p.num}
+                initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.85, delay: i * 0.07, ease: easeOut }}
                 className="relative border-t border-white/[0.07]"
               >
+                {/* Teal rule that stretches when open */}
                 <span
                   aria-hidden
                   className="absolute top-0 left-0 h-px bg-[#A7DADB]"
-                  style={{
-                    width: isOpen ? '100%' : '0%',
-                    opacity: isOpen ? 0.6 : 0,
-                    transition: 'width 800ms var(--ease-out-expo), opacity 400ms',
-                  }}
+                  style={{ width: isOpen ? '100%' : '0%', opacity: isOpen ? 0.55 : 0, transition: 'width 700ms var(--ease-out-expo), opacity 350ms' }}
                 />
 
                 <button
                   type="button"
-                  onClick={() => setOpenIdx(isOpen ? null : i)}
-                  className="w-full text-left py-12 md:py-16 cursor-pointer"
+                  onClick={() => setMobileIdx(isOpen ? null : i)}
+                  className="w-full text-left py-8 cursor-pointer"
                   aria-expanded={isOpen}
                 >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 gap-x-10">
-                    <div className="lg:col-span-4 flex flex-col gap-4">
-                      <div className="inline-flex items-center justify-center h-12 w-12 rounded-xl border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07]">
-                        <Icon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <div
+                        className="shrink-0 h-11 w-11 rounded-xl border flex items-center justify-center"
+                        style={{
+                          borderColor: isOpen ? 'rgba(167,218,219,0.3)' : 'rgba(167,218,219,0.12)',
+                          backgroundColor: isOpen ? 'rgba(167,218,219,0.1)' : 'rgba(167,218,219,0.05)',
+                          transition: 'border-color 280ms, background-color 280ms',
+                        }}
+                      >
+                        <PIcon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.5} />
                       </div>
                       <div>
-                        <p className="font-display text-[11px] tracking-[0.4em] uppercase text-[#A7DADB] font-bold">{pillar.pillar}</p>
-                        <h3 className="mt-1 font-display font-bold text-white text-2xl md:text-3xl tracking-tight">{pillar.name}</h3>
+                        <p
+                          className="font-display text-[10px] tracking-[0.38em] uppercase font-bold"
+                          style={{ color: isOpen ? 'rgba(167,218,219,0.7)' : 'rgba(167,218,219,0.45)', transition: 'color 280ms' }}
+                        >
+                          {p.pillar}
+                        </p>
+                        <h3
+                          className="mt-0.5 font-display font-bold text-xl tracking-tight"
+                          style={{ color: isOpen ? '#fff' : 'rgba(255,255,255,0.75)', transition: 'color 280ms' }}
+                        >
+                          {p.name}
+                        </h3>
                       </div>
                     </div>
-                    <div className="lg:col-span-7 lg:col-start-5 flex items-center">
-                      <p className="font-body font-light text-[#b0c5c6]/70 text-base">
-                        {pillar.items.length} deliverables — click to expand
-                      </p>
-                    </div>
-                    <div className="lg:col-span-1 lg:col-start-12 flex items-center justify-end">
-                      <motion.div
-                        animate={{ rotate: isOpen ? 180 : 0 }}
-                        transition={{ duration: 0.4, ease: easeOut }}
-                        className="h-9 w-9 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0"
-                      >
-                        <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
-                      </motion.div>
-                    </div>
+                    <motion.div
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.38, ease: easeOut }}
+                      className="shrink-0 h-8 w-8 rounded-full border border-[#A7DADB]/22 bg-[#A7DADB]/[0.06] flex items-center justify-center"
+                    >
+                      <ChevronDown className="h-3.5 w-3.5 text-[#A7DADB]" strokeWidth={2} />
+                    </motion.div>
                   </div>
                 </button>
 
                 <AnimatePresence initial={false}>
                   {isOpen && (
                     <motion.div
-                      key="pillar-expand"
+                      key="mobile-expand"
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: 'auto', opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: easeOut }}
+                      transition={{ duration: 0.48, ease: easeOut }}
                       className="overflow-hidden"
                     >
-                      <div className="pb-14 md:pb-16">
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-4">
-                          {pillar.items.map((item, ii) => (
-                            <li key={ii} className="flex items-center gap-3">
-                              <span className="h-px w-4 bg-[#A7DADB]/40 shrink-0" />
-                              <span className="font-body text-[#b0c5c6] text-base">{item}</span>
-                            </li>
+                      <div className="pb-10">
+                        {/* Headline */}
+                        <p className="mb-5 font-body font-light text-[#b0c5c6] text-sm leading-relaxed">{p.headline}</p>
+
+                        {/* Stat chip */}
+                        <div className="mb-6 inline-flex items-center gap-4 rounded-[14px] border border-[#A7DADB]/15 bg-[#A7DADB]/[0.05] px-5 py-3">
+                          <span className="font-display font-bold text-[#A7DADB] text-[1.85rem] tabular-nums leading-none">{p.stat.value}</span>
+                          <div className="h-8 w-px bg-[#A7DADB]/18" />
+                          <p className="font-body text-[#b0c5c6]/60 text-xs leading-snug max-w-[18ch]">{p.stat.label}</p>
+                        </div>
+
+                        {/* Items list */}
+                        <div className="space-y-3">
+                          {p.items.map((item) => (
+                            <div
+                              key={item.title}
+                              className="flex items-start gap-3 rounded-[14px] border border-white/[0.05] bg-white/[0.02] p-4"
+                            >
+                              <div className="shrink-0 mt-0.5 h-[18px] w-[18px] rounded-full border border-[#A7DADB]/28 bg-[#A7DADB]/[0.08] flex items-center justify-center">
+                                <Check className="h-2 w-2 text-[#A7DADB]" strokeWidth={3} />
+                              </div>
+                              <div>
+                                <p className="font-display font-bold text-white text-sm tracking-tight">{item.title}</p>
+                                <p className="mt-1 font-body text-[#b0c5c6]/60 text-xs leading-relaxed">{item.detail}</p>
+                              </div>
+                            </div>
                           ))}
-                        </ul>
+                        </div>
                       </div>
                     </motion.div>
                   )}
@@ -1337,6 +1545,7 @@ const ProgrammePillars: React.FC = () => {
             );
           })}
         </div>
+
       </div>
     </section>
   );
