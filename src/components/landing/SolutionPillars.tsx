@@ -194,7 +194,7 @@ export const SolutionPillars = () => {
         </div>
 
         {/* Asymmetric bento with 3D tilt */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[480px_420px] md:lg:grid-rows-[560px_480px] gap-6 md:gap-8 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 lg:grid-rows-[480px_minmax(500px,auto)] gap-6 md:gap-8 w-full">
           {pillars.map((p, i) => {
             const Icon = p.icon;
             const isHorizontal = p.horizontal;
@@ -260,7 +260,7 @@ export const SolutionPillars = () => {
                   <div
                     className={`relative z-10 ${
                       isHorizontal
-                        ? 'lg:ml-[41.6667%] p-8 md:p-14 lg:py-16'
+                        ? 'lg:ml-[41.6667%] p-8 md:px-14 md:py-16 lg:py-20'
                         : 'p-8 md:p-10'
                     } flex flex-col h-full ${isHorizontal ? 'gap-6' : 'gap-8'}`}
                   >
