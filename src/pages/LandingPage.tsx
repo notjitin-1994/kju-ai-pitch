@@ -9,6 +9,8 @@ import { Outcomes } from '../components/landing/Outcomes';
 import { CTA } from '../components/landing/CTA';
 import { GrainOverlay } from '../components/ui/atmosphere';
 import { CursorSpotlight } from '../components/ui/CursorSpotlight';
+import { AudioProvider } from '../audio/AudioProvider';
+import { MiniPlayer } from '../audio/MiniPlayer';
 
 const navLinks: { href: string; label: string; route?: boolean }[] = [
   { href: '#problem', label: 'Premise' },
@@ -112,19 +114,22 @@ const ScrollProgress: React.FC = () => {
 
 const LandingPage: React.FC = () => {
   return (
-    <div className="relative bg-[#020C1B] min-h-screen selection:bg-[#A7DADB]/30 selection:text-[#A7DADB]">
-      <CursorSpotlight />
-      <ScrollProgress />
-      <Navbar />
-      <main>
-        <Hero />
-        <ProblemMatrix />
-        <SolutionPillars />
-        <Outcomes />
-        <CTA />
-      </main>
-      <GrainOverlay opacity={0.06} />
-    </div>
+    <AudioProvider>
+      <div className="relative bg-[#020C1B] min-h-screen selection:bg-[#A7DADB]/30 selection:text-[#A7DADB]">
+        <CursorSpotlight />
+        <ScrollProgress />
+        <Navbar />
+        <main>
+          <Hero />
+          <ProblemMatrix />
+          <SolutionPillars />
+          <Outcomes />
+          <CTA />
+        </main>
+        <GrainOverlay opacity={0.06} />
+        <MiniPlayer />
+      </div>
+    </AudioProvider>
   );
 };
 

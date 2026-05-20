@@ -3,6 +3,8 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowUpRight, Mail, Calendar } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { FlickeringGrid } from '../ui/flickering-grid';
+import { useSectionAudio } from '../../audio/useSectionAudio';
+import { AmbientGlow } from '../../audio/AmbientGlow';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -54,11 +56,15 @@ const MagneticButton: React.FC<MagneticButtonProps> = ({
 };
 
 export const CTA = () => {
+  const { ref, isActive } = useSectionAudio('cta');
+
   return (
     <section
+      ref={ref as React.RefObject<HTMLElement>}
       id="contact"
       className="relative py-40 md:py-52 px-6 md:px-12 lg:px-24 overflow-hidden"
     >
+      <AmbientGlow active={isActive} />
       {/* Background campus image */}
       <div className="absolute inset-0 z-0">
         <img

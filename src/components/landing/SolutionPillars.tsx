@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { NumberTicker } from '../ui/number-ticker';
+import { useSectionAudio } from '../../audio/useSectionAudio';
+import { AmbientGlow } from '../../audio/AmbientGlow';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -130,12 +132,15 @@ const TiltCard: React.FC<TiltCardProps> = ({ children, className, style, onClick
 export const SolutionPillars = () => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const activeData = pillars.find((p) => p.id === activeId);
+  const { ref, isActive } = useSectionAudio('solution');
 
   return (
     <section
+      ref={ref as React.RefObject<HTMLElement>}
       id="solution"
       className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden"
     >
+      <AmbientGlow active={isActive} />
       <MeshGradient intensity="low" />
 
       <div className="relative z-10 max-w-[1440px] mx-auto">

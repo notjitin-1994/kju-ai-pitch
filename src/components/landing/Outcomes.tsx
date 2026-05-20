@@ -20,6 +20,8 @@ import {
   TrendingDown,
 } from 'lucide-react';
 import { MeshGradient } from '../ui/atmosphere';
+import { useSectionAudio } from '../../audio/useSectionAudio';
+import { AmbientGlow } from '../../audio/AmbientGlow';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -687,11 +689,15 @@ const AnchorRow: React.FC<{ a: Anchor; idx: number }> = ({ a, idx }) => {
    Outcomes — Chapter 04
    ───────────────────────────────────────────────────────── */
 export const Outcomes = () => {
+  const { ref, isActive } = useSectionAudio('outcomes');
+
   return (
     <section
+      ref={ref as React.RefObject<HTMLElement>}
       id="outcomes"
       className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden"
     >
+      <AmbientGlow active={isActive} />
       <MeshGradient intensity="low" />
 
       <div className="relative z-10 max-w-[1440px] mx-auto">

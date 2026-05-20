@@ -4,11 +4,15 @@ import { Play, ArrowUpRight } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
 import { FlickeringGrid } from '../ui/flickering-grid';
 import { MeshGradient } from '../ui/atmosphere';
+import { useSectionAudio } from '../../audio/useSectionAudio';
+import { AmbientGlow } from '../../audio/AmbientGlow';
+import { HeroAudioCTA } from '../../audio/HeroAudioCTA';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export const Hero = () => {
   const [videoOpen, setVideoOpen] = useState(false);
+  const { ref, isActive } = useSectionAudio('hero');
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -31,11 +35,13 @@ export const Hero = () => {
 
   return (
     <section
+      ref={ref as React.RefObject<HTMLElement>}
       id="hero"
       className="relative min-h-[100dvh] flex items-center px-6 md:px-12 lg:px-24 pt-32 pb-24 overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
+      <AmbientGlow active={isActive} />
       {/* Atmosphere */}
       <MeshGradient intensity="med" />
       <div className="absolute inset-0 pointer-events-none [mask-image:linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.18)_55%,transparent_100%)]">
@@ -127,6 +133,9 @@ export const Hero = () => {
               />
             </a>
           </motion.div>
+
+          {/* Audio narration opt-in */}
+          <HeroAudioCTA />
 
           {/* Trust strip */}
           <motion.div
