@@ -134,7 +134,7 @@ export const SolutionPillars = () => {
   return (
     <section
       id="solution"
-      className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden"
+      className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden"
     >
       <MeshGradient intensity="low" />
 

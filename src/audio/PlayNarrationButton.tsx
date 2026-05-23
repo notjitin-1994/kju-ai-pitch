@@ -126,12 +126,12 @@ export const PlayNarrationButton: React.FC<PlayNarrationButtonProps> = ({
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="inline-flex items-center gap-4 rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-md px-2 py-2 pr-5">
+    <div className="inline-flex max-w-full items-center gap-3 sm:gap-4 rounded-full border border-white/[0.08] bg-white/[0.04] backdrop-blur-md px-2 py-2 pr-4 sm:pr-5">
       <button
         type="button"
         onClick={toggle}
         aria-label={isPlaying ? 'Pause narration' : 'Play narration'}
-        className="press-scale group flex h-11 w-11 items-center justify-center rounded-full bg-[#A7DADB] text-[#020C1B]"
+        className="press-scale group flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#A7DADB] text-[#020C1B]"
         style={{
           boxShadow:
             '0 8px 22px -8px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)',
@@ -150,12 +150,12 @@ export const PlayNarrationButton: React.FC<PlayNarrationButtonProps> = ({
         )}
       </button>
 
-      <div className="flex flex-col gap-1.5 min-w-[150px]">
-        <div className="flex items-center justify-between gap-3">
-          <span className="font-display text-[10px] tracking-[0.35em] uppercase text-[#b0c5c6]/85 font-bold">
+      <div className="flex flex-col gap-1.5 min-w-0 flex-1 sm:min-w-[150px] sm:flex-initial">
+        <div className="flex items-center justify-between gap-2 sm:gap-3">
+          <span className="font-display text-[9.5px] sm:text-[10px] tracking-[0.28em] sm:tracking-[0.35em] uppercase text-[#b0c5c6]/85 font-bold truncate">
             {isPlaying ? 'Narrating' : 'Listen to the brief'}
           </span>
-          <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/65">
+          <span className="font-mono text-[9.5px] sm:text-[10px] tabular-nums text-[#b0c5c6]/65 shrink-0">
             {formatTime(currentTime)} / {formatTime(duration)}
           </span>
         </div>

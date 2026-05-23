@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import { Menu, X, Mail } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { Hero } from '../components/landing/Hero';
 import { ProblemMatrix } from '../components/landing/ProblemMatrix';
@@ -17,8 +18,11 @@ const navLinks: { href: string; label: string; route?: boolean }[] = [
   { href: '/pricing', label: 'Pricing', route: true },
 ];
 
+const easeOut = [0.16, 1, 0.3, 1] as const;
+
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -26,6 +30,13 @@ const Navbar: React.FC = () => {
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
 
   return (
     <nav
@@ -35,9 +46,9 @@ const Navbar: React.FC = () => {
       }}
     >
       <div
-        className={`flex items-center justify-between px-6 md:px-12 lg:px-24 h-20 md:h-[88px] border-b ${
-          scrolled
-            ? 'border-white/[0.06] bg-[#020C1B]/75 backdrop-blur-2xl'
+        className={`flex items-center justify-between px-5 md:px-12 lg:px-24 h-16 md:h-[88px] border-b ${
+          scrolled || menuOpen
+            ? 'border-white/[0.06] bg-[#020C1B]/85 backdrop-blur-2xl'
             : 'border-transparent bg-transparent backdrop-blur-0'
         }`}
         style={{ transition: 'inherit' }}
@@ -80,10 +91,11 @@ const Navbar: React.FC = () => {
           )}
         </div>
 
-        <div className="flex items-center gap-5">
+        <div className="flex items-center gap-2.5 md:gap-5">
           <a
             href="#contact"
-            className="press-scale inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-[#A7DADB] text-[#020C1B] font-display text-xs tracking-[0.22em] uppercase font-bold"
+            aria-label="Reach out"
+            className="press-scale inline-flex items-center gap-2 rounded-full bg-[#A7DADB] text-[#020C1B] font-display tracking-[0.22em] uppercase font-bold h-10 md:h-auto md:px-5 md:py-2.5 px-3.5 text-[10px] md:text-xs whitespace-nowrap"
             style={{
               boxShadow:
                 '0 8px 22px -8px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)',
@@ -91,10 +103,65 @@ const Navbar: React.FC = () => {
             }}
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#020C1B]/80 animate-soft-pulse" />
-            Reach Out
+            <span className="hidden sm:inline">Reach Out</span>
+            <Mail className="sm:hidden h-3.5 w-3.5" strokeWidth={2.25} />
           </a>
+
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            className="press-scale lg:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md text-white"
+            style={{ transition: 'background-color 200ms, border-color 200ms' }}
+          >
+            <motion.div
+              animate={{ rotate: menuOpen ? 90 : 0 }}
+              transition={{ duration: 0.3, ease: easeOut }}
+            >
+              {menuOpen ? <X className="h-4 w-4" strokeWidth={2.25} /> : <Menu className="h-4 w-4" strokeWidth={2.25} />}
+            </motion.div>
+          </button>
         </div>
       </div>
+
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-drawer"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.32, ease: easeOut }}
+            className="lg:hidden bg-[#020C1B]/95 backdrop-blur-2xl border-b border-white/[0.06]"
+          >
+            <div className="px-5 py-6 flex flex-col gap-1">
+              {navLinks.map((l, i) => {
+                const inner = (
+                  <span className="flex items-center justify-between w-full py-3.5 border-b border-white/[0.04]">
+                    <span className="font-display text-[13px] tracking-[0.3em] uppercase font-bold text-white">
+                      {l.label}
+                    </span>
+                    <span className="font-display text-[10px] tabular-nums text-[#A7DADB]/55 font-bold">
+                      0{i + 1}
+                    </span>
+                  </span>
+                );
+                return l.route ? (
+                  <Link key={l.href} to={l.href} onClick={() => setMenuOpen(false)}>
+                    {inner}
+                  </Link>
+                ) : (
+                  <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>
+                    {inner}
+                  </a>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

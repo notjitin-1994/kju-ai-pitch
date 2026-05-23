@@ -277,7 +277,7 @@ export const ProblemMatrix = () => {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
 
   return (
-    <section id="problem" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden bg-[#020C1B]">
+    <section id="problem" className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden bg-[#020C1B]">
       <MeshGradient intensity="low" />
 
       <div className="relative z-10 max-w-[1440px] mx-auto">

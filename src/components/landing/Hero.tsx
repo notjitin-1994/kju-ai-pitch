@@ -33,7 +33,7 @@ export const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] flex items-center px-6 md:px-12 lg:px-24 pt-32 pb-24 overflow-hidden"
+      className="relative min-h-[100dvh] flex items-center px-5 md:px-12 lg:px-24 pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
@@ -50,9 +50,9 @@ export const Hero = () => {
       </div>
 
       {/* Asymmetric 7/5 grid */}
-      <div className="relative z-10 max-w-[1440px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-y-16 gap-x-12 lg:gap-x-20 items-center">
+      <div className="relative z-10 max-w-[1440px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-y-12 md:gap-y-16 gap-x-12 lg:gap-x-20 items-center">
         {/* Left: editorial copy */}
-        <div className="lg:col-span-7 space-y-9">
+        <div className="lg:col-span-7 space-y-7 md:space-y-9">
           {/* Overline */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
@@ -72,7 +72,7 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 22 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.08, ease: easeOut }}
-            className="font-display font-bold text-white leading-[0.94] tracking-[-0.025em] text-[clamp(3rem,7vw,7.25rem)]"
+            className="font-display font-bold text-white leading-[0.94] tracking-[-0.025em] text-[clamp(2.6rem,7vw,7.25rem)]"
           >
             An era is
             <br />
@@ -102,7 +102,7 @@ export const Hero = () => {
             <button
               type="button"
               onClick={() => setVideoOpen(true)}
-              className="group relative inline-flex items-center gap-3 rounded-full px-6 py-3.5 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-sm tracking-[0.18em] uppercase"
+              className="group relative inline-flex items-center gap-3 rounded-full px-5 md:px-6 py-3 md:py-3.5 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-[13px] md:text-sm tracking-[0.16em] md:tracking-[0.18em] uppercase"
               style={{
                 boxShadow: "0 12px 30px -10px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)",
                 transition: "transform 160ms var(--ease-out-expo), box-shadow 200ms var(--ease-out-expo)",
@@ -112,7 +112,7 @@ export const Hero = () => {
                 <Play className="h-3 w-3 fill-[#A7DADB] text-[#A7DADB] translate-x-[0.5px]" strokeWidth={0} />
               </span>
               <span>Watch the Film</span>
-              <span className="ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">02:52</span>
+              <span className="hidden sm:inline ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">02:52</span>
             </button>
 
             <a
@@ -137,18 +137,18 @@ export const Hero = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 1, delay: 0.6, ease: easeOut }}
-            className="pt-12 mt-2 border-t border-white/[0.06] grid grid-cols-3 gap-x-6 max-w-xl"
+            className="pt-10 md:pt-12 mt-2 border-t border-white/[0.06] grid grid-cols-3 gap-x-3 sm:gap-x-6 max-w-xl"
           >
             {[
               { k: "Pillars", v: "03" },
-              { k: "Efficiency Gain", v: "70%" },
+              { k: "Efficiency", v: "70%" },
               { k: "Era", v: "2026" },
             ].map((m) => (
               <div key={m.k} className="flex flex-col gap-1.5 pt-5">
-                <span className="font-display text-[10px] tracking-[0.35em] uppercase text-[#b0c5c6]/60 font-bold">
+                <span className="font-display text-[9px] sm:text-[10px] tracking-[0.28em] sm:tracking-[0.35em] uppercase text-[#b0c5c6]/60 font-bold">
                   {m.k}
                 </span>
-                <span className="font-display text-2xl md:text-3xl text-white tabular-nums tracking-tight">
+                <span className="font-display text-xl sm:text-2xl md:text-3xl text-white tabular-nums tracking-tight">
                   {m.v}
                 </span>
               </div>

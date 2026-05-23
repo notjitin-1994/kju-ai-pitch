@@ -254,7 +254,7 @@ const ScenarioToggle: React.FC<{
     <div
       role="tablist"
       aria-label="Impact scenario"
-      className="relative inline-flex items-center rounded-full border border-white/[0.08] bg-[#0a1729]/60 backdrop-blur-xl p-1.5"
+      className="relative inline-flex w-full sm:w-auto items-stretch rounded-full border border-white/[0.08] bg-[#0a1729]/60 backdrop-blur-xl p-1.5"
     >
       {/* Sliding pill */}
       <motion.span
@@ -277,13 +277,13 @@ const ScenarioToggle: React.FC<{
             aria-selected={isActive}
             type="button"
             onClick={() => onChange(id)}
-            className="relative z-10 px-5 md:px-7 py-2.5 font-display text-[10.5px] md:text-xs tracking-[0.32em] uppercase font-bold whitespace-nowrap cursor-pointer"
+            className="relative z-10 flex-1 sm:flex-initial px-2 sm:px-5 md:px-7 py-2 sm:py-2.5 font-display text-[9.5px] sm:text-[10.5px] md:text-xs tracking-[0.22em] sm:tracking-[0.32em] uppercase font-bold whitespace-nowrap cursor-pointer text-center"
             style={{
               color: isActive ? '#A7DADB' : 'rgba(176,197,198,0.7)',
               transition: 'color 280ms var(--ease-out-expo)',
             }}
           >
-            <span className="inline-flex items-center gap-1.5">
+            <span className="inline-flex items-center justify-center gap-1 sm:gap-1.5">
               {s.guarantee && (
                 <ShieldCheck
                   className="h-3 w-3 -ml-0.5 shrink-0"
@@ -436,7 +436,7 @@ const ImpactConsole: React.FC = () => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.95, ease: easeOut }}
-      className="relative rounded-[32px] border border-white/[0.08] bg-[#0a1729]/45 backdrop-blur-2xl overflow-hidden"
+      className="relative rounded-[24px] md:rounded-[32px] border border-white/[0.08] bg-[#0a1729]/45 backdrop-blur-2xl overflow-hidden"
     >
       {/* Soft inner radial */}
       <div
@@ -448,9 +448,9 @@ const ImpactConsole: React.FC = () => {
         }}
       />
 
-      <div className="relative z-10 p-8 md:p-12 lg:p-14">
+      <div className="relative z-10 p-5 sm:p-8 md:p-12 lg:p-14">
         {/* Console header */}
-        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-8 mb-10 md:mb-12">
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 md:gap-8 mb-8 md:mb-12">
           <div className="max-w-[58ch]">
             <div className="flex items-center gap-2.5">
               <Sparkles className="h-3.5 w-3.5 text-[#A7DADB]" strokeWidth={2} />
@@ -471,14 +471,14 @@ const ImpactConsole: React.FC = () => {
             </p>
           </div>
 
-          <div className="shrink-0">
+          <div className="lg:shrink-0 w-full lg:w-auto">
             <ScenarioToggle active={scenarioId} onChange={setScenarioId} />
             <motion.p
               key={scenarioId}
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.45, ease: easeOut }}
-              className="mt-3 font-body font-light text-[#b0c5c6]/65 text-[12.5px] text-right max-w-[28ch] ml-auto"
+              className="mt-3 font-body font-light text-[#b0c5c6]/65 text-[12px] sm:text-[12.5px] lg:text-right max-w-[34ch] lg:max-w-[28ch] lg:ml-auto"
             >
               {s.guarantee && (
                 <span className="inline-flex items-center gap-1 mr-1.5 text-[#A7DADB]/85">
@@ -626,12 +626,12 @@ const AnchorRow: React.FC<{ a: Anchor; idx: number }> = ({ a, idx }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
       transition={{ duration: 0.95, delay: idx * 0.08, ease: easeOut }}
-      className="relative border-t border-white/[0.07] py-16 md:py-24"
+      className="relative border-t border-white/[0.07] py-12 md:py-24"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-10 gap-x-10">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 md:gap-y-10 gap-x-10">
         {/* Numeric */}
         <div className="lg:col-span-5 lg:col-start-1 flex items-center">
-          <span className="font-display font-bold text-white tabular-nums tracking-[-0.045em] leading-[0.85] text-[clamp(6rem,13vw,12rem)]">
+          <span className="font-display font-bold text-white tabular-nums tracking-[-0.045em] leading-[0.85] text-[clamp(4.5rem,13vw,12rem)]">
             {a.numeric}
           </span>
         </div>
@@ -690,7 +690,7 @@ export const Outcomes = () => {
   return (
     <section
       id="outcomes"
-      className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden"
+      className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden"
     >
       <MeshGradient intensity="low" />
 

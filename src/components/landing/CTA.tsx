@@ -57,7 +57,7 @@ export const CTA = () => {
   return (
     <section
       id="contact"
-      className="relative py-40 md:py-52 px-6 md:px-12 lg:px-24 overflow-hidden"
+      className="relative py-24 md:py-52 px-5 md:px-12 lg:px-24 overflow-hidden"
     >
       {/* Background campus image */}
       <div className="absolute inset-0 z-0">
@@ -113,7 +113,7 @@ export const CTA = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.95, ease: easeOut }}
-          className="mt-10 font-display font-bold text-white leading-[0.94] tracking-[-0.03em] text-[clamp(3rem,8.5vw,9rem)] max-w-[18ch]"
+          className="mt-8 md:mt-10 font-display font-bold text-white leading-[0.94] tracking-[-0.03em] text-[clamp(2.6rem,8.5vw,9rem)] max-w-[18ch]"
         >
           Will you{' '}
           <span className="font-serif-display italic font-normal text-[#A7DADB]">
@@ -176,19 +176,19 @@ export const CTA = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.95, delay: 0.32, ease: easeOut }}
-          className="mt-24 inline-flex items-center gap-7 rounded-full px-7 py-4 border border-[#A7DADB]/20 bg-white/[0.03] backdrop-blur-md glass-refract"
+          className="mt-16 md:mt-24 inline-flex items-center gap-4 sm:gap-7 rounded-full px-5 sm:px-7 py-3 sm:py-4 border border-[#A7DADB]/20 bg-white/[0.03] backdrop-blur-md glass-refract max-w-full"
         >
           <img
             src="/logo.png"
             alt="Smartslate"
-            className="h-7 w-auto"
+            className="h-6 sm:h-7 w-auto shrink-0"
             style={{ filter: 'drop-shadow(0 2px 10px rgba(167,218,219,0.35))' }}
           />
-          <div aria-hidden className="h-7 w-px bg-[#A7DADB]/30" />
+          <div aria-hidden className="h-6 sm:h-7 w-px bg-[#A7DADB]/30 shrink-0" />
           <img
             src="/kjc-logo.png"
             alt="Kristu Jayanti University"
-            className="h-9 w-auto"
+            className="h-7 sm:h-9 w-auto shrink-0"
             style={{ filter: 'drop-shadow(0 2px 10px rgba(255,255,255,0.15))' }}
           />
         </motion.div>

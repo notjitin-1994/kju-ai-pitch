@@ -8,6 +8,7 @@ import {
   Cloud, Server, Database, ChevronDown,
   Clock, Coins, Gauge, Megaphone, Newspaper,
   TrendingUp, GraduationCap, Wallet, Sparkles,
+  Menu,
   type LucideIcon,
 } from 'lucide-react';
 import { Logo } from '../components/Logo';
@@ -308,12 +309,21 @@ const ScrollProgress: React.FC = () => {
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 16);
     handler();
     window.addEventListener('scroll', handler, { passive: true });
     return () => window.removeEventListener('scroll', handler);
   }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [menuOpen]);
 
   const links = [
     { href: '/', label: 'Home', route: true },
@@ -328,7 +338,7 @@ const Navbar: React.FC = () => {
       style={{ transition: 'background-color 350ms var(--ease-out-expo), backdrop-filter 350ms var(--ease-out-expo)' }}
     >
       <div
-        className={`flex items-center justify-between px-6 md:px-12 lg:px-24 h-20 md:h-[88px] border-b ${scrolled ? 'border-white/[0.06] bg-[#020C1B]/75 backdrop-blur-2xl' : 'border-transparent bg-transparent backdrop-blur-0'}`}
+        className={`flex items-center justify-between px-5 md:px-12 lg:px-24 h-16 md:h-[88px] border-b ${scrolled || menuOpen ? 'border-white/[0.06] bg-[#020C1B]/85 backdrop-blur-2xl' : 'border-transparent bg-transparent backdrop-blur-0'}`}
         style={{ transition: 'inherit' }}
       >
         <Link to="/" aria-label="Smartslate home" className="flex items-center gap-3">
@@ -346,22 +356,65 @@ const Navbar: React.FC = () => {
               : <a key={l.href} href={l.href} className={cls} style={sty}>{l.label}{bar}</a>;
           })}
         </div>
-        <a
-          href="mailto:hello@smartslate.io?subject=AI%20Transformation%20Programme%20Enquiry"
-          className="press-scale inline-flex items-center gap-2 rounded-full px-5 py-2.5 bg-[#A7DADB] text-[#020C1B] font-display text-xs tracking-[0.22em] uppercase font-bold"
-          style={{ boxShadow: '0 8px 22px -8px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)', transition: 'transform 160ms var(--ease-out-expo), box-shadow 220ms var(--ease-out-expo)' }}
-        >
-          <span className="h-1.5 w-1.5 rounded-full bg-[#020C1B]/80 animate-soft-pulse" />
-          Reach Out
-        </a>
+        <div className="flex items-center gap-2.5 md:gap-5">
+          <a
+            href="mailto:hello@smartslate.io?subject=AI%20Transformation%20Programme%20Enquiry"
+            aria-label="Reach out"
+            className="press-scale inline-flex items-center gap-2 rounded-full bg-[#A7DADB] text-[#020C1B] font-display tracking-[0.22em] uppercase font-bold h-10 md:h-auto md:px-5 md:py-2.5 px-3.5 text-[10px] md:text-xs whitespace-nowrap"
+            style={{ boxShadow: '0 8px 22px -8px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)', transition: 'transform 160ms var(--ease-out-expo), box-shadow 220ms var(--ease-out-expo)' }}
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#020C1B]/80 animate-soft-pulse" />
+            <span className="hidden sm:inline">Reach Out</span>
+            <Mail className="sm:hidden h-3.5 w-3.5" strokeWidth={2.25} />
+          </a>
+          <button
+            type="button"
+            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((v) => !v)}
+            className="press-scale lg:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md text-white"
+            style={{ transition: 'background-color 200ms, border-color 200ms' }}
+          >
+            <motion.div animate={{ rotate: menuOpen ? 90 : 0 }} transition={{ duration: 0.3, ease: easeOut }}>
+              {menuOpen ? <XIcon className="h-4 w-4" strokeWidth={2.25} /> : <Menu className="h-4 w-4" strokeWidth={2.25} />}
+            </motion.div>
+          </button>
+        </div>
       </div>
+
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-drawer"
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.32, ease: easeOut }}
+            className="lg:hidden bg-[#020C1B]/95 backdrop-blur-2xl border-b border-white/[0.06]"
+          >
+            <div className="px-5 py-6 flex flex-col gap-1">
+              {links.map((l, i) => {
+                const inner = (
+                  <span className="flex items-center justify-between w-full py-3.5 border-b border-white/[0.04]">
+                    <span className="font-display text-[13px] tracking-[0.3em] uppercase font-bold text-white">{l.label}</span>
+                    <span className="font-display text-[10px] tabular-nums text-[#A7DADB]/55 font-bold">0{i + 1}</span>
+                  </span>
+                );
+                return l.route
+                  ? <Link key={l.href} to={l.href} onClick={() => setMenuOpen(false)}>{inner}</Link>
+                  : <a key={l.href} href={l.href} onClick={() => setMenuOpen(false)}>{inner}</a>;
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
 
 // ─── Hero ─────────────────────────────────────────────────────────────────────
 const PricingHero: React.FC = () => (
-  <section className="relative min-h-[100dvh] flex items-center px-6 md:px-12 lg:px-24 overflow-hidden pt-24">
+  <section className="relative min-h-[100dvh] flex items-center px-5 md:px-12 lg:px-24 overflow-hidden pt-20 md:pt-24">
     <MeshGradient intensity="med" />
     <div className="absolute inset-0 pointer-events-none [mask-image:radial-gradient(ellipse_at_65%_50%,rgba(0,0,0,0.55)_0%,transparent_68%)]">
       <FlickeringGrid color="rgb(167,218,219)" squareSize={3} gridGap={11} flickerChance={0.09} maxOpacity={0.1} />
@@ -398,7 +451,7 @@ const PricingHero: React.FC = () => (
           initial={{ opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.95, delay: 0.1, ease: easeOut }}
-          className="mt-10 font-display font-bold text-white leading-[0.94] tracking-[-0.03em] text-[clamp(3.5rem,7.5vw,8rem)]"
+          className="mt-8 md:mt-10 font-display font-bold text-white leading-[0.94] tracking-[-0.03em] text-[clamp(2.8rem,7.5vw,8rem)]"
         >
           The Economics
           <br />
@@ -445,7 +498,7 @@ const PricingHero: React.FC = () => (
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.95, delay: 0.28, ease: easeOut }}
-          className="rounded-[24px] border border-white/[0.08] bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-8 space-y-8"
+          className="rounded-[20px] md:rounded-[24px] border border-white/[0.08] bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-6 md:p-8 space-y-6 md:space-y-8"
         >
           {[
             { v: '₹88L', sub: 'Year 1 Smartslate service fee — all three implementation options', accent: '#A7DADB' },
@@ -474,7 +527,7 @@ const ContractualKPIs: React.FC = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
-    <section className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
       {/* Subtle campus photo — right-side atmosphere */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
@@ -568,29 +621,36 @@ const ContractualKPIs: React.FC = () => {
                 <motion.button
                   type="button"
                   onClick={() => setOpenIdx(isOpen ? null : i)}
-                  className="w-full text-left py-14 md:py-20 cursor-pointer"
+                  className="w-full text-left py-10 md:py-20 cursor-pointer"
                   aria-expanded={isOpen}
                   whileTap={{ scale: 0.995 }}
                   transition={springCard}
                 >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-10">
-                    <div className="lg:col-span-4 flex items-center">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-5 md:gap-y-8 gap-x-10">
+                    <div className="lg:col-span-4 flex items-center justify-between gap-4 lg:justify-start">
                       <span
-                        className="font-display font-bold tabular-nums tracking-[-0.04em] leading-[0.85] text-[clamp(5.5rem,13vw,12rem)]"
+                        className="font-display font-bold tabular-nums tracking-[-0.04em] leading-[0.85] text-[clamp(3.5rem,13vw,12rem)]"
                         style={{ color: '#A7DADB' }}
                       >
                         {m.num}
                       </span>
+                      <motion.div
+                        animate={{ rotate: isOpen ? 180 : 0 }}
+                        transition={{ duration: 0.4, ease: easeOut }}
+                        className="lg:hidden h-9 w-9 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0"
+                      >
+                        <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
+                      </motion.div>
                     </div>
                     <div className="lg:col-span-7 lg:col-start-6 flex flex-col justify-center">
-                      <h3 className="font-display font-bold text-white text-2xl md:text-3xl tracking-tight">
+                      <h3 className="font-display font-bold text-white text-xl md:text-3xl tracking-tight">
                         {m.label}
                       </h3>
-                      <p className="mt-4 font-body font-light text-[#b0c5c6] text-base md:text-[17px] leading-[1.65] max-w-[52ch]">
+                      <p className="mt-3 md:mt-4 font-body font-light text-[#b0c5c6] text-[15px] md:text-[17px] leading-[1.65] max-w-[52ch]">
                         {m.detail}
                       </p>
                     </div>
-                    <div className="lg:col-span-1 lg:col-start-12 flex items-center justify-end">
+                    <div className="hidden lg:flex lg:col-span-1 lg:col-start-12 items-center justify-end">
                       <motion.div
                         animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.4, ease: easeOut }}
@@ -760,7 +820,7 @@ const FeeSchedule: React.FC = () => {
 
   return (
     <>
-      <section id="fee-structure" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+      <section id="fee-structure" className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
         <MeshGradient intensity="low" />
         <div className="relative z-10 max-w-[1440px] mx-auto">
 
@@ -853,9 +913,9 @@ const FeeSchedule: React.FC = () => {
             className="grid grid-cols-1 lg:grid-cols-12 gap-8"
           >
             {/* Smartslate service fees */}
-            <div className="lg:col-span-7 rounded-[24px] border border-[#A7DADB]/18 bg-[#0a1729]/70 backdrop-blur-xl glass-refract overflow-hidden">
+            <div className="lg:col-span-7 rounded-[20px] md:rounded-[24px] border border-[#A7DADB]/18 bg-[#0a1729]/70 backdrop-blur-xl glass-refract overflow-hidden">
               {/* Table header */}
-              <div className="px-8 py-5 border-b border-white/[0.06] flex items-center justify-between gap-4">
+              <div className="px-5 sm:px-8 py-5 border-b border-white/[0.06] flex items-center justify-between gap-4">
                 <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
                   Smartslate Service Fees — Fixed per Phase
                 </span>
@@ -879,7 +939,7 @@ const FeeSchedule: React.FC = () => {
                     viewport={{ once: true, margin: '-60px' }}
                     transition={{ duration: 0.45, delay: i * 0.07, ease: easeOut }}
                     whileTap={{ scale: 0.99 }}
-                    className="group relative w-full text-left grid grid-cols-12 gap-4 px-8 py-6 items-center cursor-pointer hover:bg-[#A7DADB]/[0.06]"
+                    className="group relative w-full text-left flex flex-col sm:grid sm:grid-cols-12 gap-3 sm:gap-4 px-5 sm:px-8 py-5 sm:py-6 sm:items-center cursor-pointer hover:bg-[#A7DADB]/[0.06]"
                     style={{ transition: 'background-color 200ms var(--ease-out-expo)' }}
                     aria-label={`View ${ph.name} deliverables`}
                   >
@@ -891,18 +951,18 @@ const FeeSchedule: React.FC = () => {
                     />
 
                     {/* Phase + timeline */}
-                    <div className="col-span-2">
+                    <div className="sm:col-span-2 flex items-center justify-between sm:block">
                       <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
                         Phase {ph.id}
                       </span>
-                      <p className="mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">
+                      <p className="mt-0 sm:mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">
                         {ph.timeline}
                       </p>
                     </div>
 
                     {/* Name + description + hover chip */}
                     <div
-                      className="col-span-7"
+                      className="sm:col-span-7"
                       style={{ transform: 'translateX(0)', transition: 'transform 220ms var(--ease-out-expo)' }}
                     >
                       <p
@@ -913,7 +973,7 @@ const FeeSchedule: React.FC = () => {
                       </p>
                       <p className="mt-1 font-body font-light text-[#b0c5c6]/70 text-sm leading-snug">{ph.includes}</p>
                       <div
-                        className="mt-2.5 inline-flex items-center gap-1.5 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 pointer-events-none"
+                        className="mt-2.5 hidden sm:inline-flex items-center gap-1.5 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 pointer-events-none"
                         style={{ transition: 'opacity 250ms var(--ease-out-expo), transform 250ms var(--ease-out-expo)' }}
                       >
                         <span className="h-[5px] w-[5px] rounded-full bg-[#A7DADB]/60" />
@@ -924,7 +984,7 @@ const FeeSchedule: React.FC = () => {
                     </div>
 
                     {/* Fee + arrow icon */}
-                    <div className="col-span-3 flex items-center justify-end gap-3">
+                    <div className="sm:col-span-3 flex items-center justify-between sm:justify-end gap-3">
                       <span className="font-display font-bold text-[#A7DADB] text-xl tabular-nums">{ph.fee}</span>
                       <div
                         className="h-8 w-8 rounded-full border border-white/10 bg-white/[0.03] flex items-center justify-center group-hover:border-[#A7DADB]/35 group-hover:bg-[#A7DADB]/[0.09]"
@@ -941,36 +1001,38 @@ const FeeSchedule: React.FC = () => {
                 ))}
 
                 {/* Year 1 total */}
-                <div className="grid grid-cols-12 gap-4 px-8 py-5 items-center bg-[#A7DADB]/[0.05] border-t border-[#A7DADB]/18">
-                  <div className="col-span-2">
+                <div className="flex flex-col sm:grid sm:grid-cols-12 gap-3 sm:gap-4 px-5 sm:px-8 py-5 sm:items-center bg-[#A7DADB]/[0.05] border-t border-[#A7DADB]/18">
+                  <div className="sm:col-span-2">
                     <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#A7DADB]/70 font-bold">
                       Year 1
                     </span>
                   </div>
-                  <div className="col-span-7">
+                  <div className="sm:col-span-7">
                     <p className="font-display font-bold text-white text-base tracking-tight">Complete Transformation Programme</p>
                     <p className="mt-0.5 font-body text-[#b0c5c6]/55 text-sm">6 months · Phases 1 through 3</p>
                   </div>
-                  <div className="col-span-3 text-right">
+                  <div className="sm:col-span-3 flex justify-between sm:justify-end items-baseline sm:items-center gap-2">
+                    <span className="sm:hidden font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/55 font-bold">Total</span>
                     <span className="font-display font-bold text-[#A7DADB] text-2xl tabular-nums">₹88L</span>
                   </div>
                 </div>
 
                 {/* Retainer */}
-                <div className="grid grid-cols-12 gap-4 px-8 py-5 items-center">
-                  <div className="col-span-2">
+                <div className="flex flex-col sm:grid sm:grid-cols-12 gap-3 sm:gap-4 px-5 sm:px-8 py-5 sm:items-center">
+                  <div className="sm:col-span-2 flex items-center justify-between sm:block">
                     <span className="font-display text-[11px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
                       Annual
                     </span>
-                    <p className="mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">Year 2+</p>
+                    <p className="mt-0 sm:mt-1 font-display text-[10px] tracking-[0.25em] uppercase text-[#b0c5c6]/30 font-bold">Year 2+</p>
                   </div>
-                  <div className="col-span-7">
+                  <div className="sm:col-span-7">
                     <p className="font-display font-bold text-white text-base tracking-tight">Partnership Retainer</p>
                     <p className="mt-1 font-body font-light text-[#b0c5c6]/70 text-sm leading-snug">
                       Updates, new faculty onboarding, QBRs, advisory, playbook revisions
                     </p>
                   </div>
-                  <div className="col-span-3 text-right">
+                  <div className="sm:col-span-3 flex justify-between sm:justify-end items-baseline sm:items-center gap-2">
+                    <span className="sm:hidden font-display text-[10px] tracking-[0.3em] uppercase text-[#b0c5c6]/55 font-bold">Retainer</span>
                     <span className="font-display font-bold text-white/75 text-xl tabular-nums">₹44L / yr</span>
                   </div>
                 </div>
@@ -978,8 +1040,8 @@ const FeeSchedule: React.FC = () => {
             </div>
 
             {/* KJU direct tech costs */}
-            <div className="lg:col-span-5 rounded-[24px] border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract overflow-hidden">
-              <div className="px-7 py-5 border-b border-white/[0.06]">
+            <div className="lg:col-span-5 rounded-[20px] md:rounded-[24px] border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract overflow-hidden">
+              <div className="px-5 sm:px-7 py-5 border-b border-white/[0.06]">
                 <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#b0c5c6]/55 font-bold">
                   KJU Direct Technology Costs
                 </span>
@@ -987,7 +1049,7 @@ const FeeSchedule: React.FC = () => {
                   Paid by KJU directly to technology vendors. Smartslate charges no markup.
                 </p>
               </div>
-              <div className="px-7 py-6 space-y-4">
+              <div className="px-5 sm:px-7 py-6 space-y-4">
                 {directTechItems.map((item) => (
                   <div key={item} className="flex items-start gap-3">
                     <span className="mt-1.5 h-1 w-3 bg-[#b0c5c6]/25 shrink-0 rounded-full" />
@@ -995,7 +1057,7 @@ const FeeSchedule: React.FC = () => {
                   </div>
                 ))}
               </div>
-              <div className="mx-7 mb-7 rounded-[14px] border border-[#A7DADB]/18 bg-[#A7DADB]/[0.04] px-5 py-4">
+              <div className="mx-5 sm:mx-7 mb-7 rounded-[14px] border border-[#A7DADB]/18 bg-[#A7DADB]/[0.04] px-5 py-4">
                 <p className="font-display text-[10px] tracking-[0.35em] uppercase text-[#A7DADB]/70 font-bold mb-2">
                   Example (Cloud Only)
                 </p>
@@ -1026,7 +1088,7 @@ const ImplementationPaths: React.FC = () => {
   const [activeId, setActiveId] = useState<string>('1');
 
   return (
-    <section id="paths" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section id="paths" className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
       <div className="relative z-10 max-w-[1440px] mx-auto">
 
@@ -1084,7 +1146,7 @@ const ImplementationPaths: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.7, ease: easeOut }}
-          className="flex items-center gap-2 mb-10 p-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-md w-fit"
+          className="flex items-stretch sm:items-center gap-1.5 sm:gap-2 mb-10 p-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-md w-full sm:w-fit"
         >
           {paths.map((p) => (
             <motion.button
@@ -1093,10 +1155,10 @@ const ImplementationPaths: React.FC = () => {
               onClick={() => setActiveId(p.id)}
               whileTap={{ scale: 0.97 }}
               transition={springCard}
-              className="relative rounded-full px-5 py-2.5 font-display text-xs tracking-[0.25em] uppercase font-bold"
+              className="relative flex-1 sm:flex-initial rounded-full px-2 sm:px-5 py-2 sm:py-2.5 font-display text-[10px] sm:text-xs tracking-[0.18em] sm:tracking-[0.25em] uppercase font-bold text-center whitespace-nowrap"
               style={{
                 color: activeId === p.id ? '#020C1B' : 'rgba(176,197,198,0.7)',
-                transition: 'color 350ms var(--ease-out-expo)',  /* synced to layoutId animation */
+                transition: 'color 350ms var(--ease-out-expo)',
               }}
             >
               {activeId === p.id && (
@@ -1136,7 +1198,7 @@ const ImplementationPaths: React.FC = () => {
                   transition: 'border-color 350ms var(--ease-out-expo), box-shadow 350ms var(--ease-out-expo)',
                 }}
               >
-                <div className="flex flex-col gap-6 p-8 md:p-9 flex-1">
+                <div className="flex flex-col gap-6 p-6 md:p-9 flex-1">
                   {/* Header */}
                   <div className="flex items-start justify-between gap-4">
                     <div
@@ -1270,7 +1332,7 @@ const ProgrammePillars: React.FC = () => {
   const ActiveIcon = active.Icon;
 
   return (
-    <section id="programme" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section id="programme" className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
       <div className="relative z-10 max-w-[1440px] mx-auto">
 
@@ -1806,7 +1868,7 @@ const ROICalculator: React.FC = () => {
   ];
 
   return (
-    <section id="roi" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden">
+    <section id="roi" className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="med" />
       <div className="absolute inset-0 pointer-events-none [mask-image:radial-gradient(ellipse_at_72%_28%,rgba(0,0,0,0.4)_0%,transparent_70%)]">
         <FlickeringGrid color="rgb(167,218,219)" squareSize={3} gridGap={11} flickerChance={0.07} maxOpacity={0.08} />
@@ -1877,7 +1939,7 @@ const ROICalculator: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ duration: 0.8, ease: easeOut }}
-                className="rounded-[28px] border border-white/[0.08] bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-8"
+                className="rounded-[20px] md:rounded-[28px] border border-white/[0.08] bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-6 md:p-8"
               >
                 <div className="flex items-center gap-2.5 mb-8">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB]" />
@@ -1909,13 +1971,13 @@ const ROICalculator: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
                 transition={{ duration: 0.8, delay: 0.08, ease: easeOut }}
-                className="rounded-[28px] border border-white/[0.08] bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-8"
+                className="rounded-[20px] md:rounded-[28px] border border-white/[0.08] bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-6 md:p-8"
               >
                 <div className="flex items-center gap-2.5 mb-6">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB]" />
                   <span className="font-display text-[10px] tracking-[0.4em] uppercase text-white/85 font-bold">Implementation Path</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5">
                   {ROI_PATHS.map((p) => {
                     const active = p.id === pathId;
                     return (
@@ -1923,16 +1985,16 @@ const ROICalculator: React.FC = () => {
                         key={p.id}
                         type="button"
                         onClick={() => setPathId(p.id)}
-                        className="press-scale rounded-[14px] border px-3 py-3.5 text-left"
+                        className="press-scale rounded-[12px] sm:rounded-[14px] border px-2 sm:px-3 py-3 sm:py-3.5 text-left min-w-0"
                         style={{
                           borderColor: active ? 'rgba(167,218,219,0.55)' : 'rgba(255,255,255,0.08)',
                           background: active ? 'rgba(167,218,219,0.12)' : 'rgba(255,255,255,0.02)',
                           transition: 'background-color 200ms var(--ease-out-expo), border-color 200ms var(--ease-out-expo), transform 160ms var(--ease-out-expo)',
                         }}
                       >
-                        <span className={`block font-display font-bold text-[13px] ${active ? 'text-white' : 'text-[#b0c5c6]'}`}>{p.label}</span>
-                        <span className="block mt-0.5 font-display text-[8.5px] tracking-[0.1em] uppercase text-[#b0c5c6]/45 font-bold">{p.sub}</span>
-                        <span className={`block mt-1.5 font-display font-bold text-[13px] tabular-nums ${active ? 'text-[#A7DADB]' : 'text-[#b0c5c6]/55'}`}>{p.investLabel}</span>
+                        <span className={`block font-display font-bold text-[12px] sm:text-[13px] ${active ? 'text-white' : 'text-[#b0c5c6]'}`}>{p.label}</span>
+                        <span className="block mt-0.5 font-display text-[8px] sm:text-[8.5px] tracking-[0.08em] sm:tracking-[0.1em] uppercase text-[#b0c5c6]/45 font-bold truncate">{p.sub}</span>
+                        <span className={`block mt-1.5 font-display font-bold text-[12px] sm:text-[13px] tabular-nums ${active ? 'text-[#A7DADB]' : 'text-[#b0c5c6]/55'}`}>{p.investLabel}</span>
                       </button>
                     );
                   })}
@@ -1970,7 +2032,7 @@ const ROICalculator: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.8, ease: easeOut }}
-              className="relative rounded-[28px] border border-[#A7DADB]/25 overflow-hidden p-8 md:p-10"
+              className="relative rounded-[20px] md:rounded-[28px] border border-[#A7DADB]/25 overflow-hidden p-6 sm:p-8 md:p-10"
               style={{
                 background: 'linear-gradient(135deg, rgba(167,218,219,0.11) 0%, rgba(10,23,41,0.85) 58%)',
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08), 0 30px 70px -30px rgba(167,218,219,0.28)',
@@ -2201,7 +2263,7 @@ const ROICalculator: React.FC = () => {
 
 // ─── CTA ──────────────────────────────────────────────────────────────────────
 const PricingCTA: React.FC = () => (
-  <section className="relative py-40 md:py-52 px-6 md:px-12 lg:px-24 overflow-hidden">
+  <section className="relative py-24 md:py-52 px-5 md:px-12 lg:px-24 overflow-hidden">
     <MeshGradient intensity="med" />
     {/* Aspirational campus background */}
     <div className="absolute inset-0 z-0 pointer-events-none">
@@ -2243,7 +2305,7 @@ const PricingCTA: React.FC = () => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.75, ease: easeOut }}
-        className="mt-10 font-display font-bold text-white leading-[0.94] tracking-[-0.03em] text-[clamp(3rem,8.5vw,9rem)] max-w-[18ch]"
+        className="mt-8 md:mt-10 font-display font-bold text-white leading-[0.94] tracking-[-0.03em] text-[clamp(2.6rem,8.5vw,9rem)] max-w-[18ch]"
       >
         Will you{' '}
         <span className="font-serif-display italic font-normal text-[#A7DADB]">lead the era?</span>
@@ -2319,11 +2381,11 @@ const PricingCTA: React.FC = () => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.75, delay: 0.32, ease: easeOut }}
-        className="mt-24 inline-flex items-center gap-7 rounded-full px-7 py-4 border border-[#A7DADB]/20 bg-white/[0.03] backdrop-blur-md glass-refract"
+        className="mt-16 md:mt-24 inline-flex items-center gap-4 sm:gap-7 rounded-full px-5 sm:px-7 py-3 sm:py-4 border border-[#A7DADB]/20 bg-white/[0.03] backdrop-blur-md glass-refract max-w-full"
       >
-        <img src="/logo.png" alt="Smartslate" className="h-7 w-auto" style={{ filter: 'drop-shadow(0 2px 10px rgba(167,218,219,0.35))' }} />
-        <div aria-hidden className="h-7 w-px bg-[#A7DADB]/30" />
-        <img src="/kjc-logo.png" alt="Kristu Jayanti University" className="h-9 w-auto" style={{ filter: 'drop-shadow(0 2px 10px rgba(255,255,255,0.15))' }} />
+        <img src="/logo.png" alt="Smartslate" className="h-6 sm:h-7 w-auto shrink-0" style={{ filter: 'drop-shadow(0 2px 10px rgba(167,218,219,0.35))' }} />
+        <div aria-hidden className="h-6 sm:h-7 w-px bg-[#A7DADB]/30 shrink-0" />
+        <img src="/kjc-logo.png" alt="Kristu Jayanti University" className="h-7 sm:h-9 w-auto shrink-0" style={{ filter: 'drop-shadow(0 2px 10px rgba(255,255,255,0.15))' }} />
       </motion.div>
 
       <motion.div
