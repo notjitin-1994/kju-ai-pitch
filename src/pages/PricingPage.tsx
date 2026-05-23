@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
+import {
+  motion, AnimatePresence, useScroll, useSpring,
+  useMotionValue, useInView, useReducedMotion,
+} from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
   ArrowUpRight, ArrowLeft, Check, Mail, X as XIcon,
@@ -8,7 +11,7 @@ import {
   Cloud, Server, Database, ChevronDown,
   Clock, Coins, Gauge, Megaphone, Newspaper,
   TrendingUp, GraduationCap, Wallet, Sparkles,
-  Menu,
+  Menu, ArrowRight, ShieldCheck, FileSignature, AlertTriangle,
   type LucideIcon,
 } from 'lucide-react';
 import { Logo } from '../components/Logo';
@@ -172,27 +175,68 @@ const paths = [
   },
 ] as const;
 
-const kpiMetrics = [
+type KpiMetric = {
+  id: string;
+  ref: string;
+  pillar: string;
+  // Number display (ticker)
+  prefix?: string;
+  value: number;
+  rangeUpper?: number;
+  suffix?: string;
+  // Copy
+  label: string;
+  detail: string;
+  // Binding terms (replaces the generic 4-up card grid)
+  binding: {
+    method: string;
+    cadence: string;
+    trigger: string;
+  };
+  // Evidence ledger — hairline-divided data row
+  evidence: { label: string; value: string }[];
+};
+
+const kpiMetrics: readonly KpiMetric[] = [
   {
-    num: '≥70%',
+    id: '01',
+    ref: 'KJU/STM-2026/KPI-01',
+    pillar: 'Operations',
+    prefix: '≥',
+    value: 70,
+    suffix: '%',
     label: 'Admin overhead reduction',
     detail:
       'Routine student queries — schedules, fees, hostel, registrations — resolved autonomously in <30 seconds, 24/7. Staff redirected to high-value student interactions.',
-    accent: '#A7DADB',
-    expandedStats: [
-      { label: 'Autonomous resolution rate', value: '>90%' },
+    binding: {
+      method: 'Ticket-volume delta vs. pre-deployment baseline, 12-week rolling.',
+      cadence: 'Weekly internal · Quarterly to KJU leadership.',
+      trigger: '14-day remediation plan if <60% sustained for 4 weeks.',
+    },
+    evidence: [
+      { label: 'Autonomous resolution', value: '>90%' },
       { label: 'Response time', value: '<30 sec' },
       { label: 'Staff hours redirected', value: '~60%' },
       { label: 'Measured from', value: 'Day 1' },
     ],
   },
   {
-    num: '40–60%',
+    id: '02',
+    ref: 'KJU/STM-2026/KPI-02',
+    pillar: 'Faculty',
+    prefix: '',
+    value: 40,
+    rangeUpper: 60,
+    suffix: '%',
     label: 'Faculty preparation time saved',
     detail:
       'Measured weekly against a pre-deployment baseline. Lesson plans generated in <20 minutes vs 2–3 hours pre-deployment. Reclaimed hours go directly back to student mentorship.',
-    accent: '#A7DADB',
-    expandedStats: [
+    binding: {
+      method: 'Self-reported timesheets, cross-checked against platform telemetry.',
+      cadence: 'Weekly internal · Quarterly to KJU Dean of Faculty.',
+      trigger: 'Remediation plan if cohort median falls below 30% for 6 weeks.',
+    },
+    evidence: [
       { label: 'Lesson plan time', value: '<20 min' },
       { label: 'Pre-deployment baseline', value: '2–3 hrs' },
       { label: 'Annual hours reclaimed', value: '~200 hrs' },
@@ -200,19 +244,28 @@ const kpiMetrics = [
     ],
   },
   {
-    num: '>80%',
+    id: '03',
+    ref: 'KJU/STM-2026/KPI-03',
+    pillar: 'Students',
+    prefix: '>',
+    value: 80,
+    suffix: '%',
     label: 'Students AI-certified institution-wide',
     detail:
       'AI literacy embedded across all streams — not an elective. Every student builds a verifiable, institutionally-issued credential that differentiates KJU alumni in every hiring cycle.',
-    accent: '#A7DADB',
-    expandedStats: [
+    binding: {
+      method: 'Institutional credential issuance per cohort, all streams, all years.',
+      cadence: 'Per academic term · Annual ROI report.',
+      trigger: 'Curriculum review triggered if cohort certification <65% by Month 10.',
+    },
+    evidence: [
       { label: 'Curriculum coverage', value: 'All streams' },
       { label: 'Credential type', value: 'Institutional' },
       { label: 'Industry alignment', value: 'Infosys / Deloitte' },
       { label: 'Target cohort', value: 'All graduates' },
     ],
   },
-] as const;
+];
 
 const programmePillars = [
   {
@@ -292,6 +345,118 @@ const finRows = [
 const formatINR = (lakhs: number): string => {
   if (lakhs >= 100) return `₹${(lakhs / 100).toFixed(1)} Cr`;
   return `₹${Math.round(lakhs)} L`;
+};
+
+// ─── NumberTicker — count-up that triggers on viewport entry ─────────────────
+// Adapted from Magic UI: https://magicui.design/docs/components/number-ticker
+const NumberTicker: React.FC<{
+  value: number;
+  className?: string;
+  duration?: number;
+  prefix?: string;
+  suffix?: string;
+  delay?: number;
+}> = ({ value, className, prefix = '', suffix = '', delay = 0 }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  const reduce = useReducedMotion();
+  const motionValue = useMotionValue(0);
+  // High damping + low stiffness = smooth decel into the target
+  const springValue = useSpring(motionValue, { damping: 42, stiffness: 80 });
+
+  useEffect(() => {
+    if (!isInView) return;
+    if (reduce) {
+      motionValue.set(value);
+      return;
+    }
+    const t = setTimeout(() => motionValue.set(value), delay * 1000);
+    return () => clearTimeout(t);
+  }, [isInView, motionValue, value, delay, reduce]);
+
+  useEffect(() => {
+    const unsub = springValue.on('change', (latest) => {
+      if (ref.current) {
+        ref.current.textContent = `${prefix}${Math.round(latest)}${suffix}`;
+      }
+    });
+    return unsub;
+  }, [springValue, prefix, suffix]);
+
+  return (
+    <span ref={ref} className={className}>{`${prefix}0${suffix}`}</span>
+  );
+};
+
+// ─── BindingSeal — once-through border-beam (the "sealing" moment) ───────────
+// Adapted from Magic UI BorderBeam. Brand-tuned and non-infinite so it doesn't
+// become visual noise. Triggers on mount; renders only when expanded.
+const BindingSeal: React.FC<{ size?: number; duration?: number; borderRadius?: number }> = ({
+  size = 180,
+  duration = 2.4,
+  borderRadius = 24,
+}) => {
+  const reduce = useReducedMotion();
+  if (reduce) return null;
+  return (
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      style={{ borderRadius }}
+    >
+      <motion.div
+        className="absolute"
+        style={{
+          width: size,
+          aspectRatio: '1',
+          offsetPath: `rect(0 auto auto 0 round ${size}px)`,
+          background:
+            'linear-gradient(to left, transparent, rgba(167,218,219,0.85), rgba(232,199,137,0.5), transparent)',
+          filter: 'blur(0.5px)',
+        }}
+        initial={{ offsetDistance: '0%', opacity: 0 }}
+        animate={{ offsetDistance: '100%', opacity: [0, 1, 1, 0] }}
+        transition={{ duration, ease: 'linear', times: [0, 0.08, 0.92, 1] }}
+      />
+    </div>
+  );
+};
+
+// ─── useMagnetic — subtle spring-based pull toward the cursor ────────────────
+// Returns motion-value style {x, y} for premium "alive" interactions on
+// numbers and icons. Never re-renders the React tree (motion values bypass it).
+const useMagnetic = (strength = 0.08) => {
+  const reduce = useReducedMotion();
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 170, damping: 18, mass: 0.45 });
+  const sy = useSpring(y, { stiffness: 170, damping: 18, mass: 0.45 });
+  const onMove = useCallback(
+    (e: React.MouseEvent<HTMLElement>) => {
+      if (reduce) return;
+      const r = e.currentTarget.getBoundingClientRect();
+      x.set((e.clientX - r.left - r.width / 2) * strength);
+      y.set((e.clientY - r.top - r.height / 2) * strength);
+    },
+    [x, y, strength, reduce]
+  );
+  const onLeave = useCallback(() => {
+    x.set(0);
+    y.set(0);
+  }, [x, y]);
+  return { x: sx, y: sy, onMove, onLeave };
+};
+
+// ─── Per-row cursor spotlight — soft teal radial follow inside a row ─────────
+const useRowSpotlight = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const onMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    if (!ref.current) return;
+    const r = ref.current.getBoundingClientRect();
+    ref.current.style.setProperty('--rx', `${e.clientX - r.left}px`);
+    ref.current.style.setProperty('--ry', `${e.clientY - r.top}px`);
+  }, []);
+  return { ref, onMove };
 };
 
 // ─── Scroll Progress ─────────────────────────────────────────────────────────
@@ -522,7 +687,319 @@ const PricingHero: React.FC = () => (
   </section>
 );
 
-// ─── Contractual KPIs (click-to-expand) ──────────────────────────────────────
+// ─── Binding Ledger Row ──────────────────────────────────────────────────────
+// One KPI presented as a row in a notarized institutional ledger.
+// Magnetic count-up · per-row cursor spotlight · ATTESTED status pulse ·
+// click to reveal Binding Terms (method · cadence · trigger) and a
+// hairline-divided evidence ledger (no card boxes — distill principle).
+const BindingLedgerRow: React.FC<{
+  metric: KpiMetric;
+  index: number;
+  isOpen: boolean;
+  onToggle: () => void;
+}> = ({ metric, index, isOpen, onToggle }) => {
+  const numberMag = useMagnetic(0.05);
+  const chipMag = useMagnetic(0.18);
+  const spot = useRowSpotlight();
+  const tickerDelay = 0.18 + index * 0.05;
+
+  return (
+    <motion.article
+      ref={spot.ref}
+      onMouseMove={spot.onMove}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-80px' }}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: easeOut }}
+      className="relative group border-t border-white/[0.07]"
+    >
+      {/* Per-row cursor spotlight (opacity-gated, mutates a CSS var only) */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100"
+        style={{
+          background:
+            'radial-gradient(440px circle at var(--rx, -200px) var(--ry, -200px), rgba(167,218,219,0.055), transparent 62%)',
+          transition: 'opacity 320ms var(--ease-out-expo)',
+        }}
+      />
+
+      {/* Top hairline — full sweep when open */}
+      <span
+        aria-hidden
+        className="absolute top-0 left-0 h-px w-full bg-[#A7DADB] origin-left scale-x-from-left"
+        style={{
+          transform: isOpen ? 'scaleX(1)' : 'scaleX(0)',
+          opacity: isOpen ? 0.55 : 0,
+          transition: 'transform 650ms var(--ease-out-expo), opacity 350ms',
+        }}
+      />
+
+      {/* Corner tick marks — technical document detail (hover only) */}
+      <span
+        aria-hidden
+        className="absolute -top-px left-0 w-3 h-3 pointer-events-none opacity-0 group-hover:opacity-100"
+        style={{
+          borderLeft: '1px solid rgba(167,218,219,0.5)',
+          borderTop: '1px solid rgba(167,218,219,0.5)',
+          transition: 'opacity 320ms var(--ease-out-expo)',
+        }}
+      />
+      <span
+        aria-hidden
+        className="absolute -top-px right-0 w-3 h-3 pointer-events-none opacity-0 group-hover:opacity-100"
+        style={{
+          borderRight: '1px solid rgba(167,218,219,0.5)',
+          borderTop: '1px solid rgba(167,218,219,0.5)',
+          transition: 'opacity 320ms var(--ease-out-expo)',
+        }}
+      />
+
+      <motion.button
+        type="button"
+        onClick={onToggle}
+        className="relative w-full text-left py-10 md:py-16 cursor-pointer"
+        aria-expanded={isOpen}
+        aria-label={`${isOpen ? 'Collapse' : 'Expand'} binding terms for ${metric.label}`}
+        whileTap={{ scale: 0.997 }}
+        transition={springCard}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 lg:gap-y-8 gap-x-10 items-center">
+          {/* ─── Zone 1: Magnetic count-up + ref + ATTESTED ─── */}
+          <div
+            className="lg:col-span-5"
+            onMouseMove={numberMag.onMove}
+            onMouseLeave={numberMag.onLeave}
+          >
+            <div className="flex items-end justify-between lg:justify-start gap-4">
+              <motion.div
+                style={{ x: numberMag.x, y: numberMag.y }}
+                className="flex items-end leading-[0.82]"
+              >
+                {metric.rangeUpper != null ? (
+                  <>
+                    <NumberTicker
+                      value={metric.value}
+                      delay={tickerDelay}
+                      className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]"
+                    />
+                    <span className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]/55 mx-[0.04em]">
+                      –
+                    </span>
+                    <NumberTicker
+                      value={metric.rangeUpper}
+                      suffix={metric.suffix}
+                      delay={tickerDelay + 0.12}
+                      className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]"
+                    />
+                  </>
+                ) : (
+                  <NumberTicker
+                    value={metric.value}
+                    prefix={metric.prefix}
+                    suffix={metric.suffix}
+                    delay={tickerDelay}
+                    className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]"
+                  />
+                )}
+              </motion.div>
+
+              {/* Mobile expand chevron */}
+              <motion.div
+                animate={{ rotate: isOpen ? 180 : 0 }}
+                transition={{ duration: 0.4, ease: easeOut }}
+                className="lg:hidden h-10 w-10 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0 mb-2"
+              >
+                <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
+              </motion.div>
+            </div>
+
+            {/* KPI ref + ATTESTED · LIVE badge */}
+            <div className="mt-5 flex items-center gap-3 flex-wrap">
+              <span className="font-mono text-[11px] tabular-nums tracking-tight text-[#b0c5c6]/55">
+                {metric.ref}
+              </span>
+              <span aria-hidden className="h-px w-6 bg-white/[0.08]" />
+              <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#A7DADB]/[0.06] border border-[#A7DADB]/15">
+                <span className="relative inline-flex h-1.5 w-1.5">
+                  <span aria-hidden className="absolute inset-0 rounded-full bg-[#A7DADB] opacity-70 animate-ping" />
+                  <span className="relative h-1.5 w-1.5 rounded-full bg-[#A7DADB]" />
+                </span>
+                <span className="font-display text-[9px] tracking-[0.32em] uppercase font-bold text-[#A7DADB]/85">
+                  Attested · Live
+                </span>
+              </span>
+            </div>
+          </div>
+
+          {/* ─── Zone 2: Pillar tag + Title + Description ─── */}
+          <div className="lg:col-span-5 flex flex-col justify-center">
+            <span className="font-display text-[10px] tracking-[0.42em] uppercase font-bold text-[#b0c5c6]/40">
+              {String(index + 1).padStart(2, '0')} · {metric.pillar}
+            </span>
+            <h3 className="mt-3 font-display font-bold text-white text-xl md:text-[28px] tracking-tight leading-[1.1]">
+              {metric.label}
+            </h3>
+            <p className="mt-4 font-body font-light text-[#b0c5c6] text-[15px] md:text-base leading-[1.65] max-w-[52ch]">
+              {metric.detail}
+            </p>
+          </div>
+
+          {/* ─── Zone 3: View Binding magnetic chip (desktop only) ─── */}
+          <div className="hidden lg:flex lg:col-span-2 items-center justify-end">
+            <motion.div
+              onMouseMove={chipMag.onMove}
+              onMouseLeave={chipMag.onLeave}
+              style={{
+                x: chipMag.x,
+                y: chipMag.y,
+                transition:
+                  'background-color 280ms var(--ease-out-expo), border-color 280ms var(--ease-out-expo)',
+              }}
+              className="inline-flex items-center gap-3 px-4 py-3 rounded-full border border-[#A7DADB]/18 bg-[#A7DADB]/[0.04] group-hover:bg-[#A7DADB]/[0.09] group-hover:border-[#A7DADB]/35"
+            >
+              <span className="font-display text-[9px] tracking-[0.35em] uppercase font-bold text-[#A7DADB]/80">
+                {isOpen ? 'Collapse' : 'View Binding'}
+              </span>
+              <motion.div
+                animate={{ rotate: isOpen ? 90 : 0 }}
+                transition={{ duration: 0.35, ease: easeOut }}
+                className="h-7 w-7 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.07] flex items-center justify-center"
+              >
+                <ChevronDown className="h-3.5 w-3.5 text-[#A7DADB]" strokeWidth={2.2} />
+              </motion.div>
+            </motion.div>
+          </div>
+        </div>
+      </motion.button>
+
+      {/* ─── Expanded Binding Terms panel ─── */}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            key="binding-panel"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.55, ease: easeOut }}
+            className="overflow-hidden"
+          >
+            <div className="pb-14 md:pb-20 pt-2">
+              <div className="relative rounded-[20px] md:rounded-[24px] border border-[#A7DADB]/14 bg-[#0a1729]/55 backdrop-blur-xl glass-refract overflow-hidden">
+                {/* Border-beam seal — runs once on open */}
+                <BindingSeal size={220} duration={2.4} borderRadius={24} />
+
+                {/* Panel header */}
+                <div className="relative flex items-center justify-between gap-4 px-6 md:px-8 py-5 border-b border-white/[0.06]">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <FileSignature className="h-4 w-4 text-[#A7DADB]/75 shrink-0" strokeWidth={1.75} />
+                    <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#A7DADB]/85 truncate">
+                      Binding Terms
+                    </span>
+                    <span aria-hidden className="h-px w-6 bg-white/[0.08] shrink-0 hidden sm:block" />
+                    <span className="font-mono text-[11px] tabular-nums text-[#b0c5c6]/45 truncate">
+                      {metric.ref}
+                    </span>
+                  </div>
+                  {/* ATTESTED stamp — overshoot spring entry */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.85, rotate: -10 }}
+                    animate={{ opacity: 1, scale: 1, rotate: -4 }}
+                    transition={{ type: 'spring', stiffness: 220, damping: 11, delay: 0.5 }}
+                    className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-[#e8c789]/45 bg-[#e8c789]/[0.06]"
+                  >
+                    <ShieldCheck className="h-3 w-3 text-[#e8c789]" strokeWidth={2.25} />
+                    <span className="font-display text-[9px] tracking-[0.42em] uppercase font-bold text-[#e8c789]/90">
+                      Attested
+                    </span>
+                  </motion.div>
+                </div>
+
+                {/* 3-column binding terms (Method · Cadence · Trigger) */}
+                <div className="relative grid grid-cols-1 md:grid-cols-3">
+                  {[
+                    { Icon: Gauge,          k: 'Method',  v: metric.binding.method,  accent: '#A7DADB' },
+                    { Icon: Clock,          k: 'Cadence', v: metric.binding.cadence, accent: '#A7DADB' },
+                    { Icon: AlertTriangle,  k: 'Trigger', v: metric.binding.trigger, accent: '#e8c789' },
+                  ].map((b, bi) => (
+                    <motion.div
+                      key={b.k}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: 0.18 + bi * 0.08, ease: easeOut }}
+                      className={`px-6 md:px-8 py-7 ${
+                        bi > 0 ? 'md:border-l border-t md:border-t-0 border-white/[0.05]' : ''
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 mb-3">
+                        <b.Icon
+                          className="h-3.5 w-3.5 shrink-0"
+                          style={{ color: b.accent, opacity: 0.85 }}
+                          strokeWidth={2}
+                        />
+                        <span
+                          className="font-display text-[10px] tracking-[0.42em] uppercase font-bold"
+                          style={{ color: b.accent, opacity: 0.78 }}
+                        >
+                          {b.k}
+                        </span>
+                      </div>
+                      <p className="font-body font-light text-[#b0c5c6] text-[13.5px] leading-[1.6]">
+                        {b.v}
+                      </p>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Evidence ledger — hairline-divided data points (no card boxes) */}
+                <div className="relative border-t border-white/[0.06] bg-[#020C1B]/40 px-6 md:px-8 py-5">
+                  <div className="flex items-center gap-2.5 mb-4">
+                    <span className="h-1 w-1 rounded-full bg-[#A7DADB]/55" />
+                    <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#b0c5c6]/45">
+                      Evidence ledger
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-y-5">
+                    {metric.evidence.map((e, ei) => (
+                      <motion.div
+                        key={e.label}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.35, delay: 0.42 + ei * 0.05, ease: easeOut }}
+                        className={`flex flex-col gap-1.5 ${
+                          ei > 0 ? 'md:border-l md:border-white/[0.06] md:pl-6' : ''
+                        } ${ei < metric.evidence.length - 1 ? 'md:pr-6' : ''}`}
+                      >
+                        <span className="font-display font-bold text-[#A7DADB] text-xl md:text-2xl tabular-nums tracking-tight leading-none">
+                          {e.value}
+                        </span>
+                        <span className="font-body font-light text-[#b0c5c6]/60 text-[11px] leading-snug">
+                          {e.label}
+                        </span>
+                      </motion.div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Contract footer line */}
+                <div className="relative border-t border-white/[0.05] px-6 md:px-8 py-4 flex items-center justify-between gap-4 flex-wrap">
+                  <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/40 tracking-wide">
+                    EFFECTIVE: DAY 01 · VERIFIED BY: KJU PROGRAMME OFFICE
+                  </span>
+                  <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/45 tracking-wide">
+                    {metric.ref}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.article>
+  );
+};
+
+// ─── Contractual KPIs (Binding Commitments — document-grade ledger) ──────────
 const ContractualKPIs: React.FC = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
@@ -545,32 +1022,81 @@ const ContractualKPIs: React.FC = () => {
           style={{ background: 'linear-gradient(90deg, #020C1B 0%, rgba(2,12,27,0.85) 30%, rgba(2,12,27,0.2) 65%, transparent 100%)' }}
         />
       </div>
+
       <div className="relative z-10 max-w-[1440px] mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-12 mb-20 md:mb-28">
-          <div className="lg:col-span-3">
+        {/* ─── Document-grade section header ─── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 gap-x-12 mb-20 md:mb-24">
+          <div className="lg:col-span-5">
+            {/* Eyebrow with concentric "stamp" pulse */}
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: easeOut }}
-              className="flex items-center gap-3"
+              className="flex items-center gap-4"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              <span className="relative inline-flex h-3 w-3 items-center justify-center">
+                <motion.span
+                  aria-hidden
+                  className="absolute inset-0 rounded-full bg-[#A7DADB]/30"
+                  animate={{ scale: [0.7, 1.9], opacity: [0.7, 0] }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeOut' }}
+                />
+                <motion.span
+                  aria-hidden
+                  className="absolute inset-0 rounded-full bg-[#A7DADB]/22"
+                  animate={{ scale: [0.7, 1.9], opacity: [0.6, 0] }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeOut', delay: 1.3 }}
+                />
+                <span className="relative h-1.5 w-1.5 rounded-full bg-[#A7DADB] shadow-[0_0_10px_rgba(167,218,219,0.9)]" />
+              </span>
               <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
                 Binding Commitments
               </span>
+              <span aria-hidden className="hidden md:inline-block h-px w-14 bg-gradient-to-r from-[#A7DADB]/35 to-transparent" />
             </motion.div>
+
+            {/* Subhead — keeps the editorial "Not aspirational" line, extends with serif italic */}
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
-              className="mt-5 font-display text-2xl md:text-3xl text-white tracking-tight"
+              className="mt-6 font-display text-2xl md:text-3xl text-white tracking-tight"
             >
-              Not aspirational
+              Not aspirational.{' '}
+              <span className="font-serif-display italic text-[#A7DADB]/70 font-normal">Notarized.</span>
             </motion.p>
+
+            {/* Contract metadata strip — feels like a real document header */}
+            <motion.dl
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.65, delay: 0.2, ease: easeOut }}
+              className="mt-10 grid grid-cols-3 max-w-[460px] border-t border-white/[0.07]"
+            >
+              {[
+                { k: 'Contract',     v: 'KJU/STM-2026' },
+                { k: 'Cadence',      v: 'Quarterly' },
+                { k: 'Jurisdiction', v: 'Karnataka' },
+              ].map((row, ri) => (
+                <div
+                  key={row.k}
+                  className={`flex flex-col gap-1.5 pt-5 ${ri > 0 ? 'border-l border-white/[0.05] pl-5' : ''}`}
+                >
+                  <dt className="font-display text-[9px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
+                    {row.k}
+                  </dt>
+                  <dd className="font-mono text-[12px] tabular-nums text-[#A7DADB]/90 tracking-tight">
+                    {row.v}
+                  </dd>
+                </div>
+              ))}
+            </motion.dl>
           </div>
-          <div className="lg:col-span-9">
+
+          <div className="lg:col-span-7">
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -589,115 +1115,50 @@ const ContractualKPIs: React.FC = () => {
               transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
               className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
             >
-              Every KPI is measured from deployment Day 1. If a target is not on track, Smartslate flags it proactively and delivers a remediation plan within 14 days.{' '}
-              <span className="text-[#A7DADB]/70 text-sm">Click each to see the detail.</span>
+              Every KPI is measured from deployment Day 1. If a target drifts off track, Smartslate flags it proactively and delivers a remediation plan within 14 days.
             </motion.p>
+
+            {/* Subtle interactivity hint */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.6, delay: 0.24, ease: easeOut }}
+              className="mt-8 inline-flex items-center gap-2.5"
+            >
+              <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#A7DADB]/55 font-bold">
+                Inspect binding terms
+              </span>
+              <motion.div
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+              >
+                <ArrowRight className="h-3 w-3 text-[#A7DADB]/55" strokeWidth={2} />
+              </motion.div>
+            </motion.div>
           </div>
         </div>
 
+        {/* ─── Binding ledger rows ─── */}
         <div className="space-y-0">
-          {kpiMetrics.map((m, i) => {
-            const isOpen = openIdx === i;
-            return (
-              <motion.article
-                key={m.label}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.55, delay: i * 0.07, ease: easeOut }}
-                className="relative border-t border-white/[0.07]"
-              >
-                {/* scaleX from left — avoids layout thrash caused by animating width */}
-                <span
-                  aria-hidden
-                  className="absolute top-0 left-0 h-px w-full bg-[#A7DADB] origin-left scale-x-from-left"
-                  style={{
-                    transform: isOpen ? 'scaleX(1)' : 'scaleX(0)',
-                    opacity: isOpen ? 0.6 : 0,
-                    transition: 'transform 650ms var(--ease-out-expo), opacity 350ms',
-                  }}
-                />
-
-                <motion.button
-                  type="button"
-                  onClick={() => setOpenIdx(isOpen ? null : i)}
-                  className="w-full text-left py-10 md:py-20 cursor-pointer"
-                  aria-expanded={isOpen}
-                  whileTap={{ scale: 0.995 }}
-                  transition={springCard}
-                >
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-5 md:gap-y-8 gap-x-10">
-                    <div className="lg:col-span-4 flex items-center justify-between gap-4 lg:justify-start">
-                      <span
-                        className="font-display font-bold tabular-nums tracking-[-0.04em] leading-[0.85] text-[clamp(3.5rem,13vw,12rem)]"
-                        style={{ color: '#A7DADB' }}
-                      >
-                        {m.num}
-                      </span>
-                      <motion.div
-                        animate={{ rotate: isOpen ? 180 : 0 }}
-                        transition={{ duration: 0.4, ease: easeOut }}
-                        className="lg:hidden h-9 w-9 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0"
-                      >
-                        <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
-                      </motion.div>
-                    </div>
-                    <div className="lg:col-span-7 lg:col-start-6 flex flex-col justify-center">
-                      <h3 className="font-display font-bold text-white text-xl md:text-3xl tracking-tight">
-                        {m.label}
-                      </h3>
-                      <p className="mt-3 md:mt-4 font-body font-light text-[#b0c5c6] text-[15px] md:text-[17px] leading-[1.65] max-w-[52ch]">
-                        {m.detail}
-                      </p>
-                    </div>
-                    <div className="hidden lg:flex lg:col-span-1 lg:col-start-12 items-center justify-end">
-                      <motion.div
-                        animate={{ rotate: isOpen ? 180 : 0 }}
-                        transition={{ duration: 0.4, ease: easeOut }}
-                        className="h-9 w-9 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0"
-                      >
-                        <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
-                      </motion.div>
-                    </div>
-                  </div>
-                </motion.button>
-
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      key="kpi-expand"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.5, ease: easeOut }}
-                      className="overflow-hidden"
-                    >
-                      <div className="pb-14 md:pb-20">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          {m.expandedStats.map((s, si) => (
-                            <motion.div
-                              key={s.label}
-                              initial={{ opacity: 0, y: 12 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.35, delay: 0.05 + si * 0.06, ease: easeOut }}
-                              className="rounded-[16px] border border-[#A7DADB]/12 bg-[#A7DADB]/[0.04] p-5"
-                            >
-                              <span className="block font-display font-bold text-[#A7DADB] text-2xl md:text-3xl tabular-nums tracking-tight leading-none">
-                                {s.value}
-                              </span>
-                              <span className="mt-2 block font-body font-light text-[#b0c5c6]/70 text-xs leading-snug">
-                                {s.label}
-                              </span>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </motion.article>
-            );
-          })}
+          {kpiMetrics.map((m, i) => (
+            <BindingLedgerRow
+              key={m.id}
+              metric={m}
+              index={i}
+              isOpen={openIdx === i}
+              onToggle={() => setOpenIdx(openIdx === i ? null : i)}
+            />
+          ))}
+          {/* End-of-ledger closing strip */}
+          <div className="border-t border-white/[0.07] pt-6 flex items-center justify-between gap-4 flex-wrap">
+            <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/35 tracking-wide">
+              END OF LEDGER · 3 OF 3 KPIs ATTESTED
+            </span>
+            <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/40 tracking-wide">
+              KJU/STM-2026 · v1.0
+            </span>
+          </div>
         </div>
       </div>
     </section>
@@ -722,7 +1183,7 @@ const PhaseModal: React.FC<{ phaseId: string; onClose: () => void }> = ({ phaseI
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.97 }}
         transition={springModal}
-        className="relative w-full max-w-[640px] max-h-[88dvh] overflow-y-auto rounded-[28px] border border-[#A7DADB]/22 bg-[#060f1e]"
+        className="relative w-full max-w-[640px] max-h-[88dvh] overflow-y-auto custom-scrollbar rounded-[28px] border border-[#A7DADB]/22 bg-[#060f1e]"
         style={{ boxShadow: '0 60px 120px -24px rgba(0,0,0,0.95), inset 0 1px 0 rgba(167,218,219,0.12), 0 0 0 1px rgba(167,218,219,0.08)' }}
         onClick={e => e.stopPropagation()}
       >
