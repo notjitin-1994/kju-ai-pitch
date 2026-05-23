@@ -24,8 +24,11 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '..');
 const AUDIO_DIR = path.join(ROOT, 'public', 'audio');
 
-// ── Voice IDs (ElevenLabs premade voices) ────────────────────────────────────
+// ── Voice IDs ────────────────────────────────────────────────────────────────
+//   IndianMale — user-selected library voice, natural Indian English accent
+//   Adam / Nicole — ElevenLabs premade (free-tier fallbacks)
 const VOICE_IDS = {
+  IndianMale: 'hCJyCwSNQETUpWKHnj2n',
   Adam: 'pNInz6obpgDQGcFmaJgB',
   Nicole: 'piTKgcLEGmPE4e6mEKli',
 };
@@ -37,9 +40,9 @@ const SCRIPTS = {
 
 Right now, at universities across India, your students are using AI — with or without your guidance. They aren't waiting for permission. They're building habits, forming dependencies, and arriving at outcomes you didn't design.
 
-The question isn't whether AI reaches Kristu Jayanti. It already has.
+The question isn't whether AI reaches Kristhoo Jayenthi. It already has.
 
-The question is whether Kristu Jayanti shapes what that looks like — or inherits someone else's answer.`,
+The question is whether Kristhoo Jayenthi shapes what that looks like — or inherits someone else's answer.`,
   },
   problem: {
     text: `Your faculty spend four to six hours a day on tasks a system could handle in minutes. That's not inefficiency. That's infrastructure debt, compounding every semester — pulling your best people away from the work only they can do.
@@ -81,7 +84,7 @@ Institutions that move this year set the standard for AI-native higher education
 
 Institutions that wait don't stand still. They fall behind a standard they had no hand in writing.
 
-Kristu Jayanti has always been first. This is that moment.
+Kristhoo Jayenthi has always been first. This is that moment.
 
 The window is open. Begin the conversation.`,
   },
@@ -89,8 +92,10 @@ The window is open. Begin the conversation.`,
 
 // ── CLI args ──────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
-const sectionArg = args[args.indexOf('--section') + 1];
-const voiceArg = args[args.indexOf('--voice') + 1] ?? 'Adam';
+const sectionIdx = args.indexOf('--section');
+const voiceIdx = args.indexOf('--voice');
+const sectionArg = sectionIdx >= 0 ? args[sectionIdx + 1] : undefined;
+const voiceArg = voiceIdx >= 0 ? args[voiceIdx + 1] : 'IndianMale';
 const sections = sectionArg ? [sectionArg] : Object.keys(SCRIPTS);
 
 const API_KEY = process.env.ELEVENLABS_API_KEY;

@@ -16,6 +16,9 @@ import { FlickeringGrid } from '../components/ui/flickering-grid';
 import { CursorSpotlight } from '../components/ui/CursorSpotlight';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
+// Spring preset — used for modals and cards that should feel alive
+const springModal = { type: 'spring' as const, duration: 0.45, bounce: 0.18 };
+const springCard  = { type: 'spring' as const, duration: 0.35, bounce: 0.1 };
 
 // ─── Data (all figures from AI Transformation Programme Proposal, May 2026) ──
 
@@ -449,11 +452,15 @@ const PricingHero: React.FC = () => (
             { v: '6 months', sub: 'Phase 1 through Phase 3: Week 1 to Month 12+ full campus deployment', accent: '#A7DADB' },
             { v: '~10,000', sub: 'Users at KJU scale: students, faculty, and administrative staff', accent: '#A7DADB' },
           ].map((s, i) => (
-            <div key={i} className={i > 0 ? 'pt-8 border-t border-white/[0.06]' : ''}>
-              <span className="font-display font-bold tabular-nums tracking-tight text-[2.4rem] leading-none" style={{ color: s.accent }}>
-                {s.v}
-              </span>
-              <p className="mt-2 font-body font-light text-[#b0c5c6] text-sm leading-[1.55]">{s.sub}</p>
+            <div key={i} className={`flex gap-4 ${i > 0 ? 'pt-8 border-t border-white/[0.06]' : ''}`}>
+              {/* Left-edge accent bar — editorial detail */}
+              <div className="w-[3px] rounded-full shrink-0 mt-1" style={{ background: 'rgba(167,218,219,0.22)', alignSelf: 'stretch' }} aria-hidden />
+              <div>
+                <span className="font-display font-bold tabular-nums tracking-tight text-[2.4rem] leading-none" style={{ color: s.accent }}>
+                  {s.v}
+                </span>
+                <p className="mt-2 font-body font-light text-[#b0c5c6] text-sm leading-[1.55]">{s.sub}</p>
+              </div>
             </div>
           ))}
         </motion.div>
@@ -541,27 +548,30 @@ const ContractualKPIs: React.FC = () => {
             return (
               <motion.article
                 key={m.label}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.9, delay: i * 0.08, ease: easeOut }}
+                transition={{ duration: 0.55, delay: i * 0.07, ease: easeOut }}
                 className="relative border-t border-white/[0.07]"
               >
+                {/* scaleX from left — avoids layout thrash caused by animating width */}
                 <span
                   aria-hidden
-                  className="absolute top-0 left-0 h-px bg-[#A7DADB]"
+                  className="absolute top-0 left-0 h-px w-full bg-[#A7DADB] origin-left scale-x-from-left"
                   style={{
-                    width: isOpen ? '100%' : '0%',
+                    transform: isOpen ? 'scaleX(1)' : 'scaleX(0)',
                     opacity: isOpen ? 0.6 : 0,
-                    transition: 'width 800ms var(--ease-out-expo), opacity 400ms',
+                    transition: 'transform 650ms var(--ease-out-expo), opacity 350ms',
                   }}
                 />
 
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setOpenIdx(isOpen ? null : i)}
                   className="w-full text-left py-14 md:py-20 cursor-pointer"
                   aria-expanded={isOpen}
+                  whileTap={{ scale: 0.995 }}
+                  transition={springCard}
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-8 gap-x-10">
                     <div className="lg:col-span-4 flex items-center">
@@ -590,7 +600,7 @@ const ContractualKPIs: React.FC = () => {
                       </motion.div>
                     </div>
                   </div>
-                </button>
+                </motion.button>
 
                 <AnimatePresence initial={false}>
                   {isOpen && (
@@ -604,9 +614,12 @@ const ContractualKPIs: React.FC = () => {
                     >
                       <div className="pb-14 md:pb-20">
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          {m.expandedStats.map((s) => (
-                            <div
+                          {m.expandedStats.map((s, si) => (
+                            <motion.div
                               key={s.label}
+                              initial={{ opacity: 0, y: 12 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.35, delay: 0.05 + si * 0.06, ease: easeOut }}
                               className="rounded-[16px] border border-[#A7DADB]/12 bg-[#A7DADB]/[0.04] p-5"
                             >
                               <span className="block font-display font-bold text-[#A7DADB] text-2xl md:text-3xl tabular-nums tracking-tight leading-none">
@@ -615,7 +628,7 @@ const ContractualKPIs: React.FC = () => {
                               <span className="mt-2 block font-body font-light text-[#b0c5c6]/70 text-xs leading-snug">
                                 {s.label}
                               </span>
-                            </div>
+                            </motion.div>
                           ))}
                         </div>
                       </div>
@@ -640,17 +653,17 @@ const PhaseModal: React.FC<{ phaseId: string; onClose: () => void }> = ({ phaseI
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3, ease: easeOut }}
-      className="fixed inset-0 z-[199] bg-black/82 backdrop-blur-2xl flex items-center justify-center p-4 md:p-8"
+      transition={{ duration: 0.22, ease: easeOut }}
+      className="fixed inset-0 z-[199] bg-black/80 backdrop-blur-2xl flex items-center justify-center p-4 md:p-8"
       onClick={onClose}
     >
       <motion.div
-        initial={{ opacity: 0, y: 36, scale: 0.95 }}
+        initial={{ opacity: 0, y: 28, scale: 0.94 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 18, scale: 0.97 }}
-        transition={{ duration: 0.48, ease: easeOut }}
-        className="relative w-full max-w-[640px] max-h-[88dvh] overflow-y-auto rounded-[28px] border border-[#A7DADB]/20 bg-[#060f1e]"
-        style={{ boxShadow: '0 50px 100px -24px rgba(0,0,0,0.9), inset 0 1px 0 rgba(167,218,219,0.1)' }}
+        exit={{ opacity: 0, y: 16, scale: 0.97 }}
+        transition={springModal}
+        className="relative w-full max-w-[640px] max-h-[88dvh] overflow-y-auto rounded-[28px] border border-[#A7DADB]/22 bg-[#060f1e]"
+        style={{ boxShadow: '0 60px 120px -24px rgba(0,0,0,0.95), inset 0 1px 0 rgba(167,218,219,0.12), 0 0 0 1px rgba(167,218,219,0.08)' }}
         onClick={e => e.stopPropagation()}
       >
         {/* Sticky header */}
@@ -668,16 +681,18 @@ const PhaseModal: React.FC<{ phaseId: string; onClose: () => void }> = ({ phaseI
               </h3>
               <p className="mt-1.5 font-display font-bold text-[#A7DADB] text-xl tabular-nums">{ph.fee}</p>
             </div>
-            <button
+            <motion.button
               type="button"
               onClick={onClose}
               aria-label="Close"
+              whileTap={{ scale: 0.95 }}
+              transition={springCard}
               className="shrink-0 press-scale inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.05] hover:bg-white/[0.1] px-4 py-2 text-white/60 hover:text-white"
-              style={{ transition: 'background-color 200ms, color 200ms' }}
+              style={{ transition: 'background-color 180ms, color 180ms' }}
             >
               <XIcon className="h-3.5 w-3.5" strokeWidth={1.75} />
               <span className="font-display text-[9px] tracking-[0.35em] uppercase font-bold">Close</span>
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -729,14 +744,18 @@ const FeeSchedule: React.FC = () => {
 
   useEffect(() => {
     if (!openPhaseId) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setOpenPhaseId(null); };
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpenPhaseId(null);
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
   }, [openPhaseId]);
 
   useEffect(() => {
     document.body.style.overflow = openPhaseId ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [openPhaseId]);
 
   return (
@@ -797,16 +816,22 @@ const FeeSchedule: React.FC = () => {
 
           {/* Commitment pillars */}
           <motion.div
-            initial={{ opacity: 0, y: 24 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.85, ease: easeOut }}
+            transition={{ duration: 0.5, ease: easeOut }}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
           >
-            {commitmentPillars.map((p) => (
-              <div
+            {commitmentPillars.map((p, pi) => (
+              <motion.div
                 key={p.title}
-                className="rounded-[20px] border border-white/[0.07] bg-[#0a1729]/60 backdrop-blur-xl glass-refract p-7"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: 0.45, delay: pi * 0.08, ease: easeOut }}
+                whileHover={{ y: -3, transition: springCard }}
+                className="rounded-[20px] border border-white/[0.07] hover:border-[#A7DADB]/20 bg-[#0a1729]/60 hover:bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-7"
+                style={{ transition: 'border-color 250ms var(--ease-out-expo), background-color 250ms var(--ease-out-expo)' }}
               >
                 <div className="flex items-center gap-2.5 mb-4">
                   <span className="h-1.5 w-1.5 rounded-full" style={{ background: p.accent }} />
@@ -815,7 +840,7 @@ const FeeSchedule: React.FC = () => {
                   </span>
                 </div>
                 <p className="font-body font-light text-[#b0c5c6] text-sm leading-[1.65]">{p.body}</p>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
 
@@ -852,9 +877,10 @@ const FeeSchedule: React.FC = () => {
                     initial={{ opacity: 0, x: -8 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true, margin: '-60px' }}
-                    transition={{ duration: 0.55, delay: i * 0.08, ease: easeOut }}
-                    className="group relative w-full text-left grid grid-cols-12 gap-4 px-8 py-6 items-center cursor-pointer hover:bg-[#A7DADB]/[0.03]"
-                    style={{ transition: 'background-color 220ms var(--ease-out-expo)' }}
+                    transition={{ duration: 0.45, delay: i * 0.07, ease: easeOut }}
+                    whileTap={{ scale: 0.99 }}
+                    className="group relative w-full text-left grid grid-cols-12 gap-4 px-8 py-6 items-center cursor-pointer hover:bg-[#A7DADB]/[0.06]"
+                    style={{ transition: 'background-color 200ms var(--ease-out-expo)' }}
                     aria-label={`View ${ph.name} deliverables`}
                   >
                     {/* Left edge bar — grows in on hover */}
@@ -875,17 +901,20 @@ const FeeSchedule: React.FC = () => {
                     </div>
 
                     {/* Name + description + hover chip */}
-                    <div className="col-span-7">
+                    <div
+                      className="col-span-7"
+                      style={{ transform: 'translateX(0)', transition: 'transform 220ms var(--ease-out-expo)' }}
+                    >
                       <p
                         className="font-display font-bold text-white text-base tracking-tight group-hover:text-[#A7DADB]"
-                        style={{ transition: 'color 220ms var(--ease-out-expo)' }}
+                        style={{ transition: 'color 200ms var(--ease-out-expo)' }}
                       >
                         {ph.name}
                       </p>
                       <p className="mt-1 font-body font-light text-[#b0c5c6]/70 text-sm leading-snug">{ph.includes}</p>
                       <div
                         className="mt-2.5 inline-flex items-center gap-1.5 opacity-0 group-hover:opacity-100 -translate-y-1 group-hover:translate-y-0 pointer-events-none"
-                        style={{ transition: 'opacity 280ms var(--ease-out-expo), transform 280ms var(--ease-out-expo)' }}
+                        style={{ transition: 'opacity 250ms var(--ease-out-expo), transform 250ms var(--ease-out-expo)' }}
                       >
                         <span className="h-[5px] w-[5px] rounded-full bg-[#A7DADB]/60" />
                         <span className="font-display text-[9px] tracking-[0.32em] uppercase text-[#A7DADB]/65 font-bold">
@@ -1058,13 +1087,16 @@ const ImplementationPaths: React.FC = () => {
           className="flex items-center gap-2 mb-10 p-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] backdrop-blur-md w-fit"
         >
           {paths.map((p) => (
-            <button
+            <motion.button
               key={p.id}
               type="button"
               onClick={() => setActiveId(p.id)}
-              className="relative rounded-full px-5 py-2.5 font-display text-xs tracking-[0.25em] uppercase font-bold transition-colors duration-200"
+              whileTap={{ scale: 0.97 }}
+              transition={springCard}
+              className="relative rounded-full px-5 py-2.5 font-display text-xs tracking-[0.25em] uppercase font-bold"
               style={{
                 color: activeId === p.id ? '#020C1B' : 'rgba(176,197,198,0.7)',
+                transition: 'color 350ms var(--ease-out-expo)',  /* synced to layoutId animation */
               }}
             >
               {activeId === p.id && (
@@ -1075,7 +1107,7 @@ const ImplementationPaths: React.FC = () => {
                 />
               )}
               <span className="relative z-10">{p.name}</span>
-            </button>
+            </motion.button>
           ))}
         </motion.div>
 
@@ -1087,20 +1119,21 @@ const ImplementationPaths: React.FC = () => {
             return (
               <motion.article
                 key={path.id}
-                initial={{ opacity: 0, y: 28 }}
+                initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-80px' }}
-                transition={{ duration: 0.85, delay: i * 0.09, ease: easeOut }}
+                transition={{ duration: 0.5, delay: i * 0.08, ease: easeOut }}
                 onClick={() => setActiveId(path.id)}
+                whileTap={{ scale: 0.985 }}
                 className="group relative isolate overflow-hidden rounded-[28px] bg-[#0a1729]/70 backdrop-blur-xl glass-refract flex flex-col cursor-pointer"
                 style={{
                   border: isActive
-                    ? '1px solid rgba(167,218,219,0.35)'
+                    ? '1px solid rgba(167,218,219,0.38)'
                     : '1px solid rgba(255,255,255,0.08)',
                   boxShadow: isActive
-                    ? 'inset 0 1px 0 rgba(255,255,255,0.06), 0 0 80px -24px rgba(167,218,219,0.15)'
-                    : undefined,
-                  transition: 'border-color 400ms var(--ease-out-expo), box-shadow 400ms var(--ease-out-expo)',
+                    ? 'inset 0 1px 0 rgba(255,255,255,0.07), 0 0 0 1px rgba(167,218,219,0.12), 0 0 80px -16px rgba(167,218,219,0.3), 0 30px 60px -24px rgba(0,0,0,0.7)'
+                    : 'inset 0 1px 0 rgba(255,255,255,0.04), 0 30px 60px -24px rgba(0,0,0,0.5)',
+                  transition: 'border-color 350ms var(--ease-out-expo), box-shadow 350ms var(--ease-out-expo)',
                 }}
               >
                 <div className="flex flex-col gap-6 p-8 md:p-9 flex-1">
@@ -1171,10 +1204,10 @@ const ImplementationPaths: React.FC = () => {
 
         {/* 5-Year Financial Summary */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9, ease: easeOut }}
+          transition={{ duration: 0.55, ease: easeOut }}
         >
           <div className="mb-8">
             <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#b0c5c6]/55 font-bold">
@@ -1292,10 +1325,10 @@ const ProgrammePillars: React.FC = () => {
 
         {/* ── Desktop: left-nav + right panel ── */}
         <motion.div
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.9, ease: easeOut }}
+          transition={{ duration: 0.55, ease: easeOut }}
           className="hidden lg:grid lg:grid-cols-12 gap-6 items-start"
         >
           {/* Left: pillar selector */}
@@ -1303,21 +1336,23 @@ const ProgrammePillars: React.FC = () => {
             {programmePillars.map((p, i) => {
               const isActive = desktopIdx === i;
               return (
-                <button
+                <motion.button
                   key={p.num}
                   type="button"
                   onClick={() => setDesktopIdx(i)}
+                  whileTap={{ scale: 0.99 }}
+                  transition={springCard}
                   className={`group relative w-full text-left px-7 py-6 cursor-pointer ${i < programmePillars.length - 1 ? 'border-b border-white/[0.05]' : ''}`}
                   style={{
-                    backgroundColor: isActive ? 'rgba(167,218,219,0.055)' : 'transparent',
-                    transition: 'background-color 280ms var(--ease-out-expo)',
+                    backgroundColor: isActive ? 'rgba(167,218,219,0.06)' : 'transparent',
+                    transition: 'background-color 250ms var(--ease-out-expo)',
                   }}
                 >
                   {/* Active left border */}
                   <span
                     aria-hidden
                     className="absolute left-0 inset-y-[14%] w-[2.5px] bg-[#A7DADB] rounded-r-full"
-                    style={{ opacity: isActive ? 1 : 0, transition: 'opacity 280ms var(--ease-out-expo)' }}
+                    style={{ opacity: isActive ? 1 : 0, transition: 'opacity 250ms var(--ease-out-expo)' }}
                   />
 
                   <div className="flex items-start gap-4">
@@ -1326,7 +1361,7 @@ const ProgrammePillars: React.FC = () => {
                       className="font-display font-bold tabular-nums leading-none shrink-0 mt-1 text-[2rem]"
                       style={{
                         color: isActive ? 'rgba(167,218,219,0.85)' : 'rgba(176,197,198,0.18)',
-                        transition: 'color 280ms var(--ease-out-expo)',
+                        transition: 'color 250ms var(--ease-out-expo)',
                       }}
                     >
                       {p.num}
@@ -1335,31 +1370,34 @@ const ProgrammePillars: React.FC = () => {
                     <div className="flex-1 min-w-0">
                       <p
                         className="font-display text-[9.5px] tracking-[0.4em] uppercase font-bold leading-none"
-                        style={{ color: isActive ? 'rgba(167,218,219,0.65)' : 'rgba(176,197,198,0.35)', transition: 'color 280ms' }}
+                        style={{ color: isActive ? 'rgba(167,218,219,0.65)' : 'rgba(176,197,198,0.35)', transition: 'color 250ms' }}
                       >
                         {p.pillar}
                       </p>
                       <h3
                         className="mt-1 font-display font-bold text-[1.05rem] tracking-tight leading-tight"
-                        style={{ color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.45)', transition: 'color 280ms var(--ease-out-expo)' }}
+                        style={{ color: isActive ? 'rgba(255,255,255,1)' : 'rgba(255,255,255,0.45)', transition: 'color 250ms var(--ease-out-expo)' }}
                       >
                         {p.name}
                       </h3>
-                      {/* Stat preview — fades in when active */}
-                      <div
-                        className="overflow-hidden"
-                        style={{
-                          maxHeight: isActive ? '2.5rem' : '0',
-                          opacity: isActive ? 1 : 0,
-                          marginTop: isActive ? '0.5rem' : 0,
-                          transition: 'max-height 400ms var(--ease-out-expo), opacity 320ms, margin-top 400ms var(--ease-out-expo)',
-                        }}
-                      >
-                        <span className="font-display font-bold text-[#A7DADB] text-xl tabular-nums">{p.stat.value}</span>
-                      </div>
+                      {/* Stat preview — AnimatePresence for spring-interruptible height (replaces max-height hack) */}
+                      <AnimatePresence initial={false}>
+                        {isActive && (
+                          <motion.div
+                            key="stat-preview"
+                            initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                            animate={{ height: 'auto', opacity: 1, marginTop: '0.5rem' }}
+                            exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                            transition={{ duration: 0.35, ease: easeOut }}
+                            className="overflow-hidden"
+                          >
+                            <span className="font-display font-bold text-[#A7DADB] text-xl tabular-nums">{p.stat.value}</span>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
                   </div>
-                </button>
+                </motion.button>
               );
             })}
           </nav>
@@ -1484,17 +1522,24 @@ const ProgrammePillars: React.FC = () => {
                 className="relative border-t border-white/[0.07]"
               >
                 {/* Teal rule that stretches when open */}
+                {/* scaleX from left — avoids layout thrash caused by animating width */}
                 <span
                   aria-hidden
-                  className="absolute top-0 left-0 h-px bg-[#A7DADB]"
-                  style={{ width: isOpen ? '100%' : '0%', opacity: isOpen ? 0.55 : 0, transition: 'width 700ms var(--ease-out-expo), opacity 350ms' }}
+                  className="absolute top-0 left-0 h-px w-full bg-[#A7DADB] origin-left scale-x-from-left"
+                  style={{
+                    transform: isOpen ? 'scaleX(1)' : 'scaleX(0)',
+                    opacity: isOpen ? 0.55 : 0,
+                    transition: 'transform 600ms var(--ease-out-expo), opacity 350ms',
+                  }}
                 />
 
-                <button
+                <motion.button
                   type="button"
                   onClick={() => setMobileIdx(isOpen ? null : i)}
                   className="w-full text-left py-8 cursor-pointer"
                   aria-expanded={isOpen}
+                  whileTap={{ scale: 0.99 }}
+                  transition={springCard}
                 >
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
@@ -1531,7 +1576,7 @@ const ProgrammePillars: React.FC = () => {
                       <ChevronDown className="h-3.5 w-3.5 text-[#A7DADB]" strokeWidth={2} />
                     </motion.div>
                   </div>
-                </button>
+                </motion.button>
 
                 <AnimatePresence initial={false}>
                   {isOpen && (
@@ -1630,10 +1675,10 @@ const AnimatedValue: React.FC<{ value: string; className?: string; style?: React
   <AnimatePresence mode="wait" initial={false}>
     <motion.span
       key={value}
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -6 }}
-      transition={{ duration: 0.26, ease: easeOut }}
+      initial={{ opacity: 0, y: 5, filter: 'blur(4px)' }}
+      animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+      exit={{ opacity: 0, y: -5, filter: 'blur(4px)' }}
+      transition={{ duration: 0.22, ease: easeOut }}
       className={className}
       style={style}
     >
@@ -1668,7 +1713,11 @@ const RoiSlider: React.FC<{
 };
 
 const RoiMetric: React.FC<{ Icon: RoiIcon; label: string; value: string; unit: string }> = ({ Icon, label, value, unit }) => (
-  <div className="rounded-[18px] border border-white/[0.08] bg-[#0a1729]/60 backdrop-blur-xl glass-refract p-6 flex flex-col justify-between min-h-[160px]">
+  <motion.div
+    whileHover={{ y: -3, transition: springCard }}
+    className="rounded-[18px] border border-white/[0.08] hover:border-[#A7DADB]/16 bg-[#0a1729]/60 hover:bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-6 flex flex-col justify-between min-h-[160px]"
+    style={{ transition: 'border-color 220ms var(--ease-out-expo), background-color 220ms var(--ease-out-expo)' }}
+  >
     <div className="flex items-center gap-2.5">
       <Icon className="h-4 w-4 text-[#A7DADB]/70" strokeWidth={1.75} />
       <span className="font-display text-[9.5px] tracking-[0.24em] uppercase font-bold text-[#A7DADB]/60">{label}</span>
@@ -1681,7 +1730,7 @@ const RoiMetric: React.FC<{ Icon: RoiIcon; label: string; value: string; unit: s
       />
       <span className="mt-1.5 block font-body text-[#b0c5c6]/50 text-sm leading-snug">{unit}</span>
     </div>
-  </div>
+  </motion.div>
 );
 
 const RoiStream: React.FC<{
@@ -1998,10 +2047,22 @@ const ROICalculator: React.FC = () => {
               body="Hours your faculty and staff get back — and what those hours are worth. These are contractual KPIs, measured weekly against a pre-deployment baseline and written into the engagement SLA."
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <RoiMetric Icon={Clock} label="Faculty Hours Reclaimed" value={facultyHours.toLocaleString('en-IN')} unit="teaching hours returned / year" />
-                <RoiMetric Icon={Coins} label="Value of Faculty Time" value={formatINR(facultyValue)} unit="reclaimed prep-time value / year" />
-                <RoiMetric Icon={Users} label="Admin Hours Redirected" value={adminHours.toLocaleString('en-IN')} unit="support hours freed / year" />
-                <RoiMetric Icon={Gauge} label="Value of Admin Capacity" value={formatINR(adminValue)} unit="capacity recovered / year" />
+                {[
+                  { Icon: Clock,  label: 'Faculty Hours Reclaimed', value: facultyHours.toLocaleString('en-IN'), unit: 'teaching hours returned / year' },
+                  { Icon: Coins,  label: 'Value of Faculty Time',    value: formatINR(facultyValue),              unit: 'reclaimed prep-time value / year' },
+                  { Icon: Users,  label: 'Admin Hours Redirected',   value: adminHours.toLocaleString('en-IN'),   unit: 'support hours freed / year' },
+                  { Icon: Gauge,  label: 'Value of Admin Capacity',  value: formatINR(adminValue),                unit: 'capacity recovered / year' },
+                ].map((m, mi) => (
+                  <motion.div
+                    key={m.label}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.4, delay: mi * 0.06, ease: easeOut }}
+                  >
+                    <RoiMetric Icon={m.Icon} label={m.label} value={m.value} unit={m.unit} />
+                  </motion.div>
+                ))}
               </div>
             </RoiStream>
 
@@ -2014,21 +2075,41 @@ const ROICalculator: React.FC = () => {
               delay={0.05}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <RoiMetric Icon={Megaphone} label="Earned Media Value" value={formatINR(mediaValue)} unit="advertising-equivalent value / Year 1" />
-                <div className="rounded-[18px] border border-white/[0.08] bg-[#0a1729]/60 backdrop-blur-xl glass-refract p-6 flex flex-col justify-between min-h-[160px]">
-                  <div className="flex items-center gap-2.5">
-                    <Newspaper className="h-4 w-4 text-[#A7DADB]/70" strokeWidth={1.75} />
-                    <span className="font-display text-[9.5px] tracking-[0.24em] uppercase font-bold text-[#A7DADB]/60">National Positioning</span>
-                  </div>
-                  <div className="mt-4">
-                    <span className="block font-display font-bold text-white text-[17px] leading-snug tracking-tight">
-                      The first AI-Native Cognitive Campus in its tier.
-                    </span>
-                    <span className="mt-2 block font-body text-[#b0c5c6]/55 text-[13px] leading-relaxed">
-                      A claim no competitor can make second — compounding into rankings, recruiter interest and applicant trust.
-                    </span>
-                  </div>
-                </div>
+                {[
+                  { type: 'metric' as const, Icon: Megaphone, label: 'Earned Media Value', value: formatINR(mediaValue), unit: 'advertising-equivalent value / Year 1' },
+                  { type: 'callout' as const },
+                ].map((item, mi) => (
+                  <motion.div
+                    key={mi}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.4, delay: mi * 0.07, ease: easeOut }}
+                  >
+                    {item.type === 'metric' ? (
+                      <RoiMetric Icon={item.Icon!} label={item.label!} value={item.value!} unit={item.unit!} />
+                    ) : (
+                      <motion.div
+                        whileHover={{ y: -3, transition: springCard }}
+                        className="rounded-[18px] border border-white/[0.08] hover:border-[#A7DADB]/16 bg-[#0a1729]/60 hover:bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-6 flex flex-col justify-between min-h-[160px]"
+                        style={{ transition: 'border-color 220ms var(--ease-out-expo), background-color 220ms var(--ease-out-expo)' }}
+                      >
+                        <div className="flex items-center gap-2.5">
+                          <Newspaper className="h-4 w-4 text-[#A7DADB]/70" strokeWidth={1.75} />
+                          <span className="font-display text-[9.5px] tracking-[0.24em] uppercase font-bold text-[#A7DADB]/60">National Positioning</span>
+                        </div>
+                        <div className="mt-4">
+                          <span className="block font-display font-bold text-white text-[17px] leading-snug tracking-tight">
+                            The first AI-Native Cognitive Campus in its tier.
+                          </span>
+                          <span className="mt-2 block font-body text-[#b0c5c6]/55 text-[13px] leading-relaxed">
+                            A claim no competitor can make second — compounding into rankings, recruiter interest and applicant trust.
+                          </span>
+                        </div>
+                      </motion.div>
+                    )}
+                  </motion.div>
+                ))}
               </div>
             </RoiStream>
 
@@ -2041,10 +2122,22 @@ const ROICalculator: React.FC = () => {
               delay={0.1}
             >
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <RoiMetric Icon={TrendingUp} label="Incremental Enquiries" value={incrEnquiries.toLocaleString('en-IN')} unit="additional prospectus enquiries / year" />
-                <RoiMetric Icon={GraduationCap} label="Incremental Admissions" value={incrAdmissions.toLocaleString('en-IN')} unit="additional enrolments / year" />
-                <RoiMetric Icon={Coins} label="New Tuition Revenue" value={formatINR(newRevenue)} unit="added fee income, Year 1" />
-                <RoiMetric Icon={Wallet} label="Cohort Lifetime Value" value={formatINR(cohortLTV)} unit="full-degree value of one cohort" />
+                {[
+                  { Icon: TrendingUp,    label: 'Incremental Enquiries',   value: incrEnquiries.toLocaleString('en-IN'), unit: 'additional prospectus enquiries / year' },
+                  { Icon: GraduationCap, label: 'Incremental Admissions',  value: incrAdmissions.toLocaleString('en-IN'), unit: 'additional enrolments / year' },
+                  { Icon: Coins,         label: 'New Tuition Revenue',      value: formatINR(newRevenue),                  unit: 'added fee income, Year 1' },
+                  { Icon: Wallet,        label: 'Cohort Lifetime Value',    value: formatINR(cohortLTV),                   unit: 'full-degree value of one cohort' },
+                ].map((m, mi) => (
+                  <motion.div
+                    key={m.label}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.4, delay: mi * 0.06, ease: easeOut }}
+                  >
+                    <RoiMetric Icon={m.Icon} label={m.label} value={m.value} unit={m.unit} />
+                  </motion.div>
+                ))}
               </div>
             </RoiStream>
 
@@ -2136,7 +2229,7 @@ const PricingCTA: React.FC = () => (
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.7, ease: easeOut }}
+        transition={{ duration: 0.55, ease: easeOut }}
         className="flex items-center gap-3"
       >
         <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
@@ -2149,7 +2242,7 @@ const PricingCTA: React.FC = () => (
         initial={{ opacity: 0, y: 22 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.95, ease: easeOut }}
+        transition={{ duration: 0.75, ease: easeOut }}
         className="mt-10 font-display font-bold text-white leading-[0.94] tracking-[-0.03em] text-[clamp(3rem,8.5vw,9rem)] max-w-[18ch]"
       >
         Will you{' '}
@@ -2157,13 +2250,7 @@ const PricingCTA: React.FC = () => (
       </motion.h2>
 
       {/* 3-step next steps */}
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
-        className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[900px]"
-      >
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-[900px]">
         {[
           {
             step: '01',
@@ -2180,22 +2267,31 @@ const PricingCTA: React.FC = () => (
             title: 'KJU Goes AI-First',
             body: 'Phase 1 begins on contract signing day. The window to be the first AI-native institution in your tier is open now.',
           },
-        ].map((s) => (
-          <div key={s.step} className="rounded-[20px] border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract p-7">
+        ].map((s, si) => (
+          <motion.div
+            key={s.step}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.45, delay: si * 0.09, ease: easeOut }}
+            whileHover={{ y: -4, transition: springCard }}
+            className="group rounded-[20px] border border-white/[0.07] hover:border-[#A7DADB]/20 bg-[#0a1729]/50 hover:bg-[#0a1729]/75 backdrop-blur-xl glass-refract p-7"
+            style={{ transition: 'border-color 250ms var(--ease-out-expo), background-color 250ms var(--ease-out-expo)' }}
+          >
             <span className="font-serif-display italic font-normal text-[5rem] leading-none" style={{ color: 'rgba(167,218,219,0.12)' }}>
               {s.step}
             </span>
-            <h3 className="mt-3 font-display font-bold text-white text-lg tracking-tight">{s.title}</h3>
+            <h3 className="mt-3 font-display font-bold text-white text-lg tracking-tight group-hover:text-[#A7DADB]" style={{ transition: 'color 250ms var(--ease-out-expo)' }}>{s.title}</h3>
             <p className="mt-3 font-body font-light text-[#b0c5c6]/70 text-sm leading-relaxed">{s.body}</p>
-          </div>
+          </motion.div>
         ))}
-      </motion.div>
+      </div>
 
       <motion.div
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.85, delay: 0.22, ease: easeOut }}
+        transition={{ duration: 0.65, delay: 0.22, ease: easeOut }}
         className="mt-14 flex flex-col sm:flex-row items-start sm:items-center gap-5"
       >
         <a
@@ -2222,7 +2318,7 @@ const PricingCTA: React.FC = () => (
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
-        transition={{ duration: 0.95, delay: 0.32, ease: easeOut }}
+        transition={{ duration: 0.75, delay: 0.32, ease: easeOut }}
         className="mt-24 inline-flex items-center gap-7 rounded-full px-7 py-4 border border-[#A7DADB]/20 bg-white/[0.03] backdrop-blur-md glass-refract"
       >
         <img src="/logo.png" alt="Smartslate" className="h-7 w-auto" style={{ filter: 'drop-shadow(0 2px 10px rgba(167,218,219,0.35))' }} />

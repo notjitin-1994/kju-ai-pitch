@@ -17,8 +17,6 @@ import {
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { NumberTicker } from '../ui/number-ticker';
 import { FlickeringGrid } from '../ui/flickering-grid';
-import { useSectionAudio } from '../../audio/useSectionAudio';
-import { AmbientGlow } from '../../audio/AmbientGlow';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -277,11 +275,9 @@ const DetailModal: React.FC<DetailModalProps> = ({ failure, onClose }) => {
 
 export const ProblemMatrix = () => {
   const [selectedIdx, setSelectedIdx] = useState<number | null>(null);
-  const { ref, isActive } = useSectionAudio('problem');
 
   return (
-    <section ref={ref as React.RefObject<HTMLElement>} id="problem" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden bg-[#020C1B]">
-      <AmbientGlow active={isActive} />
+    <section id="problem" className="relative py-32 md:py-40 px-6 md:px-12 lg:px-24 overflow-hidden bg-[#020C1B]">
       <MeshGradient intensity="low" />
 
       <div className="relative z-10 max-w-[1440px] mx-auto">
