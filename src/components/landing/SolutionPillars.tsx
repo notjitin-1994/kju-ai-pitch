@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import {
@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { NumberTicker } from '../ui/number-ticker';
+import { BackgroundVideo, FOOTAGE } from '../ui/BackgroundVideo';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -33,6 +34,7 @@ const pillars = [
     sub: 'Operations & Management',
     icon: Building2,
     img: '/v2-pillar-1.jpg',
+    video: FOOTAGE.campusInteriorTimelapse,
     body: 'A 24/7 cognitive concierge, at-risk student modelling, and a unified institutional data layer. The campus runs on intelligence, not paperwork.',
     metric: { k: 'Operational Lift', v: 70, suffix: '%' },
     span: 'lg:col-span-7',
@@ -50,6 +52,7 @@ const pillars = [
     sub: 'Teaching & Efficiency',
     icon: Users,
     img: '/v2-pillar-2.jpg',
+    video: FOOTAGE.professorSmartboard,
     body: 'Subject-specific masterclasses, AI-designed assessment cycles, and a continuous update ecosystem. The hours buried in prep return to the craft of teaching.',
     metric: { k: 'Time Reclaimed', v: 60, suffix: '%' },
     span: 'lg:col-span-5',
@@ -67,6 +70,7 @@ const pillars = [
     sub: 'Learning & Outcomes',
     icon: GraduationCap,
     img: '/v2-pillar-3.jpg',
+    video: FOOTAGE.studentsLab,
     body: 'Mandatory AI literacy across every stream, real-world AI-augmented assignments, and an enterprise lab with industry-grade tooling. Graduates do not use AI; they practise it.',
     metric: { k: 'Practitioner Ready', v: 100, suffix: '%' },
     span: 'lg:col-span-12',
@@ -219,19 +223,19 @@ export const SolutionPillars = () => {
                         : 'absolute inset-0'
                     } overflow-hidden`}
                   >
-                    <img
-                      src={p.img}
-                      alt={p.title}
-                      className="h-full w-full object-cover scale-100 group-hover:scale-[1.04]"
+                    <div
+                      className="absolute inset-0 scale-100 group-hover:scale-[1.04]"
                       style={{
-                        filter: 'contrast(1.1) saturate(0.85) brightness(0.55)',
                         transition:
                           'transform 1200ms var(--ease-out-expo), filter 700ms var(--ease-out-expo)',
                       }}
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
+                    >
+                      <BackgroundVideo
+                        src={p.video}
+                        poster={p.img}
+                        style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.55)' }}
+                      />
+                    </div>
                     {/* Gradient cap */}
                     <div
                       aria-hidden
@@ -336,7 +340,19 @@ export const SolutionPillars = () => {
 
 const DetailModal = ({ data, onClose }: { data: any; onClose: () => void }) => {
   const Icon = data.icon;
-  
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
   return createPortal(
     <motion.div
       className="fixed inset-0 z-[250] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
@@ -356,7 +372,7 @@ const DetailModal = ({ data, onClose }: { data: any; onClose: () => void }) => {
 
       {/* Modal Content */}
       <motion.div
-        className="relative z-10 w-full max-w-[900px] max-h-full overflow-y-auto rounded-[32px] border border-white/[0.08] bg-[#0a1729]/95 backdrop-blur-2xl overflow-hidden glass-refract custom-scrollbar flex flex-col md:flex-row"
+        className="relative z-10 w-full max-w-[900px] max-h-full overflow-y-auto md:overflow-hidden custom-scrollbar rounded-[32px] border border-white/[0.08] bg-[#0a1729]/95 backdrop-blur-2xl glass-refract isolate flex flex-col md:flex-row"
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 30, scale: 0.97 }}
@@ -391,8 +407,8 @@ const DetailModal = ({ data, onClose }: { data: any; onClose: () => void }) => {
           </div>
         </div>
         
-        {/* Right Side (Content) */}
-        <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative">
+        {/* Right Side (Content) — scrolls within the rounded modal on desktop */}
+        <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative md:overflow-y-auto md:custom-scrollbar">
            <button
             onClick={onClose}
             className="absolute top-6 right-6 p-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.05] hover:border-white/[0.1] transition-all text-white/70 hover:text-white"

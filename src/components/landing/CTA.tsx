@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowUpRight, Mail, Calendar } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { FlickeringGrid } from '../ui/flickering-grid';
+import { BackgroundVideo, FOOTAGE } from '../ui/BackgroundVideo';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -59,16 +60,12 @@ export const CTA = () => {
       id="contact"
       className="relative py-24 md:py-52 px-5 md:px-12 lg:px-24 overflow-hidden"
     >
-      {/* Background campus image */}
+      {/* Background campus footage — Bustling University Campus in India */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="/cta-campus.jpg"
-          alt="KJU campus"
-          className="w-full h-full object-cover"
+        <BackgroundVideo
+          src={FOOTAGE.campusBustling}
+          poster="/cta-campus.jpg"
           style={{ filter: 'contrast(1.05) saturate(0.7) brightness(0.35)' }}
-          onError={(e) => {
-            (e.currentTarget as HTMLImageElement).style.display = 'none';
-          }}
         />
         <div
           aria-hidden

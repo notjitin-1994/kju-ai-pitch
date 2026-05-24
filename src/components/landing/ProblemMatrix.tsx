@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
 import {
@@ -17,6 +17,7 @@ import {
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { NumberTicker } from '../ui/number-ticker';
 import { FlickeringGrid } from '../ui/flickering-grid';
+import { BackgroundVideo, FOOTAGE } from '../ui/BackgroundVideo';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -32,6 +33,7 @@ const failures = [
     accentColor: '#A7DADB',
     accentGlow: 'rgba(167, 218, 219, 0.15)',
     img: '/pricing-pillar-students.jpg',
+    video: FOOTAGE.campusVibrantLife,
     imgAlt: 'Indian university students collaborating with laptops',
     body: 'A generation using artificial intelligence in the shadows. Without guidance. Without ethical framing. Without the practitioner skill that industry now demands at the entry rung.',
     stat: { value: 76, suffix: '%', label: 'use AI without any institutional guidance' },
@@ -51,6 +53,7 @@ const failures = [
     accentColor: '#8AC8C9',
     accentGlow: 'rgba(138, 200, 201, 0.15)',
     img: '/pricing-pillar-faculty.jpg',
+    video: FOOTAGE.professorSmartboard,
     imgAlt: 'Indian educator preparing lesson materials',
     body: "Educators ready to lead, buried by yesterday's tooling. Manual preparation, static pedagogy, and assessment debt drain the very hours that compound into pedagogical mastery.",
     stat: { value: 60, suffix: '%', label: 'of faculty time lost to manual prep work' },
@@ -70,6 +73,7 @@ const failures = [
     accentColor: '#C8E9EA',
     accentGlow: 'rgba(200, 233, 234, 0.15)',
     img: '/pricing-pillar-campus.jpg',
+    video: FOOTAGE.campusTimelapse,
     imgAlt: 'Traditional Indian college campus exterior',
     body: 'Change measured in years, while industry moves in months. The compounding gap erodes brand and legacy every single semester it remains unaddressed.',
     stat: { value: 2027, suffix: '', label: 'accreditation bodies add AI-readiness metrics' },
@@ -139,6 +143,18 @@ interface DetailModalProps {
 const DetailModal: React.FC<DetailModalProps> = ({ failure, onClose }) => {
   const Icon = failure.icon;
 
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
   return createPortal(
     <motion.div
       className="fixed inset-0 z-[250] flex items-center justify-center px-4 md:px-8 py-12 md:py-16"
@@ -158,21 +174,23 @@ const DetailModal: React.FC<DetailModalProps> = ({ failure, onClose }) => {
 
       {/* Modal Content */}
       <motion.div
-        className="relative z-10 w-full max-w-[900px] max-h-full overflow-y-auto rounded-[32px] border border-white/[0.08] bg-[#0a1729]/95 backdrop-blur-2xl overflow-hidden glass-refract custom-scrollbar"
+        className="relative z-10 w-full max-w-[900px] max-h-full overflow-hidden rounded-[32px] border border-white/[0.08] bg-[#0a1729]/95 backdrop-blur-2xl glass-refract isolate flex flex-col"
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 30, scale: 0.97 }}
         transition={{ duration: 0.5, ease: easeOut }}
       >
-        {/* Top accent line */}
-        <div className="h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${failure.accentColor}, transparent)` }} />
+        {/* Top accent line — stays pinned, not part of scroll area */}
+        <div className="shrink-0 h-[2px] w-full" style={{ background: `linear-gradient(90deg, transparent, ${failure.accentColor}, transparent)` }} />
+
+        {/* Scrollable content — scrollbar lives inside the rounded modal */}
+        <div className="overflow-y-auto custom-scrollbar flex-1">
 
         {/* Image Header */}
         <div className="relative h-[220px] md:h-[280px] overflow-hidden">
-          <img
-            src={failure.img}
-            alt={failure.imgAlt}
-            className="w-full h-full object-cover"
+          <BackgroundVideo
+            src={failure.video}
+            poster={failure.img}
             style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.5)' }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a1729] via-[#0a1729]/60 to-transparent" />
@@ -264,6 +282,7 @@ const DetailModal: React.FC<DetailModalProps> = ({ failure, onClose }) => {
               );
             })}
           </div>
+        </div>
         </div>
       </motion.div>
     </motion.div>,
@@ -365,17 +384,21 @@ export const ProblemMatrix = () => {
                   className={`group relative isolate overflow-hidden rounded-[28px] border border-white/[0.06] bg-[#0a1729]/70 backdrop-blur-xl glass-refract cursor-pointer h-full ${cardHeight} transition-all duration-700 hover:border-white/[0.12]`}
                   onClick={() => setSelectedIdx(i)}
                 >
-                  {/* ── Image Layer ── */}
+                  {/* ── Video / Image Layer ── */}
                   <div className="absolute inset-0 overflow-hidden">
-                    <img
-                      src={f.img}
-                      alt={f.imgAlt}
-                      className="h-full w-full object-cover scale-100 group-hover:scale-[1.06]"
+                    <div
+                      className="absolute inset-0 scale-100 group-hover:scale-[1.06]"
                       style={{
-                        filter: 'contrast(1.1) saturate(0.85) brightness(0.45)',
-                        transition: 'transform 1200ms var(--ease-out-expo), filter 700ms var(--ease-out-expo)',
+                        transition:
+                          'transform 1200ms var(--ease-out-expo), filter 700ms var(--ease-out-expo)',
                       }}
-                    />
+                    >
+                      <BackgroundVideo
+                        src={f.video}
+                        poster={f.img}
+                        style={{ filter: 'contrast(1.1) saturate(0.85) brightness(0.45)' }}
+                      />
+                    </div>
                     <div
                       aria-hidden
                       className="absolute inset-0"

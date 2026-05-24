@@ -18,6 +18,7 @@ import { Logo } from '../components/Logo';
 import { MeshGradient, Vignette, GrainOverlay } from '../components/ui/atmosphere';
 import { FlickeringGrid } from '../components/ui/flickering-grid';
 import { CursorSpotlight } from '../components/ui/CursorSpotlight';
+import { BackgroundVideo, FOOTAGE } from '../components/ui/BackgroundVideo';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 // Spring preset — used for modals and cards that should feel alive
@@ -272,6 +273,7 @@ const programmePillars = [
     Icon: Cpu,
     num: '01',
     photo: '/pricing-pillar-campus.jpg',
+    video: FOOTAGE.campusTimelapse,
     pillar: 'Operations & Management',
     name: 'AI-Enabled Campus',
     headline: 'Every routine query answered autonomously, in under 30 seconds, around the clock.',
@@ -287,6 +289,7 @@ const programmePillars = [
     Icon: Users,
     num: '02',
     photo: '/pricing-pillar-faculty.jpg',
+    video: FOOTAGE.professorSmartboard,
     pillar: 'Teaching & Efficiency',
     name: 'AI-Augmented Faculty',
     headline: 'Lesson prep drops from 3 hours to 20 minutes. Every faculty member, every week.',
@@ -302,6 +305,7 @@ const programmePillars = [
     Icon: BookOpen,
     num: '03',
     photo: '/pricing-pillar-students.jpg',
+    video: FOOTAGE.studentsOutdoorMNIT,
     pillar: 'Learning & Outcomes',
     name: 'AI-First Students',
     headline: 'Every KJU graduate leaves with a verifiable, industry-aligned AI credential at graduation.',
@@ -317,6 +321,7 @@ const programmePillars = [
     Icon: Shield,
     num: '04',
     photo: '/pricing-pillar-partner.jpg',
+    video: FOOTAGE.partnershipMeeting,
     pillar: 'Partnership Continuity',
     name: 'Annual Retainer',
     headline: 'The programme evolves as AI evolves — no renegotiation, no gaps, no institutional drift.',
@@ -586,15 +591,13 @@ const PricingHero: React.FC = () => (
     </div>
     <Vignette strength={0.5} />
 
-    {/* Background campus image */}
+    {/* Background — Aerial view of Bangalore cityscape */}
     <div className="absolute inset-0 z-0 pointer-events-none">
-      <img
-        src="/pricing-campus.jpg"
-        alt=""
-        aria-hidden
-        className="w-full h-full object-cover opacity-35"
+      <BackgroundVideo
+        src={FOOTAGE.bangaloreAerial}
+        poster="/pricing-campus.jpg"
+        className="opacity-35"
         style={{ filter: 'contrast(1.1) saturate(0.7) brightness(0.55)' }}
-        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
       />
     </div>
 
@@ -1006,16 +1009,16 @@ const ContractualKPIs: React.FC = () => {
   return (
     <section className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
-      {/* Subtle campus photo — right-side atmosphere */}
+      {/* Subtle Bangalore footage — right-side atmosphere */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <img
-          src="/pricing-campus.jpg"
-          alt=""
-          aria-hidden
-          className="absolute right-0 top-0 h-full w-[55%] object-cover object-left"
-          style={{ opacity: 0.22, filter: 'saturate(0.35) brightness(0.6) contrast(1.2)' }}
-          onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-        />
+        <div className="absolute right-0 top-0 h-full w-[55%]">
+          <BackgroundVideo
+            src={FOOTAGE.bangaloreAerial}
+            poster="/pricing-campus.jpg"
+            objectPosition="left center"
+            style={{ opacity: 0.22, filter: 'saturate(0.35) brightness(0.6) contrast(1.2)' }}
+          />
+        </div>
         <div
           aria-hidden
           className="absolute inset-0"
@@ -1938,15 +1941,14 @@ const ProgrammePillars: React.FC = () => {
               >
                 {/* Panel top: icon + name + headline */}
                 <div className="relative px-8 pt-8 pb-7 border-b border-white/[0.05] overflow-hidden">
-                  {/* Contextual photo — right-side magazine blend */}
-                  <img
-                    src={active.photo}
-                    alt=""
-                    aria-hidden
-                    className="absolute top-0 right-0 h-full w-[52%] object-cover pointer-events-none"
-                    style={{ opacity: 0.5, filter: 'saturate(0.5) brightness(0.55) contrast(1.1)' }}
-                    onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
-                  />
+                  {/* Contextual footage — right-side magazine blend */}
+                  <div className="absolute top-0 right-0 h-full w-[52%] pointer-events-none">
+                    <BackgroundVideo
+                      src={active.video}
+                      poster={active.photo}
+                      style={{ opacity: 0.5, filter: 'saturate(0.5) brightness(0.55) contrast(1.1)' }}
+                    />
+                  </div>
                   <div
                     aria-hidden
                     className="absolute inset-0 pointer-events-none"
@@ -2112,15 +2114,12 @@ const ProgrammePillars: React.FC = () => {
                       className="overflow-hidden"
                     >
                       <div className="pb-10">
-                        {/* Photo strip */}
+                        {/* Footage strip */}
                         <div className="relative mb-5 rounded-[16px] overflow-hidden h-36">
-                          <img
-                            src={p.photo}
-                            alt=""
-                            aria-hidden
-                            className="absolute inset-0 w-full h-full object-cover"
+                          <BackgroundVideo
+                            src={p.video}
+                            poster={p.photo}
                             style={{ filter: 'saturate(0.7) brightness(0.7) contrast(1.05)' }}
-                            onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
                           />
                           <div
                             aria-hidden
@@ -2726,15 +2725,13 @@ const ROICalculator: React.FC = () => {
 const PricingCTA: React.FC = () => (
   <section className="relative py-24 md:py-52 px-5 md:px-12 lg:px-24 overflow-hidden">
     <MeshGradient intensity="med" />
-    {/* Aspirational campus background */}
+    {/* Aspirational background — Vibrant University Campus Life in India */}
     <div className="absolute inset-0 z-0 pointer-events-none">
-      <img
-        src="/pricing-cta.jpg"
-        alt=""
-        aria-hidden
-        className="w-full h-full object-cover object-center"
-        style={{ opacity: 0.32, filter: 'saturate(0.65) brightness(0.55) contrast(1.1)' }}
-        onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none'; }}
+      <BackgroundVideo
+        src={FOOTAGE.campusVibrantLife}
+        poster="/pricing-cta.jpg"
+        className="opacity-[0.32]"
+        style={{ filter: 'saturate(0.65) brightness(0.55) contrast(1.1)' }}
       />
       <div
         aria-hidden
