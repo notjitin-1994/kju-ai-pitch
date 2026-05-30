@@ -167,7 +167,6 @@ export function HeroVideoDialog({
                   src={videoSrc}
                   className="w-full h-full object-contain bg-black"
                   controls
-                  autoPlay
                   playsInline
                 />
 
