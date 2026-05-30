@@ -112,7 +112,7 @@ export const Hero = () => {
                 <Play className="h-3 w-3 fill-[#A7DADB] text-[#A7DADB] translate-x-[0.5px]" strokeWidth={0} />
               </span>
               <span>Watch the Film</span>
-              <span className="hidden sm:inline ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">02:52</span>
+              <span className="hidden sm:inline ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">03:50</span>
             </button>
 
             <a
