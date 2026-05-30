@@ -112,7 +112,7 @@ export const Hero = () => {
                 <Play className="h-3 w-3 fill-[#A7DADB] text-[#A7DADB] translate-x-[0.5px]" strokeWidth={0} />
               </span>
               <span>Watch the Film</span>
-              <span className="hidden sm:inline ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">03:50</span>
+              <span className="hidden sm:inline ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">02:52</span>
             </button>
 
             <a
@@ -174,10 +174,10 @@ export const Hero = () => {
             }}
           />
           <HeroVideoDialog
-            videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-video-final.mp4"
+            videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-video.mp4"
             thumbnailSrc="/video-thumbnail.jpg"
             thumbnailAlt="Project Institutional Intelligence  ·  Watch the film"
-            durationLabel="03:50"
+            durationLabel="02:52"
             externallyOpen={videoOpen}
             onOpenChange={setVideoOpen}
           />
