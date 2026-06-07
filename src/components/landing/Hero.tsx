@@ -1,15 +1,27 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 import { Play, ArrowUpRight } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
 import { FlickeringGrid } from '../ui/flickering-grid';
 import { MeshGradient } from '../ui/atmosphere';
 import { PlayNarrationButton } from '../../audio/PlayNarrationButton';
+import { useNarration } from '../../audio/NarrationContext';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
 export const Hero = () => {
   const [videoOpen, setVideoOpen] = useState(false);
+  const { pauseForVideo, resumeFromVideo } = useNarration();
+
+  // Coordinate narration with the video dialog — pause when video opens,
+  // restore to pre-video state when it closes.
+  useEffect(() => {
+    if (videoOpen) {
+      pauseForVideo();
+    } else {
+      resumeFromVideo();
+    }
+  }, [videoOpen]);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -130,7 +142,7 @@ export const Hero = () => {
           </motion.div>
 
           {/* Audio narration */}
-          <PlayNarrationButton externallyPaused={videoOpen} />
+          <PlayNarrationButton />
 
           {/* Trust strip */}
           <motion.div

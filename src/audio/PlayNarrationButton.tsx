@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { Play, Pause } from 'lucide-react';
-
-const NARRATION_SRC = '/audio/narration.mp3';
+import { useNarration } from './NarrationContext';
 
 function formatTime(seconds: number): string {
   if (!isFinite(seconds) || seconds < 0) return '0:00';
@@ -10,119 +9,8 @@ function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-interface PlayNarrationButtonProps {
-  /** When true, narration auto-pauses; when toggled back to false, it auto-resumes (unless the user manually paused). */
-  externallyPaused?: boolean;
-}
-
-export const PlayNarrationButton: React.FC<PlayNarrationButtonProps> = ({
-  externallyPaused = false,
-}) => {
-  // Lazy-init audio element. useRef survives React.StrictMode double-mount, so we
-  // get exactly one HTMLAudioElement across both mounts in dev.
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  if (audioRef.current === null) {
-    audioRef.current = new Audio(NARRATION_SRC);
-    audioRef.current.preload = 'auto';
-  }
-
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
-
-  const wasPlayingBeforeExternalPause = useRef(false);
-  const userPausedRef = useRef(false);
-  // Keep externallyPaused readable by the gesture-listener closure without rebinding the listener.
-  const externallyPausedRef = useRef(externallyPaused);
-  useEffect(() => {
-    externallyPausedRef.current = externallyPaused;
-  }, [externallyPaused]);
-
-  useEffect(() => {
-    const el = audioRef.current!;
-
-    const onLoaded = () => setDuration(el.duration);
-    const onTime = () => setCurrentTime(el.currentTime);
-    const onPlay = () => setIsPlaying(true);
-    const onPause = () => setIsPlaying(false);
-    const onEnded = () => {
-      setIsPlaying(false);
-      el.currentTime = 0;
-      setCurrentTime(0);
-    };
-
-    el.addEventListener('loadedmetadata', onLoaded);
-    el.addEventListener('timeupdate', onTime);
-    el.addEventListener('play', onPlay);
-    el.addEventListener('pause', onPause);
-    el.addEventListener('ended', onEnded);
-
-    // Re-sync state with the element on (re-)mount.
-    if (!isNaN(el.duration)) setDuration(el.duration);
-    setCurrentTime(el.currentTime);
-    setIsPlaying(!el.paused);
-
-    // Optimistic autoplay attempt — most browsers reject this for audio-with-sound
-    // on first page visit, but it costs nothing if it succeeds.
-    el.play().catch(() => {
-      /* swallow — fallback below handles it */
-    });
-
-    // Gesture-fallback: listeners attach immediately (not inside a .catch) so any
-    // click/scroll/keypress that happens while the autoplay promise is still
-    // pending will still trigger playback.
-    const armAndPlay = () => {
-      if (el.paused && !userPausedRef.current && !externallyPausedRef.current) {
-        el.play().catch(() => {});
-      }
-    };
-    const passive: AddEventListenerOptions = { passive: true };
-    document.addEventListener('click', armAndPlay, passive);
-    document.addEventListener('keydown', armAndPlay);
-    document.addEventListener('scroll', armAndPlay, passive);
-    document.addEventListener('touchstart', armAndPlay, passive);
-    document.addEventListener('pointerdown', armAndPlay, passive);
-
-    return () => {
-      el.removeEventListener('loadedmetadata', onLoaded);
-      el.removeEventListener('timeupdate', onTime);
-      el.removeEventListener('play', onPlay);
-      el.removeEventListener('pause', onPause);
-      el.removeEventListener('ended', onEnded);
-      document.removeEventListener('click', armAndPlay);
-      document.removeEventListener('keydown', armAndPlay);
-      document.removeEventListener('scroll', armAndPlay);
-      document.removeEventListener('touchstart', armAndPlay);
-      document.removeEventListener('pointerdown', armAndPlay);
-    };
-  }, []);
-
-  // Coordinate with external pause signal (e.g. video dialog open).
-  useEffect(() => {
-    const el = audioRef.current;
-    if (!el) return;
-
-    if (externallyPaused) {
-      wasPlayingBeforeExternalPause.current = !el.paused;
-      if (!el.paused) el.pause();
-    } else if (wasPlayingBeforeExternalPause.current && !userPausedRef.current) {
-      el.play().catch(() => {});
-      wasPlayingBeforeExternalPause.current = false;
-    }
-  }, [externallyPaused]);
-
-  const toggle = () => {
-    const el = audioRef.current;
-    if (!el) return;
-    if (isPlaying) {
-      el.pause();
-      userPausedRef.current = true;
-    } else {
-      userPausedRef.current = false;
-      el.play().catch(() => {});
-    }
-  };
-
+export const PlayNarrationButton: React.FC = () => {
+  const { isPlaying, currentTime, duration, toggle } = useNarration();
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
