@@ -25,9 +25,11 @@ const ROOT = path.resolve(__dirname, '..');
 const AUDIO_DIR = path.join(ROOT, 'public', 'audio');
 
 // ── Voice IDs ────────────────────────────────────────────────────────────────
-//   IndianMale — user-selected library voice, natural Indian English accent
+//   IndianFemale — expressive Indian English female (user-selected, June 2026)
+//   IndianMale   — previous voice, kept for reference
 //   Adam / Nicole — ElevenLabs premade (free-tier fallbacks)
 const VOICE_IDS = {
+  IndianFemale: 'zfNJjrEvrTnshRxs2CUa',
   IndianMale: 'hCJyCwSNQETUpWKHnj2n',
   Adam: 'pNInz6obpgDQGcFmaJgB',
   Nicole: 'piTKgcLEGmPE4e6mEKli',
@@ -95,7 +97,7 @@ const args = process.argv.slice(2);
 const sectionIdx = args.indexOf('--section');
 const voiceIdx = args.indexOf('--voice');
 const sectionArg = sectionIdx >= 0 ? args[sectionIdx + 1] : undefined;
-const voiceArg = voiceIdx >= 0 ? args[voiceIdx + 1] : 'IndianMale';
+const voiceArg = voiceIdx >= 0 ? args[voiceIdx + 1] : 'IndianFemale';
 const sections = sectionArg ? [sectionArg] : Object.keys(SCRIPTS);
 
 const API_KEY = process.env.ELEVENLABS_API_KEY;
@@ -139,9 +141,9 @@ for (const sectionId of sections) {
         text: script.text,
         model_id: 'eleven_multilingual_v2',
         voice_settings: {
-          stability: 0.42,
-          similarity_boost: 0.8,
-          style: 0.35,
+          stability: 0.32,
+          similarity_boost: 0.78,
+          style: 0.52,
           use_speaker_boost: true,
         },
       }),
