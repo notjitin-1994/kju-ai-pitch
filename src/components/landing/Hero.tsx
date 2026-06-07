@@ -174,7 +174,7 @@ export const Hero = () => {
             }}
           />
           <HeroVideoDialog
-            videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-video-compressed.mp4"
+            videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-v2.mp4"
             thumbnailSrc="/video-thumbnail.jpg"
             thumbnailAlt="Project Institutional Intelligence  ·  Watch the film"
             durationLabel="03:50"
