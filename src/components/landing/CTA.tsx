@@ -1,14 +1,19 @@
 import React, { useRef } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { ArrowUpRight, Mail, Calendar } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight, Mail, BarChart2 } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { FlickeringGrid } from '../ui/flickering-grid';
 import { BackgroundVideo, FOOTAGE } from '../ui/BackgroundVideo';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
+// motion-enhanced Link for internal SPA navigation with magnetic physics
+const MotionLink = motion.create(Link);
+
 interface MagneticButtonProps {
-  href: string;
+  href?: string;
+  to?: string;
   children: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
@@ -17,6 +22,7 @@ interface MagneticButtonProps {
 
 const MagneticButton: React.FC<MagneticButtonProps> = ({
   href,
+  to,
   children,
   className,
   style,
@@ -41,15 +47,19 @@ const MagneticButton: React.FC<MagneticButtonProps> = ({
     y.set(0);
   };
 
+  const sharedStyle = { ...style, x: springX, y: springY, display: 'inline-flex' as const };
+
   return (
     <div ref={wrapRef} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave}>
-      <motion.a
-        href={href}
-        className={className}
-        style={{ ...style, x: springX, y: springY, display: 'inline-flex' }}
-      >
-        {children}
-      </motion.a>
+      {to ? (
+        <MotionLink to={to} className={className} style={sharedStyle}>
+          {children}
+        </MotionLink>
+      ) : (
+        <motion.a href={href} className={className} style={sharedStyle}>
+          {children}
+        </motion.a>
+      )}
     </div>
   );
 };
@@ -139,31 +149,28 @@ export const CTA = () => {
           className="mt-14 flex flex-col sm:flex-row items-start sm:items-center gap-5"
         >
           <MagneticButton
-            href="mailto:hello@smartslate.io?subject=Project%20Institutional%20Intelligence"
+            to="/pricing"
             className="group items-center gap-3 rounded-full px-7 py-4 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-sm tracking-[0.18em] uppercase"
             style={{
               boxShadow:
                 '0 12px 32px -10px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)',
             }}
           >
-            <Mail className="h-4 w-4 inline mr-2" strokeWidth={2} />
-            <span>Begin the Conversation</span>
-            <ArrowUpRight
-              className="h-4 w-4 inline ml-2"
-              strokeWidth={2}
-            />
+            <BarChart2 className="h-4 w-4 inline mr-2" strokeWidth={2} />
+            <span>Pricing &amp; ROI</span>
+            <ArrowUpRight className="h-4 w-4 inline ml-2" strokeWidth={2} />
           </MagneticButton>
 
           <a
-            href="#hero"
+            href="mailto:hello@smartslate.io?subject=Project%20Institutional%20Intelligence"
             className="group inline-flex items-center gap-3 rounded-full px-7 py-4 border border-white/15 bg-white/[0.04] text-white press-scale font-display font-bold text-sm tracking-[0.18em] uppercase backdrop-blur-md"
             style={{
               transition:
                 'background-color 220ms var(--ease-out-expo), border-color 220ms var(--ease-out-expo), transform 160ms var(--ease-out-expo)',
             }}
           >
-            <Calendar className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
-            <span>Watch the Film</span>
+            <Mail className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
+            <span>Begin the Conversation</span>
           </a>
         </motion.div>
 

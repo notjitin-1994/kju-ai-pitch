@@ -11,6 +11,7 @@ interface NarrationContextValue {
   currentTime: number;
   duration: number;
   toggle: () => void;
+  seek: (time: number) => void;
   pauseForVideo: () => void;
   resumeFromVideo: () => void;
 }
@@ -104,6 +105,11 @@ export function NarrationProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const seek = (time: number) => {
+    const el = audioRef.current!;
+    el.currentTime = Math.max(0, Math.min(time, isFinite(el.duration) ? el.duration : 0));
+  };
+
   // Called when the video dialog opens. Remembers whether narration was playing
   // so resumeFromVideo can restore the right state.
   const pauseForVideo = () => {
@@ -125,7 +131,7 @@ export function NarrationProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <NarrationContext.Provider
-      value={{ isPlaying, currentTime, duration, toggle, pauseForVideo, resumeFromVideo }}
+      value={{ isPlaying, currentTime, duration, toggle, seek, pauseForVideo, resumeFromVideo }}
     >
       {children}
     </NarrationContext.Provider>
