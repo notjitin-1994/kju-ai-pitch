@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
 import { Play, ArrowUpRight } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
 import { FlickeringGrid } from '../ui/flickering-grid';
@@ -27,6 +27,12 @@ export const Hero = () => {
   const mouseY = useMotionValue(0);
   const springX = useSpring(mouseX, { stiffness: 60, damping: 24 });
   const springY = useSpring(mouseY, { stiffness: 60, damping: 24 });
+
+  // Compose the parallax as a single GPU-composited transform. The x/y
+  // shorthands render on the main thread (requestAnimationFrame), which
+  // stutters under the hero's animated canvas + grain; translate3d forces
+  // a dedicated compositor layer so the motion stays smooth.
+  const parallax = useMotionTemplate`translate3d(${springX}px, ${springY}px, 0)`;
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
@@ -168,37 +174,45 @@ export const Hero = () => {
           </motion.div>
         </div>
 
-        {/* Right: video as cinematic still — parallax on mouse */}
+        {/* Right: video as cinematic still.
+            Outer layer owns the one-shot entry animation; inner layer owns the
+            continuous mouse parallax as a composited translate3d. Keeping these
+            on separate elements stops the two from fighting over the transform's
+            y-axis (which caused the jitter). */}
         <motion.div
           initial={{ opacity: 0, scale: 0.97, y: 24 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.1, delay: 0.18, ease: easeOut }}
-          style={{ x: springX, y: springY }}
           className="lg:col-span-5 relative"
         >
-          {/* Soft halo */}
-          <div
-            aria-hidden
-            className="absolute -inset-12 -z-10 blur-3xl opacity-60"
-            style={{
-              background:
-                "radial-gradient(circle at 70% 30%, rgba(167,218,219,0.18) 0%, transparent 55%), radial-gradient(circle at 30% 80%, rgba(167,218,219,0.10) 0%, transparent 55%)",
-            }}
-          />
-          <HeroVideoDialog
-            videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-v2.mp4"
-            thumbnailSrc="/video-thumbnail.jpg"
-            thumbnailAlt="Project Institutional Intelligence  ·  Watch the film"
-            durationLabel="03:50"
-            externallyOpen={videoOpen}
-            onOpenChange={setVideoOpen}
-          />
+          <motion.div
+            style={{ transform: parallax, willChange: "transform", backfaceVisibility: "hidden" }}
+            className="relative"
+          >
+            {/* Soft halo */}
+            <div
+              aria-hidden
+              className="absolute -inset-12 -z-10 blur-3xl opacity-60"
+              style={{
+                background:
+                  "radial-gradient(circle at 70% 30%, rgba(167,218,219,0.18) 0%, transparent 55%), radial-gradient(circle at 30% 80%, rgba(167,218,219,0.10) 0%, transparent 55%)",
+              }}
+            />
+            <HeroVideoDialog
+              videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-v2.mp4"
+              thumbnailSrc="/video-thumbnail.jpg"
+              thumbnailAlt="Project Institutional Intelligence  ·  Watch the film"
+              durationLabel="03:50"
+              externallyOpen={videoOpen}
+              onOpenChange={setVideoOpen}
+            />
 
-          {/* Caption */}
-          <div className="mt-6 flex items-center justify-between text-[10px] md:text-[11px] tracking-[0.32em] uppercase text-[#b0c5c6]/70 font-display font-bold">
-            <span>Smartslate × KJU</span>
-            <span className="tabular-nums">KJU_COGNITIVE_V1.0</span>
-          </div>
+            {/* Caption */}
+            <div className="mt-6 flex items-center justify-between text-[10px] md:text-[11px] tracking-[0.32em] uppercase text-[#b0c5c6]/70 font-display font-bold">
+              <span>Smartslate × KJU</span>
+              <span className="tabular-nums">KJU_COGNITIVE_V1.0</span>
+            </div>
+          </motion.div>
         </motion.div>
       </div>
 
