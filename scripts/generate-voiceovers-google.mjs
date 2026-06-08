@@ -79,13 +79,61 @@ The cost of staying is not zero. It is compounding.
 <break time="600ms"/>
 Three pillars.
 <break time="300ms"/>
-Polaris re-engineers how your institution operates: admissions, faculty load, compliance — automated, auditable, running in the background while your people focus forward.
+Nehemiah re-engineers how your institution operates: admissions, faculty load, compliance — automated, auditable, running in the background while your people focus forward.
 <break time="500ms"/>
-Nova rebuilds how your faculty teach. AI-augmented curriculum design. Adaptive delivery. Assessment that actually reflects mastery.
+Elijah rebuilds how your faculty teach. AI-augmented curriculum design. Adaptive delivery. Assessment that actually reflects mastery.
 <break time="500ms"/>
-Constellation makes every student's learning path personal — and measurable — for the first time.
+Daniel makes every student's learning path personal — and measurable — for the first time.
 <break time="600ms"/>
 This is not a feature list. It is a new operating model for a university that intends to lead.
+</speak>`,
+
+  nehemiah_naming: `<speak>
+Nehemiah was one of the most trusted administrators in the ancient world — a man the king of Persia trusted with his life.
+<break time="400ms"/>
+He arrived at a broken institution, conducted a silent night audit before anyone knew his plans, and rebuilt it — systematically, accountably, on time.
+<break time="400ms"/>
+He restored compliance, unified records, reorganised governance — all while everyone else focused forward.
+<break time="500ms"/>
+That is not a metaphor. That is the job description.
+<break time="400ms"/>
+We named your operations layer Nehemiah because that is exactly what it does — and because this institution, of all institutions, knows what it means to build something that lasts.
+</speak>`,
+
+  elijah_naming: `<speak>
+Elijah is the spiritual patriarch of the Carmelite tradition — the prophet on Mount Carmel from whom your congregation draws its identity.
+<break time="400ms"/>
+His greatest act was not calling fire from heaven. It was what came after.
+<break time="300ms"/>
+Exhausted, restored, and sent back — more powerful than before.
+<break time="400ms"/>
+He passed his mantle to Elisha, who received a double portion of his spirit.
+<break time="500ms"/>
+That is what this pillar does for your faculty. Not a tool. A transfer.
+<break time="400ms"/>
+Your educators leave with something they did not walk in with.
+<break time="400ms"/>
+We named it Elijah because <phoneme alphabet="ipa" ph="ˈkrɪstʰuː">Kristu</phoneme> <phoneme alphabet="ipa" ph="dʒəˈjɑːntɪ">Jayanti</phoneme>, of all institutions, understands exactly what that name carries.
+</speak>`,
+
+  daniel_naming: `<speak>
+Daniel was enrolled as a student in the most powerful institution of the ancient world.
+<break time="400ms"/>
+Trained alongside the empire's best minds — and assessed.
+<break time="300ms"/>
+He was found ten times sharper than all of them.
+<break time="500ms"/>
+He never surrendered what he was formed to be.
+<break time="500ms"/>
+Your institution's own words say it: faith in God is the beginning of true wisdom.
+<break time="400ms"/>
+Daniel lived that before anyone wrote it down.
+<break time="500ms"/>
+He is not just a name for your student platform.
+<break time="300ms"/>
+He is the graduate <phoneme alphabet="ipa" ph="ˈkrɪstʰuː">Kristu</phoneme> <phoneme alphabet="ipa" ph="dʒəˈjɑːntɪ">Jayanti</phoneme> has always been trying to produce.
+<break time="300ms"/>
+Now you have a system designed to deliver him.
 </speak>`,
 
   outcomes: `<speak>
@@ -117,7 +165,7 @@ The window is open. Begin the conversation.
 </speak>`,
 };
 
-const SECTION_ORDER = ['hero', 'problem', 'solution', 'outcomes', 'cta'];
+const SECTION_ORDER = ['hero', 'problem', 'solution', 'outcomes', 'cta', 'nehemiah_naming', 'elijah_naming', 'daniel_naming'];
 const sections = sectionArg ? [sectionArg] : SECTION_ORDER;
 
 if (!fs.existsSync(AUDIO_DIR)) fs.mkdirSync(AUDIO_DIR, { recursive: true });
