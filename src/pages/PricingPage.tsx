@@ -924,22 +924,31 @@ const ContractualKPIs: React.FC = () => {
     <section className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
 
-      {/* Background footage */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute right-0 top-0 h-full w-[55%]">
-          <BackgroundVideo
-            src={FOOTAGE.bangaloreAerial}
-            poster="/pricing-campus.jpg"
-            objectPosition="left center"
-            style={{ opacity: 0.22, filter: 'saturate(0.35) brightness(0.6) contrast(1.2)' }}
-          />
-        </div>
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(90deg, #020C1B 0%, rgba(2,12,27,0.85) 30%, rgba(2,12,27,0.2) 65%, transparent 100%)' }}
+      {/* Background atmosphere — grid texture in far right, subtle teal glow */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          maskImage: 'radial-gradient(ellipse 70% 85% at 96% 48%, rgba(0,0,0,0.3) 0%, transparent 100%)',
+          WebkitMaskImage: 'radial-gradient(ellipse 70% 85% at 96% 48%, rgba(0,0,0,0.3) 0%, transparent 100%)',
+        }}
+      >
+        <FlickeringGrid
+          color="rgb(167,218,219)"
+          squareSize={3}
+          gridGap={10}
+          flickerChance={0.06}
+          maxOpacity={0.08}
         />
       </div>
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(ellipse 55% 50% at 98% 38%, rgba(167,218,219,0.06) 0%, transparent 65%)',
+        }}
+      />
 
       <div className="relative z-10 max-w-[1440px] mx-auto">
         {/* ─── Section header ─── */}
