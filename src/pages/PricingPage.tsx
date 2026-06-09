@@ -92,18 +92,27 @@ const phaseDeliverables: Record<string, PhaseDeliverable[]> = {
 
 const commitmentPillars = [
   {
+    clause: '§01',
+    Icon: FileSignature,
     title: 'Contractually Defined',
     body: 'Every deliverable, KPI, and timeline written into the contract. No ambiguity.',
+    tag: 'Contract KJU/STM-2026',
     accent: '#A7DADB',
   },
   {
+    clause: '§02',
+    Icon: Activity,
     title: 'Data-Backed Reporting',
     body: 'Quarterly business reviews with full adoption data and uplift evidence provided to KJU leadership.',
+    tag: 'Quarterly Cadence',
     accent: '#A7DADB',
   },
   {
+    clause: '§03',
+    Icon: ShieldCheck,
     title: 'No Technology Markup',
     body: 'KJU pays tech vendors directly. Smartslate fees are professional services only.',
+    tag: 'Zero Markup Guarantee',
     accent: '#A7DADB',
   },
 ] as const;
@@ -1338,34 +1347,123 @@ const FeeSchedule: React.FC = () => {
             </div>
           </div>
 
-          {/* Commitment pillars */}
+          {/* Commitment pillars — unified document panel */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.5, ease: easeOut }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16"
+            transition={{ duration: 0.65, ease: easeOut }}
+            className="relative mb-16"
           >
-            {commitmentPillars.map((p, pi) => (
-              <motion.div
-                key={p.title}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.45, delay: pi * 0.08, ease: easeOut }}
-                whileHover={{ y: -3, transition: springCard }}
-                className="rounded-[20px] border border-white/[0.07] hover:border-[#A7DADB]/20 bg-[#0a1729]/60 hover:bg-[#0a1729]/80 backdrop-blur-xl glass-refract p-7"
-                style={{ transition: 'border-color 250ms var(--ease-out-expo), background-color 250ms var(--ease-out-expo)' }}
-              >
-                <div className="flex items-center gap-2.5 mb-4">
-                  <span className="h-1.5 w-1.5 rounded-full" style={{ background: p.accent }} />
-                  <span className="font-display text-[10px] tracking-[0.4em] uppercase font-bold" style={{ color: p.accent }}>
-                    {p.title}
-                  </span>
-                </div>
-                <p className="font-body font-light text-[#b0c5c6] text-sm leading-[1.65]">{p.body}</p>
-              </motion.div>
-            ))}
+            {/* Document seal line — sweeps left-to-right on viewport entry */}
+            <motion.div
+              aria-hidden
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 1.1, ease: easeOut, delay: 0.2 }}
+              className="absolute top-0 left-0 right-0 h-px origin-left z-10 pointer-events-none"
+              style={{ background: 'linear-gradient(90deg, transparent 0%, rgba(167,218,219,0.65) 20%, rgba(167,218,219,0.65) 80%, transparent 100%)' }}
+            />
+
+            {/* Unified panel — gap-px creates hairline teal column dividers */}
+            <div
+              className="grid grid-cols-1 md:grid-cols-3 gap-px rounded-[24px] overflow-hidden"
+              style={{ background: 'rgba(167,218,219,0.07)', border: '1px solid rgba(255,255,255,0.07)' }}
+            >
+              {commitmentPillars.map((p, pi) => {
+                const PIcon = p.Icon;
+                return (
+                  <motion.div
+                    key={p.title}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: 0.55, delay: pi * 0.12, ease: easeOut }}
+                    className="group relative flex flex-col overflow-hidden"
+                    style={{ background: 'rgb(8,18,35)' }}
+                  >
+                    {/* Hover: radial teal wash from top-center */}
+                    <div
+                      aria-hidden
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none"
+                      style={{
+                        background: 'radial-gradient(75% 50% at 50% 0%, rgba(167,218,219,0.055) 0%, transparent 100%)',
+                        transition: 'opacity 450ms var(--ease-out-expo)',
+                      }}
+                    />
+
+                    <div className="relative flex flex-col gap-7 p-8 md:p-10 h-full">
+                      {/* §clause watermark — Playfair italic, very muted */}
+                      <span
+                        aria-hidden
+                        className="absolute top-0 right-4 font-serif-display italic font-normal leading-none pointer-events-none select-none"
+                        style={{ fontSize: 'clamp(4.5rem, 7vw, 6.5rem)', color: 'rgba(167,218,219,0.05)', lineHeight: 1.1 }}
+                      >
+                        {p.clause}
+                      </span>
+
+                      {/* Header: icon (left) + clause ref (right) */}
+                      <div className="flex items-center justify-between">
+                        <div
+                          className="h-12 w-12 rounded-xl flex items-center justify-center"
+                          style={{
+                            border: '1px solid rgba(167,218,219,0.2)',
+                            background: 'rgba(167,218,219,0.07)',
+                            transition: 'border-color 350ms var(--ease-out-expo), background-color 350ms var(--ease-out-expo)',
+                          }}
+                          onMouseEnter={e => {
+                            (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(167,218,219,0.42)';
+                            (e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(167,218,219,0.13)';
+                          }}
+                          onMouseLeave={e => {
+                            (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(167,218,219,0.2)';
+                            (e.currentTarget as HTMLDivElement).style.backgroundColor = 'rgba(167,218,219,0.07)';
+                          }}
+                        >
+                          <PIcon className="h-5 w-5 text-[#A7DADB]" strokeWidth={1.75} />
+                        </div>
+                        <span
+                          className="font-mono text-[11px] tabular-nums tracking-widest"
+                          style={{ color: 'rgba(167,218,219,0.28)' }}
+                        >
+                          {p.clause}
+                        </span>
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex flex-col gap-4 flex-1">
+                        <h3 className="font-display font-bold text-white text-xl md:text-2xl tracking-tight leading-[1.1]">
+                          {p.title}
+                        </h3>
+                        {/* Teal rule — tapers right */}
+                        <div
+                          className="h-px w-10"
+                          style={{ background: 'linear-gradient(90deg, rgba(167,218,219,0.55) 0%, transparent 100%)' }}
+                        />
+                        <p className="font-body font-light text-[#b0c5c6] text-[15px] leading-[1.65]">
+                          {p.body}
+                        </p>
+                      </div>
+
+                      {/* Footer tag */}
+                      <div
+                        className="flex items-center gap-2.5 pt-5 border-t"
+                        style={{ borderColor: 'rgba(255,255,255,0.055)' }}
+                      >
+                        <span className="h-1.5 w-1.5 rounded-full shrink-0" style={{ background: 'rgba(167,218,219,0.4)' }} />
+                        <span
+                          className="font-display text-[9px] tracking-[0.42em] uppercase font-bold"
+                          style={{ color: 'rgba(167,218,219,0.45)' }}
+                        >
+                          {p.tag}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
           </motion.div>
 
           {/* Phase fee table */}
