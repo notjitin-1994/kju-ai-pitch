@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { Menu, X, Mail } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import { Hero } from '../components/landing/Hero';
 import { ProblemMatrix } from '../components/landing/ProblemMatrix';
@@ -92,21 +92,6 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2.5 md:gap-5">
-          <a
-            href="#contact"
-            aria-label="Reach out"
-            className="press-scale inline-flex items-center gap-2 rounded-full bg-[#A7DADB] text-[#020C1B] font-display tracking-[0.22em] uppercase font-bold h-10 md:h-auto md:px-5 md:py-2.5 px-3.5 text-[10px] md:text-xs whitespace-nowrap"
-            style={{
-              boxShadow:
-                '0 8px 22px -8px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)',
-              transition: 'transform 160ms var(--ease-out-expo), box-shadow 220ms var(--ease-out-expo)',
-            }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full bg-[#020C1B]/80 animate-soft-pulse" />
-            <span className="hidden sm:inline">Reach Out</span>
-            <Mail className="sm:hidden h-3.5 w-3.5" strokeWidth={2.25} />
-          </a>
-
           <button
             type="button"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}

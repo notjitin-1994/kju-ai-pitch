@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
-import { Play, ArrowUpRight } from 'lucide-react';
+import { Mail, ArrowUpRight } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
 import { FlickeringGrid } from '../ui/flickering-grid';
 import { MeshGradient } from '../ui/atmosphere';
@@ -76,13 +76,16 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, ease: easeOut }}
-            className="flex items-center gap-3"
+            className="flex items-center"
           >
-            <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-            <span className="font-display text-[11px] md:text-xs tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-              01  ·  A Strategic Partnership
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+              </span>
+              <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
+                A Strategic Partnership
+              </span>
             </span>
-            <span aria-hidden className="hidden md:inline-block h-px w-12 bg-gradient-to-r from-[#A7DADB]/40 to-transparent" />
           </motion.div>
 
           {/* Editorial display heading */}
@@ -115,34 +118,36 @@ export const Hero = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.28, ease: easeOut }}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pt-2"
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2"
           >
-            <button
-              type="button"
-              onClick={() => setVideoOpen(true)}
-              className="group relative inline-flex items-center gap-3 rounded-full px-5 md:px-6 py-3 md:py-3.5 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-[13px] md:text-sm tracking-[0.16em] md:tracking-[0.18em] uppercase"
+            <a
+              href="mailto:hello@smartslate.io?subject=KJU%20AI%20Transformation%20Programme%20Enquiry"
+              className="group inline-flex items-center gap-3 rounded-full px-5 md:px-6 py-3 md:py-3.5 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-[13px] md:text-sm tracking-[0.16em] md:tracking-[0.18em] uppercase"
               style={{
                 boxShadow: "0 12px 30px -10px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)",
                 transition: "transform 160ms var(--ease-out-expo), box-shadow 200ms var(--ease-out-expo)",
               }}
             >
-              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#020C1B]/90">
-                <Play className="h-3 w-3 fill-[#A7DADB] text-[#A7DADB] translate-x-[0.5px]" strokeWidth={0} />
+              <span className="relative flex h-1.5 w-1.5 shrink-0">
+                <span aria-hidden className="absolute inset-0 rounded-full bg-[#020C1B]/55 animate-ping" />
+                <span className="relative h-1.5 w-1.5 rounded-full bg-[#020C1B]/80" />
               </span>
-              <span>Watch the Film</span>
-              <span className="hidden sm:inline ml-2 font-mono text-[11px] tabular-nums opacity-70 tracking-wider">03:50</span>
-            </button>
+              <span>Reach Out</span>
+              <Mail className="h-3.5 w-3.5 opacity-65 group-hover:opacity-100" strokeWidth={2} style={{ transition: "opacity 200ms" }} />
+            </a>
+
+            <span aria-hidden className="hidden sm:block h-5 w-px bg-white/[0.12] shrink-0" />
 
             <a
               href="#problem"
-              className="group inline-flex items-center gap-2 font-display font-bold text-sm tracking-[0.18em] uppercase text-[#b0c5c6] hover:text-white"
-              style={{ transition: "color 200ms var(--ease-out-expo)" }}
+              className="group inline-flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.22] px-4 md:px-5 py-2.5 md:py-3 font-display font-bold text-[12px] md:text-[13px] tracking-[0.18em] uppercase text-[#b0c5c6] hover:text-white backdrop-blur-sm"
+              style={{ transition: "background-color 200ms var(--ease-out-expo), border-color 200ms var(--ease-out-expo), color 200ms var(--ease-out-expo)" }}
             >
-              <span>Read the proposal</span>
+              <span>Read the Proposal</span>
               <ArrowUpRight
-                className="h-4 w-4"
+                className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100"
                 strokeWidth={2}
-                style={{ transition: "transform 220ms var(--ease-out-expo)" }}
+                style={{ transition: "opacity 200ms, transform 220ms var(--ease-out-expo)" }}
               />
             </a>
           </motion.div>
