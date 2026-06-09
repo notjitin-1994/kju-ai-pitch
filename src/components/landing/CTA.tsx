@@ -190,8 +190,8 @@ export const CTA = () => {
           />
           <div aria-hidden className="h-6 sm:h-7 w-px bg-[#A7DADB]/30 shrink-0" />
           <img
-            src="/kjc-logo.png"
-            alt="Kristu Jayanti University"
+            src="/acharya-logo.svg"
+            alt="Acharya Group of Institutions"
             className="h-7 sm:h-9 w-auto shrink-0"
             style={{ filter: 'drop-shadow(0 2px 10px rgba(255,255,255,0.15))' }}
           />
@@ -218,7 +218,7 @@ export const CTA = () => {
             </span>
           </div>
           <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/55 font-bold tabular-nums">
-            KJU_COGNITIVE_V1.0
+            ACHARYA_COGNITIVE_V1.0
           </span>
         </motion.div>
       </div>

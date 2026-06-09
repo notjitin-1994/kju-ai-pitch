@@ -110,7 +110,7 @@ export const Hero = () => {
             className="font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.55] max-w-[58ch]"
           >
             Smartslate, in partnership with{" "}
-            <span className="text-white font-normal">Kristu Jayanti University</span>, presents a three-pillar architecture for the AI-native campus.
+            <span className="text-white font-normal">Acharya Group of Institutions</span>, presents a three-pillar architecture for the AI-native campus.
           </motion.p>
 
           {/* CTA cluster */}
@@ -121,7 +121,7 @@ export const Hero = () => {
             className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2"
           >
             <a
-              href="mailto:hello@smartslate.io?subject=KJU%20AI%20Transformation%20Programme%20Enquiry"
+              href="mailto:hello@smartslate.io?subject=Acharya%20AI%20Transformation%20Programme%20Enquiry"
               className="group inline-flex items-center gap-3 rounded-full px-5 md:px-6 py-3 md:py-3.5 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-[13px] md:text-sm tracking-[0.16em] md:tracking-[0.18em] uppercase"
               style={{
                 boxShadow: "0 12px 30px -10px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)",
@@ -214,8 +214,8 @@ export const Hero = () => {
 
             {/* Caption */}
             <div className="mt-6 flex items-center justify-between text-[10px] md:text-[11px] tracking-[0.32em] uppercase text-[#b0c5c6]/70 font-display font-bold">
-              <span>Smartslate × KJU</span>
-              <span className="tabular-nums">KJU_COGNITIVE_V1.0</span>
+              <span>Smartslate × Acharya</span>
+              <span className="tabular-nums">ACHARYA_COGNITIVE_V1.0</span>
             </div>
           </motion.div>
         </motion.div>

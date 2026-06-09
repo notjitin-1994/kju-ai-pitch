@@ -40,7 +40,7 @@ export const slidesData: Slide[] = [
             transition={{ delay: 0.8, duration: 0.8 }}
             className="flex items-center gap-6"
           >
-            <img src="/kjc-logo.png" alt="KJC" className="h-24 w-auto" />
+            <img src="/acharya-logo.svg" alt="KJC" className="h-24 w-auto" />
             <div className="h-16 w-px bg-white" />
             <div className="flex flex-col">
               <span className="text-3xl tracking-[0.4em] font-display uppercase font-bold text-[#A7DADB]">Strategic</span>
@@ -63,12 +63,12 @@ export const slidesData: Slide[] = [
             transition={{ delay: 2.4, duration: 1.0 }}
             className="text-6xl text-[#b0c5c6] font-light max-w-none leading-relaxed text-left whitespace-nowrap"
           >
-            Deploying a world-class cognitive ecosystem at Kristu Jayanti College.
+            Deploying a world-class cognitive ecosystem at Acharya Group of Institutions.
           </m.p>
         </div>
       </div>
     ),
-    notes: "Thank you for having me. Today, we aren't just talking about software. We are talking about the future of Kristu Jayanti College."
+    notes: "Thank you for having me. Today, we aren't just talking about software. We are talking about the future of Acharya Group of Institutions."
   },
   {
     id: 2,
@@ -334,7 +334,7 @@ export const slidesData: Slide[] = [
                  <h3 className="text-8xl font-display font-bold text-white leading-none tracking-tighter uppercase text-left">Pioneer</h3>
                </div>
                <p className="text-6xl text-white font-medium italic font-serif leading-relaxed text-left">
-                 Kristu Jayanti has the choice to redefine the regional <span className="text-[#A7DADB] underline decoration-white decoration-8">standard.</span>
+                 Acharya has the choice to redefine the regional <span className="text-[#A7DADB] underline decoration-white decoration-8">standard.</span>
                </p>
             </div>
           </div>
@@ -359,7 +359,7 @@ export const slidesData: Slide[] = [
         </div>
       </div>
     ),
-    notes: "And for Kristu Jayanti as a brand? The risk is stagnation. If your curriculum lags behind the industry, you lose out on the top-tier enrollments to institutions that tell a better innovation story."
+    notes: "And for Acharya as a brand? The risk is stagnation. If your curriculum lags behind the industry, you lose out on the top-tier enrollments to institutions that tell a better innovation story."
   },
   {
     id: 8,
@@ -812,7 +812,7 @@ export const slidesData: Slide[] = [
           <div className="space-y-16 relative text-left pl-12 text-left text-left">
             <div className="space-y-4 text-left">
               <h3 className="font-display text-5xl uppercase tracking-[0.4em] text-[#A7DADB] font-bold text-left text-left text-left">The Pivot</h3>
-              <p className="font-serif italic text-5xl text-white/60 text-left text-left text-left">"Our Approach @ Kristu Jayanti"</p>
+              <p className="font-serif italic text-5xl text-white/60 text-left text-left text-left">"Our Approach @ Acharya"</p>
             </div>
 
             <div className="space-y-12 text-left">
@@ -974,7 +974,7 @@ export const slidesData: Slide[] = [
                 <p className="font-serif italic text-[#A7DADB] text-5xl">Defining the Standard</p>
               </div>
               <p className="font-body font-light text-[#b0c5c6] text-6xl leading-tight max-w-md border-r-2 border-[#A7DADB]/40 pr-8 text-right">
-                Solidifying Kristu Jayanti as the definitive AI-native institution, leading the era of Indian higher education prestige.
+                Solidifying Acharya as the definitive AI-native institution, leading the era of Indian higher education prestige.
               </p>
             </div>
           </m.div>
@@ -982,7 +982,7 @@ export const slidesData: Slide[] = [
 
       </div>
     ),
-    notes: "Scale is where the transformation becomes irreversible. Phase 3 expands our impact, and Phase 4 is where Kristu Jayanti cements itself as the market leader in AI-driven education."
+    notes: "Scale is where the transformation becomes irreversible. Phase 3 expands our impact, and Phase 4 is where Acharya cements itself as the market leader in AI-driven education."
   },
   {
     id: 18,
@@ -1260,7 +1260,7 @@ export const slidesData: Slide[] = [
               className="absolute inset-[-40px] bg-gradient-to-tr from-[#A7DADB] to-[#A7DADB] rounded-full blur-[100px]" 
             />
             <div className="relative flex items-center justify-center gap-16 transition-all duration-1000 group-hover:scale-105">
-              <img src="/kjc-logo.png" alt="KJC" className="h-48 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(167,218,219,0.4)]" />
+              <img src="/acharya-logo.svg" alt="KJC" className="h-48 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(167,218,219,0.4)]" />
               <div className="h-32 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent" />
               <img src="/logo.png" alt="Smartslate" className="h-40 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(79,70,229,0.4)]" />
             </div>
@@ -1295,7 +1295,7 @@ export const slidesData: Slide[] = [
             </div>
             <div className="flex flex-col gap-1 text-left">
               <span className="text-[10px] text-[#b0c5c6]/40 uppercase tracking-[0.4em] font-display">Strategic deployment</span>
-              <span className="text-white font-mono text-2xl tracking-widest">KJU_COGNITIVE_V1.0</span>
+              <span className="text-white font-mono text-2xl tracking-widest">ACHARYA_COGNITIVE_V1.0</span>
             </div>
           </div>
           <div className="flex items-center gap-6 text-[#b0c5c6]/40 text-[10px] tracking-[0.5em] uppercase font-mono">

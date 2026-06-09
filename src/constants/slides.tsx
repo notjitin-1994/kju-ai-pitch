@@ -40,7 +40,7 @@ export const slidesData: Slide[] = [
             transition={{ delay: 0.8, duration: 0.8 }}
             className="flex items-center gap-6"
           >
-            <img src="/kjc-logo.png" alt="KJC" className="h-24 w-auto" />
+            <img src="/acharya-logo.svg" alt="KJC" className="h-24 w-auto" />
             <div className="h-16 w-px bg-white" />
             <div className="flex flex-col">
               <span className="text-xl tracking-[0.4em] font-display uppercase font-bold text-[#A7DADB]">Strategic</span>
@@ -63,12 +63,12 @@ export const slidesData: Slide[] = [
             transition={{ delay: 2.4, duration: 1.0 }}
             className="text-4xl text-[#b0c5c6] font-light max-w-none leading-relaxed text-left whitespace-nowrap"
           >
-            Deploying a world-class cognitive ecosystem at Kristu Jayanti College.
+            Deploying a world-class cognitive ecosystem at Acharya Group of Institutions.
           </m.p>
         </div>
       </div>
     ),
-    notes: "Thank you for having me. Today, we aren't just talking about software. We are talking about the future of Kristu Jayanti College."
+    notes: "Thank you for having me. Today, we aren't just talking about software. We are talking about the future of Acharya Group of Institutions."
   },
   {
     id: 2,
@@ -334,7 +334,7 @@ export const slidesData: Slide[] = [
                  <h3 className="text-[90px] font-display font-bold text-white leading-none tracking-tighter uppercase text-left">Pioneer</h3>
                </div>
                <p className="text-4xl text-white font-medium italic font-serif leading-relaxed text-left">
-                 Kristu Jayanti has the choice to redefine the regional <span className="text-[#A7DADB] underline decoration-white decoration-8">standard.</span>
+                 Acharya has the choice to redefine the regional <span className="text-[#A7DADB] underline decoration-white decoration-8">standard.</span>
                </p>
             </div>
           </div>
@@ -359,7 +359,7 @@ export const slidesData: Slide[] = [
         </div>
       </div>
     ),
-    notes: "And for Kristu Jayanti as a brand? The risk is stagnation. If your curriculum lags behind the industry, you lose out on the top-tier enrollments to institutions that tell a better innovation story."
+    notes: "And for Acharya as a brand? The risk is stagnation. If your curriculum lags behind the industry, you lose out on the top-tier enrollments to institutions that tell a better innovation story."
   },
   {
     id: 8,
@@ -812,7 +812,7 @@ export const slidesData: Slide[] = [
           <div className="space-y-16 relative text-left pl-12 text-left text-left">
             <div className="space-y-4 text-left">
               <h3 className="font-display text-5xl uppercase tracking-[0.4em] text-[#A7DADB] font-bold text-left text-left text-left">The Pivot</h3>
-              <p className="font-serif italic text-3xl text-white/60 text-left text-left text-left">"Our Approach @ Kristu Jayanti"</p>
+              <p className="font-serif italic text-3xl text-white/60 text-left text-left text-left">"Our Approach @ Acharya"</p>
             </div>
 
             <div className="space-y-12 text-left">
@@ -974,7 +974,7 @@ export const slidesData: Slide[] = [
                 <p className="font-serif italic text-[#A7DADB] text-3xl">Defining the Standard</p>
               </div>
               <p className="font-body font-light text-[#b0c5c6] text-4xl leading-tight max-w-3xl border-r-2 border-[#A7DADB]/40 pr-8 text-right">
-                Solidifying Kristu Jayanti as the definitive AI-native institution, leading the era of Indian higher education prestige.
+                Solidifying Acharya as the definitive AI-native institution, leading the era of Indian higher education prestige.
               </p>
             </div>
           </m.div>
@@ -982,7 +982,7 @@ export const slidesData: Slide[] = [
 
       </div>
     ),
-    notes: "Scale is where the transformation becomes irreversible. Phase 3 expands our impact, and Phase 4 is where Kristu Jayanti cements itself as the market leader in AI-driven education."
+    notes: "Scale is where the transformation becomes irreversible. Phase 3 expands our impact, and Phase 4 is where Acharya cements itself as the market leader in AI-driven education."
   },
   {
     id: 18,
@@ -1260,7 +1260,7 @@ export const slidesData: Slide[] = [
               className="absolute inset-[-40px] bg-gradient-to-tr from-[#A7DADB] to-[#A7DADB] rounded-full blur-[100px]" 
             />
             <div className="relative flex items-center justify-center gap-16 transition-all duration-1000 group-hover:scale-105">
-              <img src="/kjc-logo.png" alt="KJC" className="h-48 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(167,218,219,0.4)]" />
+              <img src="/acharya-logo.svg" alt="KJC" className="h-48 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(167,218,219,0.4)]" />
               <div className="h-32 w-px bg-gradient-to-b from-transparent via-white/30 to-transparent" />
               <img src="/logo.png" alt="Smartslate" className="h-40 w-auto relative z-10 drop-shadow-[0_0_40px_rgba(79,70,229,0.4)]" />
             </div>
@@ -1295,7 +1295,7 @@ export const slidesData: Slide[] = [
             </div>
             <div className="flex flex-col gap-1 text-left">
               <span className="text-[10px] text-[#b0c5c6]/40 uppercase tracking-[0.4em] font-display">Strategic deployment</span>
-              <span className="text-white font-mono text-base tracking-widest">KJU_COGNITIVE_V1.0</span>
+              <span className="text-white font-mono text-base tracking-widest">ACHARYA_COGNITIVE_V1.0</span>
             </div>
           </div>
           <div className="flex items-center gap-6 text-[#b0c5c6]/40 text-[11px] tracking-[0.5em] uppercase font-mono">
@@ -1305,7 +1305,7 @@ export const slidesData: Slide[] = [
         </m.div>
       </div>
     ),
-    notes: "[This is the close. Slow down completely. Let the visual — both logos together — hold for a long, charged moment before speaking.] \"I want to leave you with a single question.\" \"Every era of Indian education was defined by a small number of institutions willing to move when others were still deciding. The colleges that built research infrastructure before it was required. The colleges that introduced international curriculum before it was expected. The colleges that made placement a priority before the market demanded it.\" \"Every time, the story is the same: someone moved first. Someone took the vision seriously. Someone decided that their institution's legacy was worth more than their institutional inertia.\" [Pause. Look at the decision maker directly.] \"Will you lead the era?\" \"Not 'should you consider participating in the AI movement.' Not 'should you form a working group to evaluate the landscape.' I'm asking something simpler — and more important. Will you lead?\" \"Because from where I'm standing, looking at what you've built here, looking at the quality of the people in this room — the answer seems obvious. Kristu Jayanti was built to lead. This is the next frontier.\" [Final beat. Quiet. Confident.] \"So that you can look back at this day as the day everything changed — we are ready to begin. The question is: are you?\" After the Final Slide — The Close: Don't rush into Q&A. Let the silence hold for two to three full seconds. Let it be slightly uncomfortable. Then say, simply:\"I'd love to hear your thoughts. And I'd love to talk about what Phase One looks like specifically for KJU — because I already have some hypotheses about where we start.\" This signals readiness, specificity, and momentum. It moves the conversation from 'if' to 'how' — and that's where deals close. Smartslate — Deploying a world-class cognitive ecosystem at Kristu Jayanti College. KJU_COGNITIVE_V1.0 // Academic Excellence 2026"
+    notes: "[This is the close. Slow down completely. Let the visual — both logos together — hold for a long, charged moment before speaking.] \"I want to leave you with a single question.\" \"Every era of Indian education was defined by a small number of institutions willing to move when others were still deciding. The colleges that built research infrastructure before it was required. The colleges that introduced international curriculum before it was expected. The colleges that made placement a priority before the market demanded it.\" \"Every time, the story is the same: someone moved first. Someone took the vision seriously. Someone decided that their institution's legacy was worth more than their institutional inertia.\" [Pause. Look at the decision maker directly.] \"Will you lead the era?\" \"Not 'should you consider participating in the AI movement.' Not 'should you form a working group to evaluate the landscape.' I'm asking something simpler — and more important. Will you lead?\" \"Because from where I'm standing, looking at what you've built here, looking at the quality of the people in this room — the answer seems obvious. Acharya was built to lead. This is the next frontier.\" [Final beat. Quiet. Confident.] \"So that you can look back at this day as the day everything changed — we are ready to begin. The question is: are you?\" After the Final Slide — The Close: Don't rush into Q&A. Let the silence hold for two to three full seconds. Let it be slightly uncomfortable. Then say, simply:\"I'd love to hear your thoughts. And I'd love to talk about what Phase One looks like specifically for Acharya — because I already have some hypotheses about where we start.\" This signals readiness, specificity, and momentum. It moves the conversation from 'if' to 'how' — and that's where deals close. Smartslate — Deploying a world-class cognitive ecosystem at Acharya Group of Institutions. ACHARYA_COGNITIVE_V1.0 // Academic Excellence 2026"
   },
   {
     id: 21,
@@ -1357,7 +1357,7 @@ export const slidesData: Slide[] = [
         <div className="absolute bottom-12 flex items-center gap-10 opacity-30">
           <span className="text-sm font-mono tracking-widest uppercase text-white/40">Ready to Architect</span>
           <div className="w-1.5 h-1.5 rounded-full bg-[#A7DADB] animate-pulse" />
-          <span className="text-sm font-mono tracking-widest uppercase text-white/40">KJU_COGNITIVE_V1.0</span>
+          <span className="text-sm font-mono tracking-widest uppercase text-white/40">ACHARYA_COGNITIVE_V1.0</span>
         </div>
       </div>
     ),
