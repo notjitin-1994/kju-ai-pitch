@@ -6,7 +6,7 @@ import {
 } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
-  ArrowUpRight, ArrowLeft, Check, Mail, X as XIcon,
+  ArrowUpRight, ArrowLeft, Check, Mail, X as XIcon, Play, Pause,
   Users, Shield, Cpu, BookOpen, Activity,
   Cloud, Server, Database, ChevronDown,
   Clock, Coins, Gauge, Megaphone, Newspaper,
@@ -19,6 +19,8 @@ import { MeshGradient, Vignette, GrainOverlay } from '../components/ui/atmospher
 import { FlickeringGrid } from '../components/ui/flickering-grid';
 import { CursorSpotlight } from '../components/ui/CursorSpotlight';
 import { BackgroundVideo, FOOTAGE } from '../components/ui/BackgroundVideo';
+import { PlayNarrationButton } from '../audio/PlayNarrationButton';
+import { useNarration } from '../audio/NarrationContext';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 // Spring preset — used for modals and cards that should feel alive
@@ -452,6 +454,26 @@ const ScrollProgress: React.FC = () => {
   );
 };
 
+// ─── Narration mini-control for navbar ───────────────────────────────────────
+const NarrationMiniButton: React.FC = () => {
+  const { isPlaying, toggle } = useNarration();
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={isPlaying ? 'Pause narration' : 'Play narration'}
+      className="press-scale inline-flex items-center justify-center h-9 w-9 rounded-full border border-[#A7DADB]/22 bg-[#A7DADB]/[0.06] backdrop-blur-md text-[#A7DADB] hover:bg-[#A7DADB]/[0.14] hover:border-[#A7DADB]/40"
+      style={{ transition: 'background-color 200ms, border-color 200ms' }}
+    >
+      {isPlaying ? (
+        <Pause className="h-3.5 w-3.5" strokeWidth={2.5} fill="currentColor" />
+      ) : (
+        <Play className="h-3.5 w-3.5 translate-x-[1px]" strokeWidth={2.5} fill="currentColor" />
+      )}
+    </button>
+  );
+};
+
 // ─── Navbar ──────────────────────────────────────────────────────────────────
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -503,6 +525,7 @@ const Navbar: React.FC = () => {
           })}
         </div>
         <div className="flex items-center gap-2.5 md:gap-5">
+          <NarrationMiniButton />
           <button
             type="button"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -573,11 +596,15 @@ const PricingHero: React.FC = () => (
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, ease: easeOut }}
-          className="flex items-center gap-3"
+          className="flex items-center"
         >
-          <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-          <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-            Part 2 · Investment & Pricing
+          <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+            <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+            </span>
+            <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
+              Part 2 · Investment & Pricing
+            </span>
           </span>
         </motion.div>
 
@@ -623,6 +650,14 @@ const PricingHero: React.FC = () => (
             <Activity className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
             Calculate Your ROI
           </a>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.44, ease: easeOut }}
+        >
+          <PlayNarrationButton />
         </motion.div>
       </div>
 
@@ -919,6 +954,16 @@ const BindingPanel: React.FC<{ metric: KpiMetric }> = ({ metric }) => (
 // ─── Contractual KPIs ────────────────────────────────────────────────────────
 const ContractualKPIs: React.FC = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const bindingRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (openIdx === null) return;
+    if (window.innerWidth >= 1024) return;
+    const timer = setTimeout(() => {
+      bindingRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }, 160);
+    return () => clearTimeout(timer);
+  }, [openIdx]);
 
   return (
     <section className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
@@ -1040,22 +1085,24 @@ const ContractualKPIs: React.FC = () => {
         </div>
 
         {/* ─── Binding terms panel — expands below the triptych ─── */}
-        <AnimatePresence mode="wait">
-          {openIdx !== null && (
-            <motion.div
-              key={openIdx}
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.55, ease: easeOut }}
-              className="overflow-hidden"
-            >
-              <div className="bg-[rgb(6,14,28)] border border-t-0 border-[rgba(167,218,219,0.07)] rounded-b-[24px] overflow-hidden">
-                <BindingPanel metric={kpiMetrics[openIdx]!} />
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        <div ref={bindingRef}>
+          <AnimatePresence mode="wait">
+            {openIdx !== null && (
+              <motion.div
+                key={openIdx}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.55, ease: easeOut }}
+                className="overflow-hidden"
+              >
+                <div className="bg-[rgb(6,14,28)] border border-t-0 border-[rgba(167,218,219,0.07)] rounded-b-[24px] overflow-hidden">
+                  <BindingPanel metric={kpiMetrics[openIdx]!} />
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
         {/* End-of-ledger strip */}
         <div className="mt-10 border-t border-white/[0.07] pt-5 flex items-center justify-between gap-4 flex-wrap">
@@ -1199,11 +1246,15 @@ const FeeSchedule: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
                 transition={{ duration: 0.7, ease: easeOut }}
-                className="flex items-center gap-3"
+                className="flex items-center"
               >
-                <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-                <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-                  The Fee Structure
+                <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+                  <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+                  </span>
+                  <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
+                    The Fee Structure
+                  </span>
                 </span>
               </motion.div>
               <motion.p
@@ -1287,7 +1338,7 @@ const FeeSchedule: React.FC = () => {
                       }}
                     />
 
-                    <div className="relative flex flex-col gap-7 p-8 md:p-10 h-full">
+                    <div className="relative flex flex-col gap-7 p-6 md:p-10 h-full">
                       {/* §clause watermark — Playfair italic, very muted */}
                       <span
                         aria-hidden
@@ -1555,11 +1606,15 @@ const ImplementationPaths: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: easeOut }}
-              className="flex items-center gap-3"
+              className="flex items-center"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-                Implementation Paths
+              <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+                </span>
+                <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
+                  Implementation Paths
+                </span>
               </span>
             </motion.div>
             <motion.p
@@ -1800,11 +1855,15 @@ const ProgrammePillars: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: easeOut }}
-              className="flex items-center gap-3"
+              className="flex items-center"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-                What Is Included
+              <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+                </span>
+                <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
+                  What Is Included
+                </span>
               </span>
             </motion.div>
             <motion.p
@@ -2336,11 +2395,15 @@ const ROICalculator: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.7, ease: easeOut }}
-              className="flex items-center gap-3"
+              className="flex items-center"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-                ROI Projection
+              <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+                <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+                </span>
+                <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
+                  ROI Projection
+                </span>
               </span>
             </motion.div>
             <motion.p
@@ -2742,11 +2805,15 @@ const PricingCTA: React.FC = () => (
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.55, ease: easeOut }}
-        className="flex items-center gap-3"
+        className="flex items-center"
       >
-        <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-        <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
-          Recommended Next Steps
+        <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+          <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
+          </span>
+          <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
+            Recommended Next Steps
+          </span>
         </span>
       </motion.div>
 

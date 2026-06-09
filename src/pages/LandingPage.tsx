@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Play, Pause } from 'lucide-react';
 import { Logo } from '../components/Logo';
+import { useNarration } from '../audio/NarrationContext';
 import { Hero } from '../components/landing/Hero';
 import { ProblemMatrix } from '../components/landing/ProblemMatrix';
 import { SolutionPillars } from '../components/landing/SolutionPillars';
@@ -19,6 +20,25 @@ const navLinks: { href: string; label: string; route?: boolean }[] = [
 ];
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
+
+const NarrationMiniButton: React.FC = () => {
+  const { isPlaying, toggle } = useNarration();
+  return (
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={isPlaying ? 'Pause narration' : 'Play narration'}
+      className="press-scale inline-flex items-center justify-center h-9 w-9 rounded-full border border-[#A7DADB]/22 bg-[#A7DADB]/[0.06] backdrop-blur-md text-[#A7DADB] hover:bg-[#A7DADB]/[0.14] hover:border-[#A7DADB]/40"
+      style={{ transition: 'background-color 200ms, border-color 200ms' }}
+    >
+      {isPlaying ? (
+        <Pause className="h-3.5 w-3.5" strokeWidth={2.5} fill="currentColor" />
+      ) : (
+        <Play className="h-3.5 w-3.5 translate-x-[1px]" strokeWidth={2.5} fill="currentColor" />
+      )}
+    </button>
+  );
+};
 
 const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -92,6 +112,7 @@ const Navbar: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2.5 md:gap-5">
+          <NarrationMiniButton />
           <button
             type="button"
             aria-label={menuOpen ? 'Close menu' : 'Open menu'}
