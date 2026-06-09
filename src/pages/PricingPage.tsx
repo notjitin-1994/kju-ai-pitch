@@ -689,326 +689,253 @@ const PricingHero: React.FC = () => (
   </section>
 );
 
-// ─── Binding Ledger Row ──────────────────────────────────────────────────────
-// One KPI presented as a row in a notarized institutional ledger.
-// Magnetic count-up · per-row cursor spotlight · ATTESTED status pulse ·
-// click to reveal Binding Terms (method · cadence · trigger) and a
-// hairline-divided evidence ledger (no card boxes — distill principle).
-const BindingLedgerRow: React.FC<{
+// ─── KpiPanel — one tile in the 3-card triptych ─────────────────────────────
+const KpiPanel: React.FC<{
   metric: KpiMetric;
   index: number;
   isOpen: boolean;
   onToggle: () => void;
 }> = ({ metric, index, isOpen, onToggle }) => {
-  const numberMag = useMagnetic(0.05);
-  const chipMag = useMagnetic(0.18);
+  const numberMag = useMagnetic(0.04);
   const spot = useRowSpotlight();
-  const tickerDelay = 0.18 + index * 0.05;
+  const tickerDelay = 0.15 + index * 0.08;
 
   return (
     <motion.article
       ref={spot.ref}
       onMouseMove={spot.onMove}
-      initial={{ opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-80px' }}
-      transition={{ duration: 0.6, delay: index * 0.08, ease: easeOut }}
-      className="relative group border-t border-white/[0.07]"
+      transition={{ duration: 0.6, delay: index * 0.1, ease: easeOut }}
+      className="relative group bg-[rgb(8,18,35)]"
     >
-      {/* Per-row cursor spotlight (opacity-gated, mutates a CSS var only) */}
+      {/* Cursor spotlight */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100"
         style={{
-          background:
-            'radial-gradient(440px circle at var(--rx, -200px) var(--ry, -200px), rgba(167,218,219,0.055), transparent 62%)',
-          transition: 'opacity 320ms var(--ease-out-expo)',
+          background: 'radial-gradient(360px circle at var(--rx,-200px) var(--ry,-200px), rgba(167,218,219,0.065), transparent 62%)',
+          transition: 'opacity 300ms var(--ease-out-expo)',
         }}
       />
 
-      {/* Top hairline — full sweep when open */}
+      {/* Active top accent line */}
       <span
         aria-hidden
-        className="absolute top-0 left-0 h-px w-full bg-[#A7DADB] origin-left scale-x-from-left"
+        className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#A7DADB]/0 via-[#A7DADB] to-[#A7DADB]/0 origin-left pointer-events-none"
         style={{
           transform: isOpen ? 'scaleX(1)' : 'scaleX(0)',
-          opacity: isOpen ? 0.55 : 0,
+          opacity: isOpen ? 0.75 : 0,
           transition: 'transform 650ms var(--ease-out-expo), opacity 350ms',
         }}
       />
 
-      {/* Corner tick marks — technical document detail (hover only) */}
+      {/* §0N watermark */}
       <span
         aria-hidden
-        className="absolute -top-px left-0 w-3 h-3 pointer-events-none opacity-0 group-hover:opacity-100"
-        style={{
-          borderLeft: '1px solid rgba(167,218,219,0.5)',
-          borderTop: '1px solid rgba(167,218,219,0.5)',
-          transition: 'opacity 320ms var(--ease-out-expo)',
-        }}
-      />
-      <span
-        aria-hidden
-        className="absolute -top-px right-0 w-3 h-3 pointer-events-none opacity-0 group-hover:opacity-100"
-        style={{
-          borderRight: '1px solid rgba(167,218,219,0.5)',
-          borderTop: '1px solid rgba(167,218,219,0.5)',
-          transition: 'opacity 320ms var(--ease-out-expo)',
-        }}
-      />
+        className="pointer-events-none select-none absolute top-6 right-6 font-serif-display italic leading-none text-[#A7DADB]"
+        style={{ fontSize: '4.5rem', opacity: 0.045 }}
+      >
+        §{metric.id}
+      </span>
 
-      <motion.button
+      <button
         type="button"
         onClick={onToggle}
-        className="relative w-full text-left py-10 md:py-16 cursor-pointer"
         aria-expanded={isOpen}
         aria-label={`${isOpen ? 'Collapse' : 'Expand'} binding terms for ${metric.label}`}
-        whileTap={{ scale: 0.997 }}
-        transition={springCard}
+        className="relative w-full h-full text-left flex flex-col p-7 md:p-9 gap-5"
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-6 lg:gap-y-8 gap-x-10 items-center">
-          {/* ─── Zone 1: Magnetic count-up + ref + ATTESTED ─── */}
-          <div
-            className="lg:col-span-5"
-            onMouseMove={numberMag.onMove}
-            onMouseLeave={numberMag.onLeave}
-          >
-            <div className="flex items-end justify-between lg:justify-start gap-4">
-              <motion.div
-                style={{ x: numberMag.x, y: numberMag.y }}
-                className="flex items-end leading-[0.82]"
-              >
-                {metric.rangeUpper != null ? (
-                  <>
-                    <NumberTicker
-                      value={metric.value}
-                      delay={tickerDelay}
-                      className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]"
-                    />
-                    <span className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]/55 mx-[0.04em]">
-                      –
-                    </span>
-                    <NumberTicker
-                      value={metric.rangeUpper}
-                      suffix={metric.suffix}
-                      delay={tickerDelay + 0.12}
-                      className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]"
-                    />
-                  </>
-                ) : (
-                  <NumberTicker
-                    value={metric.value}
-                    prefix={metric.prefix}
-                    suffix={metric.suffix}
-                    delay={tickerDelay}
-                    className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3.5rem,12vw,11rem)] text-[#A7DADB]"
-                  />
-                )}
-              </motion.div>
-
-              {/* Mobile expand chevron */}
-              <motion.div
-                animate={{ rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.4, ease: easeOut }}
-                className="lg:hidden h-10 w-10 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.06] flex items-center justify-center shrink-0 mb-2"
-              >
-                <ChevronDown className="h-4 w-4 text-[#A7DADB]" strokeWidth={2} />
-              </motion.div>
-            </div>
-
-            {/* KPI ref + ATTESTED · LIVE badge */}
-            <div className="mt-5 flex items-center gap-3 flex-wrap">
-              <span className="font-mono text-[11px] tabular-nums tracking-tight text-[#b0c5c6]/55">
-                {metric.ref}
-              </span>
-              <span aria-hidden className="h-px w-6 bg-white/[0.08]" />
-              <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-[#A7DADB]/[0.06] border border-[#A7DADB]/15">
-                <span className="relative inline-flex h-1.5 w-1.5">
-                  <span aria-hidden className="absolute inset-0 rounded-full bg-[#A7DADB] opacity-70 animate-ping" />
-                  <span className="relative h-1.5 w-1.5 rounded-full bg-[#A7DADB]" />
-                </span>
-                <span className="font-display text-[9px] tracking-[0.32em] uppercase font-bold text-[#A7DADB]/85">
-                  Attested · Live
-                </span>
-              </span>
-            </div>
-          </div>
-
-          {/* ─── Zone 2: Pillar tag + Title + Description ─── */}
-          <div className="lg:col-span-5 flex flex-col justify-center">
-            <span className="font-display text-[10px] tracking-[0.42em] uppercase font-bold text-[#b0c5c6]/40">
-              {String(index + 1).padStart(2, '0')} · {metric.pillar}
-            </span>
-            <h3 className="mt-3 font-display font-bold text-white text-xl md:text-[28px] tracking-tight leading-[1.1]">
-              {metric.label}
-            </h3>
-            <p className="mt-4 font-body font-light text-[#b0c5c6] text-[15px] md:text-base leading-[1.65] max-w-[52ch]">
-              {metric.detail}
-            </p>
-          </div>
-
-          {/* ─── Zone 3: View Binding magnetic chip (desktop only) ─── */}
-          <div className="hidden lg:flex lg:col-span-2 items-center justify-end">
-            <motion.div
-              onMouseMove={chipMag.onMove}
-              onMouseLeave={chipMag.onLeave}
-              style={{
-                x: chipMag.x,
-                y: chipMag.y,
-                transition:
-                  'background-color 280ms var(--ease-out-expo), border-color 280ms var(--ease-out-expo)',
-              }}
-              className="inline-flex items-center gap-3 px-4 py-3 rounded-full border border-[#A7DADB]/18 bg-[#A7DADB]/[0.04] group-hover:bg-[#A7DADB]/[0.09] group-hover:border-[#A7DADB]/35"
-            >
-              <span className="font-display text-[9px] tracking-[0.35em] uppercase font-bold text-[#A7DADB]/80">
-                {isOpen ? 'Collapse' : 'View Binding'}
-              </span>
-              <motion.div
-                animate={{ rotate: isOpen ? 90 : 0 }}
-                transition={{ duration: 0.35, ease: easeOut }}
-                className="h-7 w-7 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.07] flex items-center justify-center"
-              >
-                <ChevronDown className="h-3.5 w-3.5 text-[#A7DADB]" strokeWidth={2.2} />
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </motion.button>
-
-      {/* ─── Expanded Binding Terms panel ─── */}
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            key="binding-panel"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.55, ease: easeOut }}
-            className="overflow-hidden"
-          >
-            <div className="pb-14 md:pb-20 pt-2">
-              <div className="relative rounded-[20px] md:rounded-[24px] border border-[#A7DADB]/14 bg-[#0a1729]/55 backdrop-blur-xl glass-refract overflow-hidden">
-                {/* Border-beam seal — runs once on open */}
-                <BindingSeal size={220} duration={2.4} borderRadius={24} />
-
-                {/* Panel header */}
-                <div className="relative flex items-center justify-between gap-4 px-6 md:px-8 py-5 border-b border-white/[0.06]">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <FileSignature className="h-4 w-4 text-[#A7DADB]/75 shrink-0" strokeWidth={1.75} />
-                    <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#A7DADB]/85 truncate">
-                      Binding Terms
-                    </span>
-                    <span aria-hidden className="h-px w-6 bg-white/[0.08] shrink-0 hidden sm:block" />
-                    <span className="font-mono text-[11px] tabular-nums text-[#b0c5c6]/45 truncate">
-                      {metric.ref}
-                    </span>
-                  </div>
-                  {/* ATTESTED stamp — overshoot spring entry */}
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.85, rotate: -10 }}
-                    animate={{ opacity: 1, scale: 1, rotate: -4 }}
-                    transition={{ type: 'spring', stiffness: 220, damping: 11, delay: 0.5 }}
-                    className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-[#e8c789]/45 bg-[#e8c789]/[0.06]"
-                  >
-                    <ShieldCheck className="h-3 w-3 text-[#e8c789]" strokeWidth={2.25} />
-                    <span className="font-display text-[9px] tracking-[0.42em] uppercase font-bold text-[#e8c789]/90">
-                      Attested
-                    </span>
-                  </motion.div>
-                </div>
-
-                {/* 3-column binding terms (Method · Cadence · Trigger) */}
-                <div className="relative grid grid-cols-1 md:grid-cols-3">
-                  {[
-                    { Icon: Gauge,          k: 'Method',  v: metric.binding.method,  accent: '#A7DADB' },
-                    { Icon: Clock,          k: 'Cadence', v: metric.binding.cadence, accent: '#A7DADB' },
-                    { Icon: AlertTriangle,  k: 'Trigger', v: metric.binding.trigger, accent: '#e8c789' },
-                  ].map((b, bi) => (
-                    <motion.div
-                      key={b.k}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4, delay: 0.18 + bi * 0.08, ease: easeOut }}
-                      className={`px-6 md:px-8 py-7 ${
-                        bi > 0 ? 'md:border-l border-t md:border-t-0 border-white/[0.05]' : ''
-                      }`}
-                    >
-                      <div className="flex items-center gap-2.5 mb-3">
-                        <b.Icon
-                          className="h-3.5 w-3.5 shrink-0"
-                          style={{ color: b.accent, opacity: 0.85 }}
-                          strokeWidth={2}
-                        />
-                        <span
-                          className="font-display text-[10px] tracking-[0.42em] uppercase font-bold"
-                          style={{ color: b.accent, opacity: 0.78 }}
-                        >
-                          {b.k}
-                        </span>
-                      </div>
-                      <p className="font-body font-light text-[#b0c5c6] text-[13.5px] leading-[1.6]">
-                        {b.v}
-                      </p>
-                    </motion.div>
-                  ))}
-                </div>
-
-                {/* Evidence ledger — hairline-divided data points (no card boxes) */}
-                <div className="relative border-t border-white/[0.06] bg-[#020C1B]/40 px-6 md:px-8 py-5">
-                  <div className="flex items-center gap-2.5 mb-4">
-                    <span className="h-1 w-1 rounded-full bg-[#A7DADB]/55" />
-                    <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#b0c5c6]/45">
-                      Evidence ledger
-                    </span>
-                  </div>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-y-5">
-                    {metric.evidence.map((e, ei) => (
-                      <motion.div
-                        key={e.label}
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.35, delay: 0.42 + ei * 0.05, ease: easeOut }}
-                        className={`flex flex-col gap-1.5 ${
-                          ei > 0 ? 'md:border-l md:border-white/[0.06] md:pl-6' : ''
-                        } ${ei < metric.evidence.length - 1 ? 'md:pr-6' : ''}`}
-                      >
-                        <span className="font-display font-bold text-[#A7DADB] text-xl md:text-2xl tabular-nums tracking-tight leading-none">
-                          {e.value}
-                        </span>
-                        <span className="font-body font-light text-[#b0c5c6]/60 text-[11px] leading-snug">
-                          {e.label}
-                        </span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Contract footer line */}
-                <div className="relative border-t border-white/[0.05] px-6 md:px-8 py-4 flex items-center justify-between gap-4 flex-wrap">
-                  <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/40 tracking-wide">
-                    EFFECTIVE: DAY 01 · VERIFIED BY: KJU PROGRAMME OFFICE
-                  </span>
-                  <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/45 tracking-wide">
-                    {metric.ref}
-                  </span>
-                </div>
-              </div>
-            </div>
+        {/* Count-up number */}
+        <div
+          onMouseMove={numberMag.onMove}
+          onMouseLeave={numberMag.onLeave}
+          className="leading-[0.85]"
+        >
+          <motion.div style={{ x: numberMag.x, y: numberMag.y }} className="flex items-end">
+            {metric.rangeUpper != null ? (
+              <>
+                <NumberTicker
+                  value={metric.value}
+                  delay={tickerDelay}
+                  className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3rem,6.5vw,5.5rem)] text-[#A7DADB]"
+                />
+                <span className="font-display font-bold tracking-[-0.045em] text-[clamp(3rem,6.5vw,5.5rem)] text-[#A7DADB]/40 mx-[0.05em]">–</span>
+                <NumberTicker
+                  value={metric.rangeUpper}
+                  suffix={metric.suffix}
+                  delay={tickerDelay + 0.12}
+                  className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3rem,6.5vw,5.5rem)] text-[#A7DADB]"
+                />
+              </>
+            ) : (
+              <NumberTicker
+                value={metric.value}
+                prefix={metric.prefix}
+                suffix={metric.suffix}
+                delay={tickerDelay}
+                className="font-display font-bold tabular-nums tracking-[-0.045em] text-[clamp(3rem,6.5vw,5.5rem)] text-[#A7DADB]"
+              />
+            )}
           </motion.div>
-        )}
-      </AnimatePresence>
+        </div>
+
+        {/* Ref + ATTESTED badge */}
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/35 tracking-tight">
+            {metric.ref}
+          </span>
+          <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-[#A7DADB]/[0.06] border border-[#A7DADB]/15">
+            <span className="relative inline-flex h-1.5 w-1.5 shrink-0">
+              <span aria-hidden className="absolute inset-0 rounded-full bg-[#A7DADB] opacity-65 animate-ping" />
+              <span className="relative h-1.5 w-1.5 rounded-full bg-[#A7DADB]" />
+            </span>
+            <span className="font-display text-[8px] tracking-[0.32em] uppercase font-bold text-[#A7DADB]/80">
+              Attested · Live
+            </span>
+          </span>
+        </div>
+
+        {/* Pillar + label + detail */}
+        <div className="flex flex-col gap-2 flex-1">
+          <span className="font-display text-[9px] tracking-[0.42em] uppercase font-bold text-[#b0c5c6]/35">
+            {String(index + 1).padStart(2, '0')} · {metric.pillar}
+          </span>
+          <h3 className="font-display font-bold text-white text-[17px] md:text-[18px] tracking-tight leading-[1.2]">
+            {metric.label}
+          </h3>
+          <p className="font-body font-light text-[#b0c5c6]/65 text-[13px] leading-[1.7] mt-0.5">
+            {metric.detail}
+          </p>
+        </div>
+
+        {/* Footer: View Binding */}
+        <div className="border-t border-white/[0.07] pt-4 flex items-center justify-between gap-3">
+          <span
+            className="font-display text-[9px] tracking-[0.38em] uppercase font-bold text-[#A7DADB]/45 group-hover:text-[#A7DADB]/75"
+            style={{ transition: 'color 250ms' }}
+          >
+            {isOpen ? 'Collapse' : 'View Binding'}
+          </span>
+          <motion.div
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{ duration: 0.35, ease: easeOut }}
+            className="h-7 w-7 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.05] group-hover:border-[#A7DADB]/40 group-hover:bg-[#A7DADB]/[0.10] flex items-center justify-center shrink-0"
+            style={{ transition: 'background-color 250ms, border-color 250ms' } as React.CSSProperties}
+          >
+            <ChevronDown className="h-3.5 w-3.5 text-[#A7DADB]" strokeWidth={2} />
+          </motion.div>
+        </div>
+      </button>
     </motion.article>
   );
 };
 
-// ─── Contractual KPIs (Binding Commitments — document-grade ledger) ──────────
+// ─── BindingPanel — full-width binding terms below the triptych ──────────────
+const BindingPanel: React.FC<{ metric: KpiMetric }> = ({ metric }) => (
+  <div className="px-5 md:px-8 py-7 md:py-10">
+    <div className="relative rounded-[20px] md:rounded-[24px] border border-[#A7DADB]/14 bg-[#0a1729]/60 backdrop-blur-xl overflow-hidden">
+      <BindingSeal size={220} duration={2.4} borderRadius={24} />
+
+      {/* Panel header */}
+      <div className="relative flex items-center justify-between gap-4 px-6 md:px-8 py-5 border-b border-white/[0.06]">
+        <div className="flex items-center gap-3 min-w-0">
+          <FileSignature className="h-4 w-4 text-[#A7DADB]/75 shrink-0" strokeWidth={1.75} />
+          <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#A7DADB]/85 truncate">
+            Binding Terms
+          </span>
+          <span aria-hidden className="h-px w-6 bg-white/[0.08] shrink-0 hidden sm:block" />
+          <span className="font-mono text-[11px] tabular-nums text-[#b0c5c6]/45 truncate">
+            {metric.ref}
+          </span>
+        </div>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85, rotate: -10 }}
+          animate={{ opacity: 1, scale: 1, rotate: -4 }}
+          transition={{ type: 'spring', stiffness: 220, damping: 11, delay: 0.5 }}
+          className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-[#e8c789]/45 bg-[#e8c789]/[0.06]"
+        >
+          <ShieldCheck className="h-3 w-3 text-[#e8c789]" strokeWidth={2.25} />
+          <span className="font-display text-[9px] tracking-[0.42em] uppercase font-bold text-[#e8c789]/90">
+            Attested
+          </span>
+        </motion.div>
+      </div>
+
+      {/* 3-col: Method · Cadence · Trigger */}
+      <div className="relative grid grid-cols-1 md:grid-cols-3">
+        {[
+          { Icon: Gauge,         k: 'Method',  v: metric.binding.method,  accent: '#A7DADB' },
+          { Icon: Clock,         k: 'Cadence', v: metric.binding.cadence, accent: '#A7DADB' },
+          { Icon: AlertTriangle, k: 'Trigger', v: metric.binding.trigger, accent: '#e8c789' },
+        ].map((b, bi) => (
+          <motion.div
+            key={b.k}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.18 + bi * 0.08, ease: easeOut }}
+            className={`px-6 md:px-8 py-7 ${bi > 0 ? 'md:border-l border-t md:border-t-0 border-white/[0.05]' : ''}`}
+          >
+            <div className="flex items-center gap-2.5 mb-3">
+              <b.Icon className="h-3.5 w-3.5 shrink-0" style={{ color: b.accent, opacity: 0.85 }} strokeWidth={2} />
+              <span className="font-display text-[10px] tracking-[0.42em] uppercase font-bold" style={{ color: b.accent, opacity: 0.78 }}>
+                {b.k}
+              </span>
+            </div>
+            <p className="font-body font-light text-[#b0c5c6] text-[13.5px] leading-[1.6]">{b.v}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Evidence ledger */}
+      <div className="relative border-t border-white/[0.06] bg-[#020C1B]/40 px-6 md:px-8 py-5">
+        <div className="flex items-center gap-2.5 mb-4">
+          <span className="h-1 w-1 rounded-full bg-[#A7DADB]/55" />
+          <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#b0c5c6]/45">
+            Evidence ledger
+          </span>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-5">
+          {metric.evidence.map((e, ei) => (
+            <motion.div
+              key={e.label}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: 0.42 + ei * 0.05, ease: easeOut }}
+              className={`flex flex-col gap-1.5 ${ei > 0 ? 'md:border-l md:border-white/[0.06] md:pl-6' : ''} ${ei < metric.evidence.length - 1 ? 'md:pr-6' : ''}`}
+            >
+              <span className="font-display font-bold text-[#A7DADB] text-xl md:text-2xl tabular-nums tracking-tight leading-none">
+                {e.value}
+              </span>
+              <span className="font-body font-light text-[#b0c5c6]/60 text-[11px] leading-snug">{e.label}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Contract footer */}
+      <div className="relative border-t border-white/[0.05] px-6 md:px-8 py-4 flex items-center justify-between gap-4 flex-wrap">
+        <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/40 tracking-wide">
+          EFFECTIVE: DAY 01 · VERIFIED BY: KJU PROGRAMME OFFICE
+        </span>
+        <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/45 tracking-wide">
+          {metric.ref}
+        </span>
+      </div>
+    </div>
+  </div>
+);
+
+// ─── Contractual KPIs ────────────────────────────────────────────────────────
 const ContractualKPIs: React.FC = () => {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
   return (
     <section className="relative py-20 md:py-40 px-5 md:px-12 lg:px-24 overflow-hidden">
       <MeshGradient intensity="low" />
-      {/* Subtle Bangalore footage — right-side atmosphere */}
+
+      {/* Background footage */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <div className="absolute right-0 top-0 h-full w-[55%]">
           <BackgroundVideo
@@ -1026,79 +953,28 @@ const ContractualKPIs: React.FC = () => {
       </div>
 
       <div className="relative z-10 max-w-[1440px] mx-auto">
-        {/* ─── Document-grade section header ─── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 gap-x-12 mb-20 md:mb-24">
-          <div className="lg:col-span-5">
-            {/* Eyebrow with concentric "stamp" pulse */}
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.7, ease: easeOut }}
-              className="flex items-center gap-4"
-            >
-              <span className="relative inline-flex h-3 w-3 items-center justify-center">
-                <motion.span
-                  aria-hidden
-                  className="absolute inset-0 rounded-full bg-[#A7DADB]/30"
-                  animate={{ scale: [0.7, 1.9], opacity: [0.7, 0] }}
-                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeOut' }}
-                />
-                <motion.span
-                  aria-hidden
-                  className="absolute inset-0 rounded-full bg-[#A7DADB]/22"
-                  animate={{ scale: [0.7, 1.9], opacity: [0.6, 0] }}
-                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeOut', delay: 1.3 }}
-                />
-                <span className="relative h-1.5 w-1.5 rounded-full bg-[#A7DADB] shadow-[0_0_10px_rgba(167,218,219,0.9)]" />
+        {/* ─── Section header ─── */}
+        <div className="mb-16 md:mb-24">
+          {/* Pill overline */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-100px' }}
+            transition={{ duration: 0.7, ease: easeOut }}
+            className="flex items-center mb-10"
+          >
+            <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
+              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
               </span>
-              <span className="font-display text-[11px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+              <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
                 Binding Commitments
               </span>
-              <span aria-hidden className="hidden md:inline-block h-px w-14 bg-gradient-to-r from-[#A7DADB]/35 to-transparent" />
-            </motion.div>
+            </span>
+          </motion.div>
 
-            {/* Subhead — keeps the editorial "Not aspirational" line, extends with serif italic */}
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.7, delay: 0.06, ease: easeOut }}
-              className="mt-6 font-display text-2xl md:text-3xl text-white tracking-tight"
-            >
-              Not aspirational.{' '}
-              <span className="font-serif-display italic text-[#A7DADB]/70 font-normal">Notarized.</span>
-            </motion.p>
-
-            {/* Contract metadata strip — feels like a real document header */}
-            <motion.dl
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.65, delay: 0.2, ease: easeOut }}
-              className="mt-10 grid grid-cols-3 max-w-[460px] border-t border-white/[0.07]"
-            >
-              {[
-                { k: 'Contract',     v: 'KJU/STM-2026' },
-                { k: 'Cadence',      v: 'Quarterly' },
-                { k: 'Jurisdiction', v: 'Karnataka' },
-              ].map((row, ri) => (
-                <div
-                  key={row.k}
-                  className={`flex flex-col gap-1.5 pt-5 ${ri > 0 ? 'border-l border-white/[0.05] pl-5' : ''}`}
-                >
-                  <dt className="font-display text-[9px] tracking-[0.35em] uppercase text-[#b0c5c6]/45 font-bold">
-                    {row.k}
-                  </dt>
-                  <dd className="font-mono text-[12px] tabular-nums text-[#A7DADB]/90 tracking-tight">
-                    {row.v}
-                  </dd>
-                </div>
-              ))}
-            </motion.dl>
-          </div>
-
-          <div className="lg:col-span-7">
+          {/* 2-col: headline + body + metadata */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-20 gap-y-8 items-end">
             <motion.h2
               initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -1108,43 +984,54 @@ const ContractualKPIs: React.FC = () => {
             >
               Contractual KPIs.
               <br />
-              <span className="font-serif-display italic font-normal text-[#A7DADB]">Reported every quarter.</span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
-              className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
-            >
-              Every KPI is measured from deployment Day 1. If a target drifts off track, Smartslate flags it proactively and delivers a remediation plan within 14 days.
-            </motion.p>
-
-            {/* Subtle interactivity hint */}
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-80px' }}
-              transition={{ duration: 0.6, delay: 0.24, ease: easeOut }}
-              className="mt-8 inline-flex items-center gap-2.5"
-            >
-              <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#A7DADB]/55 font-bold">
-                Inspect binding terms
+              <span className="font-serif-display italic font-normal text-[#A7DADB]">
+                Reported every quarter.
               </span>
-              <motion.div
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
+            </motion.h2>
+
+            <div>
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 0.85, delay: 0.1, ease: easeOut }}
+                className="font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
               >
-                <ArrowRight className="h-3 w-3 text-[#A7DADB]/55" strokeWidth={2} />
-              </motion.div>
-            </motion.div>
+                Every KPI is measured from deployment Day 1. If a target drifts off track, Smartslate flags it proactively and delivers a remediation plan within 14 days.
+              </motion.p>
+
+              {/* Contract metadata strip */}
+              <motion.dl
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-80px' }}
+                transition={{ duration: 0.65, delay: 0.22, ease: easeOut }}
+                className="mt-8 flex flex-wrap items-stretch border-t border-white/[0.07] pt-5 divide-x divide-white/[0.06]"
+              >
+                {[
+                  { k: 'Contract',     v: 'KJU/STM-2026' },
+                  { k: 'Cadence',      v: 'Quarterly' },
+                  { k: 'Remediation',  v: '14-day SLA' },
+                  { k: 'Jurisdiction', v: 'Karnataka' },
+                ].map((row) => (
+                  <div key={row.k} className="flex flex-col gap-1 pr-5 pl-5 first:pl-0 last:pr-0">
+                    <dt className="font-display text-[9px] tracking-[0.35em] uppercase text-[#b0c5c6]/40 font-bold">
+                      {row.k}
+                    </dt>
+                    <dd className="font-mono text-[12px] tabular-nums text-[#A7DADB]/85 tracking-tight">
+                      {row.v}
+                    </dd>
+                  </div>
+                ))}
+              </motion.dl>
+            </div>
           </div>
         </div>
 
-        {/* ─── Binding ledger rows ─── */}
-        <div className="space-y-0">
+        {/* ─── KPI Triptych ─── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-[rgba(167,218,219,0.06)] rounded-[24px] overflow-hidden">
           {kpiMetrics.map((m, i) => (
-            <BindingLedgerRow
+            <KpiPanel
               key={m.id}
               metric={m}
               index={i}
@@ -1152,15 +1039,34 @@ const ContractualKPIs: React.FC = () => {
               onToggle={() => setOpenIdx(openIdx === i ? null : i)}
             />
           ))}
-          {/* End-of-ledger closing strip */}
-          <div className="border-t border-white/[0.07] pt-6 flex items-center justify-between gap-4 flex-wrap">
-            <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/35 tracking-wide">
-              END OF LEDGER · 3 OF 3 KPIs ATTESTED
-            </span>
-            <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/40 tracking-wide">
-              KJU/STM-2026 · v1.0
-            </span>
-          </div>
+        </div>
+
+        {/* ─── Binding terms panel — expands below the triptych ─── */}
+        <AnimatePresence mode="wait">
+          {openIdx !== null && (
+            <motion.div
+              key={openIdx}
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.55, ease: easeOut }}
+              className="overflow-hidden"
+            >
+              <div className="bg-[rgb(6,14,28)] border border-t-0 border-[rgba(167,218,219,0.07)] rounded-b-[24px] overflow-hidden">
+                <BindingPanel metric={kpiMetrics[openIdx]!} />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* End-of-ledger strip */}
+        <div className="mt-10 border-t border-white/[0.07] pt-5 flex items-center justify-between gap-4 flex-wrap">
+          <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/35 tracking-wide">
+            END OF LEDGER · 3 OF 3 KPIs ATTESTED
+          </span>
+          <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/40 tracking-wide">
+            KJU/STM-2026 · v1.0
+          </span>
         </div>
       </div>
     </section>
