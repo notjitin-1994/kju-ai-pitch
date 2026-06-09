@@ -402,39 +402,6 @@ const NumberTicker: React.FC<{
   );
 };
 
-// ─── BindingSeal — once-through border-beam (the "sealing" moment) ───────────
-// Adapted from Magic UI BorderBeam. Brand-tuned and non-infinite so it doesn't
-// become visual noise. Triggers on mount; renders only when expanded.
-const BindingSeal: React.FC<{ size?: number; duration?: number; borderRadius?: number }> = ({
-  size = 180,
-  duration = 2.4,
-  borderRadius = 24,
-}) => {
-  const reduce = useReducedMotion();
-  if (reduce) return null;
-  return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute inset-0 overflow-hidden"
-      style={{ borderRadius }}
-    >
-      <motion.div
-        className="absolute"
-        style={{
-          width: size,
-          aspectRatio: '1',
-          offsetPath: `rect(0 auto auto 0 round ${size}px)`,
-          background:
-            'linear-gradient(to left, transparent, rgba(167,218,219,0.85), rgba(232,199,137,0.5), transparent)',
-          filter: 'blur(0.5px)',
-        }}
-        initial={{ offsetDistance: '0%', opacity: 0 }}
-        animate={{ offsetDistance: '100%', opacity: [0, 1, 1, 0] }}
-        transition={{ duration, ease: 'linear', times: [0, 0.08, 0.92, 1] }}
-      />
-    </div>
-  );
-};
 
 // ─── useMagnetic — subtle spring-based pull toward the cursor ────────────────
 // Returns motion-value style {x, y} for premium "alive" interactions on
@@ -834,92 +801,114 @@ const KpiPanel: React.FC<{
 
 // ─── BindingPanel — full-width binding terms below the triptych ──────────────
 const BindingPanel: React.FC<{ metric: KpiMetric }> = ({ metric }) => (
-  <div className="px-5 md:px-8 py-7 md:py-10">
-    <div className="relative rounded-[20px] md:rounded-[24px] border border-[#A7DADB]/14 bg-[#0a1729]/60 backdrop-blur-xl overflow-hidden">
-      <BindingSeal size={220} duration={2.4} borderRadius={24} />
+  <div className="px-5 md:px-8 py-7 md:py-9">
+    <div className="rounded-[18px] md:rounded-[20px] border border-white/[0.09] bg-[rgb(5,13,26)] overflow-hidden">
 
-      {/* Panel header */}
-      <div className="relative flex items-center justify-between gap-4 px-6 md:px-8 py-5 border-b border-white/[0.06]">
+      {/* Header */}
+      <div
+        className="flex items-center justify-between gap-4 px-6 md:px-8 py-5 border-b border-white/[0.06]"
+        style={{ background: 'linear-gradient(135deg, rgba(167,218,219,0.04) 0%, transparent 55%)' }}
+      >
         <div className="flex items-center gap-3 min-w-0">
-          <FileSignature className="h-4 w-4 text-[#A7DADB]/75 shrink-0" strokeWidth={1.75} />
-          <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#A7DADB]/85 truncate">
+          <div className="h-7 w-7 shrink-0 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.07] flex items-center justify-center">
+            <FileSignature className="h-3.5 w-3.5 text-[#A7DADB]/80" strokeWidth={1.75} />
+          </div>
+          <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#A7DADB]/85">
             Binding Terms
           </span>
-          <span aria-hidden className="h-px w-6 bg-white/[0.08] shrink-0 hidden sm:block" />
-          <span className="font-mono text-[11px] tabular-nums text-[#b0c5c6]/45 truncate">
+          <span aria-hidden className="h-px w-5 bg-white/[0.07] shrink-0 hidden sm:block" />
+          <span className="font-mono text-[10.5px] tabular-nums text-[#b0c5c6]/38 hidden sm:block truncate">
             {metric.ref}
           </span>
         </div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.85, rotate: -10 }}
-          animate={{ opacity: 1, scale: 1, rotate: -4 }}
-          transition={{ type: 'spring', stiffness: 220, damping: 11, delay: 0.5 }}
-          className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded-md border border-[#e8c789]/45 bg-[#e8c789]/[0.06]"
-        >
-          <ShieldCheck className="h-3 w-3 text-[#e8c789]" strokeWidth={2.25} />
-          <span className="font-display text-[9px] tracking-[0.42em] uppercase font-bold text-[#e8c789]/90">
+        <div className="shrink-0 inline-flex items-center gap-2 px-3 py-1.5 rounded border border-[#e8c789]/28 bg-[#e8c789]/[0.05]">
+          <ShieldCheck className="h-3 w-3 text-[#e8c789]/75" strokeWidth={2} />
+          <span className="font-display text-[9px] tracking-[0.38em] uppercase font-bold text-[#e8c789]/75">
             Attested
           </span>
-        </motion.div>
+        </div>
       </div>
 
       {/* 3-col: Method · Cadence · Trigger */}
-      <div className="relative grid grid-cols-1 md:grid-cols-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/[0.05]">
         {[
-          { Icon: Gauge,         k: 'Method',  v: metric.binding.method,  accent: '#A7DADB' },
-          { Icon: Clock,         k: 'Cadence', v: metric.binding.cadence, accent: '#A7DADB' },
-          { Icon: AlertTriangle, k: 'Trigger', v: metric.binding.trigger, accent: '#e8c789' },
+          { Icon: Gauge,         k: 'Method',  v: metric.binding.method,  isTeal: true  },
+          { Icon: Clock,         k: 'Cadence', v: metric.binding.cadence, isTeal: true  },
+          { Icon: AlertTriangle, k: 'Trigger', v: metric.binding.trigger, isTeal: false },
         ].map((b, bi) => (
           <motion.div
             key={b.k}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.18 + bi * 0.08, ease: easeOut }}
-            className={`px-6 md:px-8 py-7 ${bi > 0 ? 'md:border-l border-t md:border-t-0 border-white/[0.05]' : ''}`}
+            transition={{ duration: 0.45, delay: 0.14 + bi * 0.09, ease: easeOut }}
+            className="px-6 md:px-8 py-7 flex flex-col gap-4"
           >
-            <div className="flex items-center gap-2.5 mb-3">
-              <b.Icon className="h-3.5 w-3.5 shrink-0" style={{ color: b.accent, opacity: 0.85 }} strokeWidth={2} />
-              <span className="font-display text-[10px] tracking-[0.42em] uppercase font-bold" style={{ color: b.accent, opacity: 0.78 }}>
+            <div className="flex items-center gap-3">
+              <div
+                className={`h-8 w-8 rounded-full flex items-center justify-center shrink-0 ${
+                  b.isTeal
+                    ? 'border border-[#A7DADB]/18 bg-[#A7DADB]/[0.06]'
+                    : 'border border-[#e8c789]/18 bg-[#e8c789]/[0.06]'
+                }`}
+              >
+                <b.Icon
+                  className={`h-3.5 w-3.5 ${b.isTeal ? 'text-[#A7DADB]/80' : 'text-[#e8c789]/80'}`}
+                  strokeWidth={2}
+                />
+              </div>
+              <span
+                className={`font-display text-[10px] tracking-[0.42em] uppercase font-bold ${
+                  b.isTeal ? 'text-[#A7DADB]/70' : 'text-[#e8c789]/70'
+                }`}
+              >
                 {b.k}
               </span>
             </div>
-            <p className="font-body font-light text-[#b0c5c6] text-[13.5px] leading-[1.6]">{b.v}</p>
+            <p className="font-body font-light text-[#b0c5c6]/80 text-[13.5px] leading-[1.65]">
+              {b.v}
+            </p>
           </motion.div>
         ))}
       </div>
 
       {/* Evidence ledger */}
-      <div className="relative border-t border-white/[0.06] bg-[#020C1B]/40 px-6 md:px-8 py-5">
-        <div className="flex items-center gap-2.5 mb-4">
-          <span className="h-1 w-1 rounded-full bg-[#A7DADB]/55" />
-          <span className="font-display text-[10px] tracking-[0.45em] uppercase font-bold text-[#b0c5c6]/45">
+      <div
+        className="border-t border-white/[0.06] px-6 md:px-8 py-6"
+        style={{ background: 'rgba(2,12,27,0.45)' }}
+      >
+        <div className="flex items-center gap-3 mb-5">
+          <span className="h-px w-4 bg-[#A7DADB]/35" />
+          <span className="font-display text-[9px] tracking-[0.48em] uppercase font-bold text-[#b0c5c6]/38">
             Evidence ledger
           </span>
+          <span className="h-px flex-1 bg-gradient-to-r from-[#A7DADB]/12 to-transparent" />
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-5">
+        <div className="grid grid-cols-2 md:grid-cols-4">
           {metric.evidence.map((e, ei) => (
             <motion.div
               key={e.label}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.42 + ei * 0.05, ease: easeOut }}
-              className={`flex flex-col gap-1.5 ${ei > 0 ? 'md:border-l md:border-white/[0.06] md:pl-6' : ''} ${ei < metric.evidence.length - 1 ? 'md:pr-6' : ''}`}
+              transition={{ duration: 0.35, delay: 0.36 + ei * 0.06, ease: easeOut }}
+              className={`flex flex-col gap-1.5 py-2 ${ei > 0 ? 'md:border-l md:border-white/[0.06] md:pl-6' : ''} ${ei < metric.evidence.length - 1 ? 'md:pr-6' : ''}`}
             >
               <span className="font-display font-bold text-[#A7DADB] text-xl md:text-2xl tabular-nums tracking-tight leading-none">
                 {e.value}
               </span>
-              <span className="font-body font-light text-[#b0c5c6]/60 text-[11px] leading-snug">{e.label}</span>
+              <span className="font-body font-light text-[#b0c5c6]/55 text-[11px] leading-snug">
+                {e.label}
+              </span>
             </motion.div>
           ))}
         </div>
       </div>
 
       {/* Contract footer */}
-      <div className="relative border-t border-white/[0.05] px-6 md:px-8 py-4 flex items-center justify-between gap-4 flex-wrap">
-        <span className="font-mono text-[10px] tabular-nums text-[#b0c5c6]/40 tracking-wide">
+      <div className="border-t border-white/[0.05] px-6 md:px-8 py-3.5 flex items-center justify-between gap-4 flex-wrap">
+        <span className="font-mono text-[9px] tabular-nums text-[#b0c5c6]/32 tracking-wide">
           EFFECTIVE: DAY 01 · VERIFIED BY: KJU PROGRAMME OFFICE
         </span>
-        <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/45 tracking-wide">
+        <span className="font-mono text-[9px] tabular-nums text-[#A7DADB]/38 tracking-wide">
           {metric.ref}
         </span>
       </div>
