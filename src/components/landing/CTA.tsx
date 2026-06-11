@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Mail, BarChart2 } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
@@ -29,12 +29,14 @@ const MagneticButton: React.FC<MagneticButtonProps> = ({
   strength = 0.32,
 }) => {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 160, damping: 18, restDelta: 0.3 });
   const springY = useSpring(y, { stiffness: 160, damping: 18, restDelta: 0.3 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (reduce) return;
     const el = wrapRef.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();

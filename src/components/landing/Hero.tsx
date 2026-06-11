@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { motion, useMotionValue, useSpring, useMotionTemplate } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useMotionTemplate, useReducedMotion } from 'framer-motion';
 import { Mail, ArrowUpRight } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
 import { FlickeringGrid } from '../ui/flickering-grid';
@@ -23,6 +23,7 @@ export const Hero = () => {
     }
   }, [videoOpen]);
 
+  const reduce = useReducedMotion();
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
   const springX = useSpring(mouseX, { stiffness: 60, damping: 24 });
@@ -36,11 +37,12 @@ export const Hero = () => {
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
+      if (reduce) return;
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
       mouseX.set(((e.clientX - rect.left - rect.width / 2) / rect.width) * 18);
       mouseY.set(((e.clientY - rect.top - rect.height / 2) / rect.height) * 12);
     },
-    [mouseX, mouseY]
+    [mouseX, mouseY, reduce]
   );
 
   const handleMouseLeave = useCallback(() => {

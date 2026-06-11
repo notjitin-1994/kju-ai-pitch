@@ -31,6 +31,23 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Anchor targets must clear the fixed navbar (88px desktop / 64px mobile) */
+html {
+  scroll-padding-top: 104px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Keyboard focus affordance — brand teal ring, only for keyboard navigation */
+:focus-visible {
+  outline: 2px solid rgba(167, 218, 219, 0.75);
+  outline-offset: 3px;
+}
+
 @layer base {
   html {
     font-family: 'Lato', sans-serif;

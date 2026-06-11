@@ -1,11 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export const CursorSpotlight: React.FC<{ color?: string }> = ({
   color = 'rgba(167, 218, 219, 0.055)',
 }) => {
   const ref = useRef<HTMLDivElement>(null);
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
+    const mq = window.matchMedia('(hover: hover) and (pointer: fine)');
+    setEnabled(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setEnabled(e.matches);
+    mq.addEventListener('change', onChange);
+    return () => mq.removeEventListener('change', onChange);
+  }, []);
+
+  useEffect(() => {
+    if (!enabled) return;
     const el = ref.current;
     if (!el) return;
     const move = (e: MouseEvent) => {
@@ -14,7 +24,9 @@ export const CursorSpotlight: React.FC<{ color?: string }> = ({
     };
     window.addEventListener('mousemove', move, { passive: true });
     return () => window.removeEventListener('mousemove', move);
-  }, []);
+  }, [enabled]);
+
+  if (!enabled) return null;
 
   return (
     <div

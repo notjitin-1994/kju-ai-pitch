@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   GraduationCap,
   Users,
@@ -13,11 +13,13 @@ import {
   Zap,
   Target,
   X,
+  ArrowUpRight,
 } from 'lucide-react';
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { NumberTicker } from '../ui/number-ticker';
 import { FlickeringGrid } from '../ui/flickering-grid';
 import { BackgroundVideo, FOOTAGE } from '../ui/BackgroundVideo';
+import { TiltCard } from '../ui/tilt-card';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -86,53 +88,6 @@ const failures = [
   },
 ];
 
-/* ───── 3D Tilt Card ─────────────────────────────────── */
-
-interface TiltCardProps {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  onClick?: () => void;
-}
-
-const TiltCard: React.FC<TiltCardProps> = ({ children, className, style, onClick }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const rotateX = useMotionValue(0);
-  const rotateY = useMotionValue(0);
-  const springX = useSpring(rotateX, { stiffness: 120, damping: 30, restDelta: 0.001 });
-  const springY = useSpring(rotateY, { stiffness: 120, damping: 30, restDelta: 0.001 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const halfW = rect.width / 2;
-    const halfH = rect.height / 2;
-    rotateY.set(((e.clientX - rect.left - halfW) / halfW) * 4);
-    rotateX.set(-((e.clientY - rect.top - halfH) / halfH) * 4);
-  };
-
-  const handleMouseLeave = () => {
-    rotateX.set(0);
-    rotateY.set(0);
-  };
-
-  return (
-    <div className="perspective-1000 h-full">
-      <motion.div
-        ref={cardRef}
-        className={className}
-        style={{ ...style, rotateX: springX, rotateY: springY, transformStyle: 'preserve-3d' }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={onClick}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-};
-
 /* ───── Detail Modal ─────────────────────────────────── */
 
 interface DetailModalProps {
@@ -174,6 +129,9 @@ const DetailModal: React.FC<DetailModalProps> = ({ failure, onClose }) => {
 
       {/* Modal Content */}
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${failure.label} — ${failure.status}`}
         className="relative z-10 w-full max-w-[900px] max-h-full overflow-hidden rounded-[32px] border border-white/[0.08] bg-[#0a1729]/95 backdrop-blur-2xl glass-refract isolate flex flex-col"
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -199,7 +157,9 @@ const DetailModal: React.FC<DetailModalProps> = ({ failure, onClose }) => {
           {/* Close button */}
           <button
             onClick={onClose}
-            className="absolute top-6 right-6 w-10 h-10 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 transition-all duration-300 cursor-pointer"
+            autoFocus
+            aria-label="Close dialog"
+            className="press-scale absolute top-6 right-6 w-10 h-10 rounded-full border border-white/15 bg-white/5 backdrop-blur-sm flex items-center justify-center hover:bg-white/10 transition-colors duration-200 cursor-pointer"
           >
             <X className="w-4 h-4 text-white/70" />
           </button>
@@ -381,7 +341,7 @@ export const ProblemMatrix = () => {
                 className={`${gridClass} h-full`}
               >
                 <TiltCard
-                  className={`group relative isolate overflow-hidden rounded-[28px] border border-white/[0.06] bg-[#0a1729]/70 backdrop-blur-xl glass-refract cursor-pointer h-full ${cardHeight} transition-all duration-700 hover:border-white/[0.12]`}
+                  className={`group relative isolate overflow-hidden rounded-[28px] border border-white/[0.06] bg-[#0a1729]/70 backdrop-blur-xl glass-refract cursor-pointer h-full ${cardHeight} transition-colors duration-700 hover:border-white/[0.12]`}
                   onClick={() => setSelectedIdx(i)}
                 >
                   {/* ── Video / Image Layer ── */}
@@ -444,7 +404,7 @@ export const ProblemMatrix = () => {
                     {/* Top: icon + numeral */}
                     <div className="flex items-start justify-between gap-4">
                       <div
-                        className="inline-flex items-center justify-center h-11 w-11 rounded-xl border group-hover:border-opacity-40 transition-all duration-500"
+                        className="inline-flex items-center justify-center h-11 w-11 rounded-xl border group-hover:border-opacity-40 transition-colors duration-500"
                         style={{
                           borderColor: `${f.accentColor}25`,
                           backgroundColor: `${f.accentColor}10`,
@@ -495,8 +455,13 @@ export const ProblemMatrix = () => {
                             {f.stat.suffix}
                           </span>
                         </div>
-                        <span className="inline-flex items-center gap-1.5 font-display text-[10px] tracking-[0.25em] uppercase font-bold text-[#A7DADB] press-scale opacity-50 group-hover:opacity-100 transition-opacity duration-500">
-                          Explore →
+                        <span className="inline-flex items-center gap-1.5 font-display text-[10px] tracking-[0.25em] uppercase font-bold text-[#A7DADB] opacity-50 group-hover:opacity-100 transition-opacity duration-500">
+                          Explore
+                          <ArrowUpRight
+                            className="h-3 w-3 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                            strokeWidth={2.25}
+                            style={{ transition: 'transform 250ms var(--ease-out-expo)' }}
+                          />
                         </span>
                       </div>
                     </div>
@@ -515,7 +480,7 @@ export const ProblemMatrix = () => {
             className="md:col-span-1 lg:col-span-5 h-full"
           >
             <TiltCard
-              className="group relative isolate overflow-hidden rounded-[28px] border border-white/[0.06] bg-[#0a1729]/80 backdrop-blur-xl glass-refract h-full transition-all duration-700 hover:border-[#A7DADB]/20"
+              className="group relative isolate overflow-hidden rounded-[28px] border border-white/[0.06] bg-[#0a1729]/80 backdrop-blur-xl glass-refract h-full transition-colors duration-700 hover:border-[#A7DADB]/20"
             >
               {/* Flickering grid background */}
               <div className="absolute inset-0 opacity-[0.05] group-hover:opacity-[0.1] transition-opacity duration-1000 pointer-events-none">
@@ -622,7 +587,7 @@ export const ProblemMatrix = () => {
             className="md:col-span-1 lg:col-span-3 h-full"
           >
             <TiltCard
-              className="group relative isolate overflow-hidden rounded-[28px] border border-white/[0.06] bg-[#0a1729]/80 backdrop-blur-xl glass-refract h-full transition-all duration-700 hover:border-[#A7DADB]/20"
+              className="group relative isolate overflow-hidden rounded-[28px] border border-white/[0.06] bg-[#0a1729]/80 backdrop-blur-xl glass-refract h-full transition-colors duration-700 hover:border-[#A7DADB]/20"
             >
               {/* Flickering grid background */}
               <div className="absolute inset-0 opacity-[0.06] group-hover:opacity-[0.12] transition-opacity duration-1000 pointer-events-none">

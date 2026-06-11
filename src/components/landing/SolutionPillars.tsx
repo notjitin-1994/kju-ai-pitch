@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { motion, useMotionValue, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Building2,
   Users,
@@ -23,6 +23,7 @@ import {
 import { MeshGradient, Vignette } from '../ui/atmosphere';
 import { NumberTicker } from '../ui/number-ticker';
 import { BackgroundVideo, FOOTAGE } from '../ui/BackgroundVideo';
+import { TiltCard } from '../ui/tilt-card';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
 
@@ -84,52 +85,6 @@ const pillars = [
     ],
   },
 ];
-
-interface TiltCardProps {
-  children: React.ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
-  onClick?: () => void;
-}
-
-const TiltCard: React.FC<TiltCardProps> = ({ children, className, style, onClick }) => {
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  const rotateX = useMotionValue(0);
-  const rotateY = useMotionValue(0);
-  const springX = useSpring(rotateX, { stiffness: 120, damping: 30, restDelta: 0.001 });
-  const springY = useSpring(rotateY, { stiffness: 120, damping: 30, restDelta: 0.001 });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const el = cardRef.current;
-    if (!el) return;
-    const rect = el.getBoundingClientRect();
-    const halfW = rect.width / 2;
-    const halfH = rect.height / 2;
-    rotateY.set(((e.clientX - rect.left - halfW) / halfW) * 4);
-    rotateX.set(-((e.clientY - rect.top - halfH) / halfH) * 4);
-  };
-
-  const handleMouseLeave = () => {
-    rotateX.set(0);
-    rotateY.set(0);
-  };
-
-  return (
-    <div className="perspective-1000 h-full">
-      <motion.div
-        ref={cardRef}
-        className={className}
-        style={{ ...style, rotateX: springX, rotateY: springY, transformStyle: 'preserve-3d' }}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
-        onClick={onClick}
-      >
-        {children}
-      </motion.div>
-    </div>
-  );
-};
 
 export const SolutionPillars = () => {
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -213,7 +168,7 @@ export const SolutionPillars = () => {
               >
                 <TiltCard
                   onClick={() => setActiveId(p.id)}
-                  className="group relative isolate overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0a1729]/70 backdrop-blur-xl glass-refract h-full cursor-pointer transition-all duration-700 hover:border-[#A7DADB]/30"
+                  className="group relative isolate overflow-hidden rounded-[28px] border border-white/[0.08] bg-[#0a1729]/70 backdrop-blur-xl glass-refract h-full cursor-pointer transition-colors duration-700 hover:border-[#A7DADB]/30"
                 >
                   {/* Image layer */}
                   <div
@@ -372,6 +327,9 @@ const DetailModal = ({ data, onClose }: { data: any; onClose: () => void }) => {
 
       {/* Modal Content */}
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${data.title} — ${data.sub}`}
         className="relative z-10 w-full max-w-[900px] max-h-full overflow-y-auto md:overflow-hidden custom-scrollbar rounded-[32px] border border-white/[0.08] bg-[#0a1729]/95 backdrop-blur-2xl glass-refract isolate flex flex-col md:flex-row"
         initial={{ opacity: 0, y: 40, scale: 0.95 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -411,7 +369,9 @@ const DetailModal = ({ data, onClose }: { data: any; onClose: () => void }) => {
         <div className="w-full md:w-7/12 p-8 md:p-12 flex flex-col justify-center relative md:overflow-y-auto md:custom-scrollbar">
            <button
             onClick={onClose}
-            className="absolute top-6 right-6 p-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.05] hover:border-white/[0.1] transition-all text-white/70 hover:text-white"
+            autoFocus
+            aria-label="Close dialog"
+            className="press-scale absolute top-6 right-6 p-2 rounded-full bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.05] hover:border-white/[0.1] transition-colors duration-200 text-white/70 hover:text-white"
           >
             <X className="w-5 h-5" />
           </button>

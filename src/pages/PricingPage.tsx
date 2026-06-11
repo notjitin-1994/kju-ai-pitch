@@ -1132,6 +1132,9 @@ const PhaseModal: React.FC<{ phaseId: string; onClose: () => void }> = ({ phaseI
       onClick={onClose}
     >
       <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`Phase ${ph.id} — ${ph.name} deliverables`}
         initial={{ opacity: 0, y: 28, scale: 0.94 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 16, scale: 0.97 }}
@@ -1158,6 +1161,7 @@ const PhaseModal: React.FC<{ phaseId: string; onClose: () => void }> = ({ phaseI
             <motion.button
               type="button"
               onClick={onClose}
+              autoFocus
               aria-label="Close"
               whileTap={{ scale: 0.95 }}
               transition={springCard}
@@ -2274,6 +2278,8 @@ const RoiSlider: React.FC<{
       <input
         type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
+        aria-label={label}
+        aria-valuetext={display}
         className="pricing-range w-full cursor-pointer"
         style={{ background: `linear-gradient(to right, #A7DADB ${pct}%, rgba(255,255,255,0.12) ${pct}%)` }}
       />
