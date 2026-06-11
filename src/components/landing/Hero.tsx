@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useMotionTemplate, useReducedMotion } from 'framer-motion';
-import { Mail, ArrowUpRight } from 'lucide-react';
+import { Mail, ArrowUpRight, Play } from 'lucide-react';
 import { HeroVideoDialog } from '../ui/hero-video-dialog';
 import { FlickeringGrid } from '../ui/flickering-grid';
 import { MeshGradient } from '../ui/atmosphere';
@@ -8,20 +8,20 @@ import { PlayNarrationButton } from '../../audio/PlayNarrationButton';
 import { useNarration } from '../../audio/NarrationContext';
 
 const easeOut = [0.16, 1, 0.3, 1] as const;
+const springDefault = { type: 'spring' as const, duration: 0.45, bounce: 0.18 };
 
 export const Hero = () => {
   const [videoOpen, setVideoOpen] = useState(false);
+  const [videoHover, setVideoHover] = useState(false);
   const { pauseForVideo, resumeFromVideo } = useNarration();
 
-  // Coordinate narration with the video dialog — pause when video opens,
-  // restore to pre-video state when it closes.
   useEffect(() => {
     if (videoOpen) {
       pauseForVideo();
     } else {
       resumeFromVideo();
     }
-  }, [videoOpen]);
+  }, [videoOpen, pauseForVideo, resumeFromVideo]);
 
   const reduce = useReducedMotion();
   const mouseX = useMotionValue(0);
@@ -29,18 +29,14 @@ export const Hero = () => {
   const springX = useSpring(mouseX, { stiffness: 60, damping: 24 });
   const springY = useSpring(mouseY, { stiffness: 60, damping: 24 });
 
-  // Compose the parallax as a single GPU-composited transform. The x/y
-  // shorthands render on the main thread (requestAnimationFrame), which
-  // stutters under the hero's animated canvas + grain; translate3d forces
-  // a dedicated compositor layer so the motion stays smooth.
   const parallax = useMotionTemplate`translate3d(${springX}px, ${springY}px, 0)`;
 
   const handleMouseMove = useCallback(
     (e: React.MouseEvent<HTMLElement>) => {
       if (reduce) return;
       const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-      mouseX.set(((e.clientX - rect.left - rect.width / 2) / rect.width) * 18);
-      mouseY.set(((e.clientY - rect.top - rect.height / 2) / rect.height) * 12);
+      mouseX.set(((e.clientX - rect.left - rect.width / 2) / rect.width) * 12);
+      mouseY.set(((e.clientY - rect.top - rect.height / 2) / rect.height) * 8);
     },
     [mouseX, mouseY, reduce]
   );
@@ -53,182 +49,244 @@ export const Hero = () => {
   return (
     <section
       id="hero"
-      className="relative min-h-[100dvh] flex items-center px-5 md:px-12 lg:px-24 pt-24 md:pt-32 pb-16 md:pb-24 overflow-hidden"
+      className="relative min-h-[100dvh] flex items-center px-5 md:px-12 lg:px-24 pt-24 md:pt-32 pb-12 md:pb-16 overflow-hidden"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       {/* Atmosphere */}
       <MeshGradient intensity="med" />
-      <div className="absolute inset-0 pointer-events-none [mask-image:linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.18)_55%,transparent_100%)]">
+      <div className="absolute inset-0 pointer-events-none [mask-image:linear-gradient(180deg,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.12)_50%,transparent_100%)]">
         <FlickeringGrid
           color="rgb(167, 218, 219)"
           squareSize={3}
           gridGap={8}
-          flickerChance={0.15}
-          maxOpacity={0.18}
+          flickerChance={0.12}
+          maxOpacity={0.12}
         />
       </div>
 
-      {/* Asymmetric 7/5 grid */}
-      <div className="relative z-10 max-w-[1440px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-y-12 md:gap-y-16 gap-x-12 lg:gap-x-20 items-center">
-        {/* Left: editorial copy */}
-        <div className="lg:col-span-7 space-y-7 md:space-y-9">
-          {/* Overline */}
+      {/* Content grid — generous spacing for editorial feel */}
+      <div className="relative z-10 max-w-[1440px] w-full mx-auto grid grid-cols-1 lg:grid-cols-12 gap-y-16 md:gap-y-20 gap-x-16 lg:gap-x-24 items-center">
+        {/* Left: text-first layout */}
+        <div className="lg:col-span-5 space-y-10 md:space-y-12">
+          {/* Overline — refined badge */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: easeOut }}
-            className="flex items-center"
+            transition={{ duration: 0.6, ease: easeOut }}
+            className="inline-block"
           >
-            <span className="inline-flex items-center gap-2.5 rounded-full border border-[#A7DADB]/20 bg-[#A7DADB]/[0.06] pl-2 pr-4 py-1.5 backdrop-blur-sm">
-              <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#A7DADB]/[0.12] border border-[#A7DADB]/20">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse" />
-              </span>
-              <span className="font-display text-[10px] md:text-[11px] tracking-[0.42em] uppercase text-[#A7DADB] font-bold whitespace-nowrap">
-                A Strategic Partnership
+            <span className="inline-flex items-center gap-2 rounded-full border border-[#A7DADB]/25 bg-[#A7DADB]/[0.05] px-3.5 py-2 backdrop-blur-sm">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#A7DADB] animate-soft-pulse shrink-0" />
+              <span className="font-display text-[9px] md:text-[10px] tracking-[0.45em] uppercase text-[#A7DADB] font-bold">
+                AI Transformation
               </span>
             </span>
           </motion.div>
 
-          {/* Editorial display heading */}
+          {/* Headline — confident, clean typography */}
           <motion.h1
-            initial={{ opacity: 0, y: 22 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.08, ease: easeOut }}
-            className="font-display font-bold text-white leading-[0.94] tracking-[-0.025em] text-[clamp(2.6rem,7vw,7.25rem)]"
+            transition={{ duration: 0.95, delay: 0.12, ease: easeOut }}
+            className="font-display font-bold text-white leading-[0.98] tracking-[-0.03em] text-[clamp(2.8rem,8vw,7.5rem)]"
           >
-            An era is
+            Lead the era.
             <br />
-            <span className="font-serif-display italic font-normal text-[#A7DADB]">
-              being written.
+            <span className="bg-gradient-to-r from-[#A7DADB] via-[#A7DADB] to-[#8AC8C9] bg-clip-text text-transparent">
+              Start now.
             </span>
           </motion.h1>
 
-          {/* Sub copy */}
+          {/* Subheadline — more breathing room */}
           <motion.p
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.18, ease: easeOut }}
-            className="font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.55] max-w-[58ch]"
+            transition={{ duration: 0.85, delay: 0.24, ease: easeOut }}
+            className="font-body font-light text-[#b0c5c6] text-base md:text-lg leading-[1.7] max-w-[52ch]"
           >
-            Smartslate, in partnership with{" "}
-            <span className="text-white font-normal">Kristu Jayanti University</span>, presents a three-pillar architecture for the AI-native campus.
+            Smartslate partners with institutional leaders to architect AI-native operations that compound every semester.
           </motion.p>
 
-          {/* CTA cluster */}
+          {/* CTA cluster — refined with spring interactions */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.28, ease: easeOut }}
-            className="flex flex-col sm:flex-row items-start sm:items-center gap-4 pt-2"
+            transition={{ duration: 0.8, delay: 0.36, ease: easeOut }}
+            className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-4"
           >
-            <a
+            {/* Primary CTA — more premium treatment */}
+            <motion.a
               href="mailto:hello@smartslate.io?subject=KJU%20AI%20Transformation%20Programme%20Enquiry"
-              className="group inline-flex items-center gap-3 rounded-full px-5 md:px-6 py-3 md:py-3.5 bg-[#A7DADB] text-[#020C1B] press-scale font-display font-bold text-[13px] md:text-sm tracking-[0.16em] md:tracking-[0.18em] uppercase"
+              className="group inline-flex items-center gap-3 rounded-lg px-6 py-3.5 bg-[#A7DADB] text-[#020C1B] font-display font-bold text-sm tracking-[0.16em] uppercase"
+              whileHover={{ scale: 1.04, y: -2 }}
+              whileTap={{ scale: 0.98 }}
+              transition={springDefault}
               style={{
-                boxShadow: "0 12px 30px -10px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)",
-                transition: "transform 160ms var(--ease-out-expo), box-shadow 200ms var(--ease-out-expo)",
+                boxShadow: '0 16px 40px -10px rgba(167,218,219,0.4), inset 0 1px 0 rgba(255,255,255,0.35)',
               }}
             >
-              <span className="relative flex h-1.5 w-1.5 shrink-0">
-                <span aria-hidden className="absolute inset-0 rounded-full bg-[#020C1B]/55 animate-ping" />
-                <span className="relative h-1.5 w-1.5 rounded-full bg-[#020C1B]/80" />
-              </span>
-              <span>Reach Out</span>
-              <Mail className="h-3.5 w-3.5 opacity-65 group-hover:opacity-100" strokeWidth={2} style={{ transition: "opacity 200ms" }} />
-            </a>
-
-            <span aria-hidden className="hidden sm:block h-5 w-px bg-white/[0.12] shrink-0" />
-
-            <a
-              href="#problem"
-              className="group inline-flex items-center gap-2.5 rounded-full border border-white/[0.12] bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/[0.22] px-4 md:px-5 py-2.5 md:py-3 font-display font-bold text-[12px] md:text-[13px] tracking-[0.18em] uppercase text-[#b0c5c6] hover:text-white backdrop-blur-sm"
-              style={{ transition: "background-color 200ms var(--ease-out-expo), border-color 200ms var(--ease-out-expo), color 200ms var(--ease-out-expo)" }}
-            >
-              <span>Read the Proposal</span>
+              <Mail className="h-4 w-4" strokeWidth={2} />
+              <span>Begin Partnership</span>
               <ArrowUpRight
-                className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100"
+                className="h-4 w-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
                 strokeWidth={2}
-                style={{ transition: "opacity 200ms, transform 220ms var(--ease-out-expo)" }}
+                style={{ transition: 'transform 250ms var(--ease-out-expo)' }}
               />
-            </a>
+            </motion.a>
+
+            {/* Secondary CTA */}
+            <motion.a
+              href="#problem"
+              className="group inline-flex items-center gap-2.5 rounded-lg border border-white/[0.15] bg-white/[0.04] backdrop-blur-sm px-6 py-3.5 font-display font-bold text-sm tracking-[0.16em] uppercase text-[#b0c5c6] hover:text-white"
+              whileHover={{ scale: 1.02, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              transition={springDefault}
+              style={{
+                transition: 'background-color 220ms var(--ease-out-expo), border-color 220ms var(--ease-out-expo)',
+              }}
+            >
+              <span>Discover the Proposal</span>
+              <ArrowUpRight className="h-4 w-4 opacity-65 group-hover:opacity-100" strokeWidth={2} />
+            </motion.a>
           </motion.div>
 
-          {/* Audio narration */}
-          <PlayNarrationButton />
+          {/* Narration control */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.48, ease: easeOut }}
+          >
+            <PlayNarrationButton />
+          </motion.div>
 
-          {/* Trust strip */}
+          {/* Metrics strip — refined and intentional */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 0.6, ease: easeOut }}
-            className="pt-10 md:pt-12 mt-2 border-t border-white/[0.06] grid grid-cols-3 gap-x-3 sm:gap-x-6 max-w-xl"
+            transition={{ duration: 0.8, delay: 0.6, ease: easeOut }}
+            className="pt-12 border-t border-white/[0.08] space-y-6"
           >
-            {[
-              { k: "Pillars", v: "03" },
-              { k: "Efficiency", v: "70%" },
-              { k: "Era", v: "2026" },
-            ].map((m) => (
-              <div key={m.k} className="flex flex-col gap-1.5 pt-5">
-                <span className="font-display text-[9px] sm:text-[10px] tracking-[0.28em] sm:tracking-[0.35em] uppercase text-[#b0c5c6]/60 font-bold">
-                  {m.k}
-                </span>
-                <span className="font-display text-xl sm:text-2xl md:text-3xl text-white tabular-nums tracking-tight">
-                  {m.v}
-                </span>
-              </div>
-            ))}
+            <p className="font-display text-[9px] tracking-[0.45em] uppercase text-[#b0c5c6]/50 font-bold">
+              Guaranteed Floor
+            </p>
+            <div className="grid grid-cols-3 gap-8">
+              {[
+                { label: 'Operational Lift', value: '70%' },
+                { label: 'Time Reclaimed', value: '200 hrs' },
+                { label: 'Certified', value: '80%+' },
+              ].map((m, i) => (
+                <motion.div
+                  key={m.label}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.72 + i * 0.06, ease: easeOut }}
+                  className="space-y-1.5"
+                >
+                  <span className="font-display text-sm md:text-base text-[#A7DADB] font-bold tabular-nums">
+                    {m.value}
+                  </span>
+                  <p className="font-body text-[11px] md:text-xs text-[#b0c5c6]/60 leading-tight">
+                    {m.label}
+                  </p>
+                </motion.div>
+              ))}
+            </div>
           </motion.div>
         </div>
 
-        {/* Right: video as cinematic still.
-            Outer layer owns the one-shot entry animation; inner layer owns the
-            continuous mouse parallax as a composited translate3d. Keeping these
-            on separate elements stops the two from fighting over the transform's
-            y-axis (which caused the jitter). */}
+        {/* Right: premium video presentation */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.97, y: 24 }}
+          initial={{ opacity: 0, scale: 0.95, y: 32 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.18, ease: easeOut }}
-          className="lg:col-span-5 relative"
+          transition={{ duration: 1.0, delay: 0.2, ease: easeOut }}
+          className="lg:col-span-7 relative"
         >
           <motion.div
-            style={{ transform: parallax, willChange: "transform", backfaceVisibility: "hidden" }}
+            style={{ transform: parallax, willChange: 'transform', backfaceVisibility: 'hidden' }}
             className="relative"
           >
-            {/* Soft halo */}
+            {/* Glow halo — more subtle, refined */}
             <div
               aria-hidden
-              className="absolute -inset-12 -z-10 blur-3xl opacity-60"
+              className="absolute -inset-6 -z-10 blur-3xl opacity-40"
               style={{
                 background:
-                  "radial-gradient(circle at 70% 30%, rgba(167,218,219,0.18) 0%, transparent 55%), radial-gradient(circle at 30% 80%, rgba(167,218,219,0.10) 0%, transparent 55%)",
+                  'radial-gradient(circle at 60% 40%, rgba(167,218,219,0.2) 0%, transparent 50%), radial-gradient(circle at 40% 70%, rgba(167,218,219,0.12) 0%, transparent 45%)',
               }}
             />
-            <HeroVideoDialog
-              videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-v2.mp4"
-              thumbnailSrc="/video-thumbnail.jpg"
-              thumbnailAlt="Project Institutional Intelligence  ·  Watch the film"
-              durationLabel="03:50"
-              externallyOpen={videoOpen}
-              onOpenChange={setVideoOpen}
-            />
 
-            {/* Caption */}
-            <div className="mt-6 flex items-center justify-between text-[10px] md:text-[11px] tracking-[0.32em] uppercase text-[#b0c5c6]/70 font-display font-bold">
-              <span>Smartslate × KJU</span>
-              <span className="tabular-nums">KJU_COGNITIVE_V1.0</span>
-            </div>
+            {/* Premium frame container */}
+            <motion.div
+              onMouseEnter={() => setVideoHover(true)}
+              onMouseLeave={() => setVideoHover(false)}
+              className="relative group rounded-[24px] md:rounded-[32px] overflow-hidden border border-[#A7DADB]/15 bg-[#0a1729]/40 backdrop-blur-sm"
+              whileHover={{
+                borderColor: 'rgba(167, 218, 219, 0.3)',
+              }}
+              transition={{ duration: 0.4, ease: easeOut }}
+              style={{
+                transition: 'border-color 400ms var(--ease-out-expo)',
+              }}
+            >
+              {/* Top accent line — premium detail */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/30 to-transparent pointer-events-none z-10" />
+
+              {/* Video component */}
+              <HeroVideoDialog
+                videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-v2.mp4"
+                thumbnailSrc="/video-thumbnail.jpg"
+                thumbnailAlt="AI Transformation Programme — Watch the vision"
+                durationLabel="03:50"
+                externallyOpen={videoOpen}
+                onOpenChange={setVideoOpen}
+              />
+
+              {/* Play overlay — appears on hover, premium treatment */}
+              {!videoOpen && (
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center bg-black/20 backdrop-blur-sm pointer-events-none"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: videoHover ? 1 : 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.div
+                    animate={{ scale: videoHover ? 1.1 : 1 }}
+                    transition={springDefault}
+                    className="flex items-center justify-center h-16 w-16 rounded-full bg-white/10 border border-white/20 backdrop-blur-sm"
+                  >
+                    <Play className="h-6 w-6 text-white fill-white ml-0.5" />
+                  </motion.div>
+                </motion.div>
+              )}
+
+              {/* Bottom accent line */}
+              <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/20 to-transparent pointer-events-none" />
+            </motion.div>
+
+            {/* Video metadata */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.6, ease: easeOut }}
+              className="mt-6 flex items-center justify-between text-[10px] md:text-[11px] tracking-[0.32em] uppercase text-[#b0c5c6]/60 font-display font-bold"
+            >
+              <span className="flex items-center gap-2">
+                <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#A7DADB]/60" />
+                Smartslate × KJU Partnership
+              </span>
+              <span className="tabular-nums text-[#A7DADB]/50">KJU_COGNITIVE_V1.0</span>
+            </motion.div>
           </motion.div>
         </motion.div>
       </div>
 
-      {/* Bottom HUD line */}
+      {/* Bottom divider — refined */}
       <motion.div
-        initial={{ scaleX: 0, transformOrigin: "left" }}
+        initial={{ scaleX: 0, transformOrigin: 'left' }}
         animate={{ scaleX: 1 }}
-        transition={{ duration: 1.6, delay: 0.6, ease: easeOut }}
-        className="absolute bottom-12 left-6 md:left-12 lg:left-24 right-6 md:right-12 lg:right-24 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/25 to-transparent"
+        transition={{ duration: 1.4, delay: 0.7, ease: easeOut }}
+        className="absolute bottom-0 left-6 md:left-12 lg:left-24 right-6 md:right-12 lg:right-24 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/20 to-transparent"
       />
     </section>
   );
