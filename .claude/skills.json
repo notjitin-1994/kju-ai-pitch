@@ -1,0 +1,42 @@
+{
+  "skills": [
+    {
+      "name": "emil-design-eng",
+      "description": "Emil Kowalski's design engineering skill for UI polish, component design, and crafted interfaces",
+      "source": "https://github.com/emilkowalski/skill",
+      "enabled": true,
+      "priority": "high",
+      "triggers": ["beautiful", "stunning", "gorgeous", "aesthetic", "design", "ui", "interface"]
+    },
+    {
+      "name": "impeccable",
+      "description": "Open-source design skill framework with 17 commands for creating beautiful, polished UI",
+      "source": "https://github.com/pbakaus/impeccable",
+      "enabled": true,
+      "priority": "high",
+      "triggers": ["polish", "design", "ui", "frontend", "beautiful", "refactor"],
+      "commands": [
+        "polish",
+        "audit",
+        "simplify",
+        "redesign",
+        "enhance",
+        "init"
+      ]
+    },
+    {
+      "name": "taste-skill",
+      "description": "Gives AI good taste and prevents generic design output by developing design sensibility",
+      "source": "https://github.com/leonxlnx/taste-skill",
+      "enabled": true,
+      "priority": "high",
+      "triggers": ["taste", "good design", "beautiful", "elegant", "refined"]
+    }
+  ],
+  "settings": {
+    "designMode": "enabled",
+    "defaultSkill": "emil-design-eng",
+    "autoActivate": true,
+    "qualityThreshold": "high"
+  }
+}
