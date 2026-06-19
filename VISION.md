@@ -1,16 +1,16 @@
 # Project: Institutional Intelligence
-## Vision Document — Smartslate × Kristu Jayanti College
+## Vision Document — Smartslate × the University
 
-> *"Deploying a world-class cognitive ecosystem at Kristu Jayanti College."*
-> — KJU_COGNITIVE_V1.0 // Academic Excellence 2026
+> *"Deploying a world-class cognitive ecosystem at the University."*
+> — UNI_COGNITIVE_V1.0 // Academic Excellence 2026
 
 ---
 
 ## Overview
 
-This document captures the complete strategic vision behind the Smartslate pitch to Kristu Jayanti College (KJC/KJU). It is not a sales document. It is a north-star statement — the "why" beneath every slide, every claim, and every design decision in the deck.
+This document captures the complete strategic vision behind the Smartslate pitch to the University (KJC/UNI). It is not a sales document. It is a north-star statement — the "why" beneath every slide, every claim, and every design decision in the deck.
 
-**The proposition in one sentence:** Smartslate will transform Kristu Jayanti College from a traditional institution into South India's first AI-native Cognitive Campus — embedding intelligence into operations, faculty practice, and student outcomes through a structured, measurable, four-phase partnership.
+**The proposition in one sentence:** Smartslate will transform the University from a traditional institution into South India's first AI-native Cognitive Campus — embedding intelligence into operations, faculty practice, and student outcomes through a structured, measurable, four-phase partnership.
 
 ---
 
@@ -148,7 +148,7 @@ The competitor pitch produces a press release. The Smartslate engagement produce
 ### Phase 1 — Deep Discovery (Weeks 1–3)
 *Mapping Institutional DNA*
 
-Full-spectrum infrastructure audit: departmental structures, faculty profiles, existing technology, student population, academic calendar. Identification of subject-matter frontiers — where AI creates the highest impact in each stream. No generic implementation is built. KJU's implementation is built.
+Full-spectrum infrastructure audit: departmental structures, faculty profiles, existing technology, student population, academic calendar. Identification of subject-matter frontiers — where AI creates the highest impact in each stream. No generic implementation is built. UNI's implementation is built.
 
 ### Phase 2 — The Vanguard (Weeks 4–11)
 *Proof-of-Value Launch*
@@ -163,7 +163,7 @@ Scale proven frameworks across all departments and administrative student servic
 ### Phase 4 — Market Leader (Continuous)
 *Defining the Standard*
 
-The transformation becomes institutional identity. KJU is no longer described as "one of the colleges using AI." It is the AI-native institution — the benchmark that ranking committees, accreditation bodies, and national media reference. Phase Four doesn't end because the AI landscape doesn't end.
+The transformation becomes institutional identity. UNI is no longer described as "one of the colleges using AI." It is the AI-native institution — the benchmark that ranking committees, accreditation bodies, and national media reference. Phase Four doesn't end because the AI landscape doesn't end.
 
 ---
 
@@ -180,7 +180,7 @@ The transformation becomes institutional identity. KJU is no longer described as
 | Return | Mechanism |
 |---|---|
 | **Market Leadership** | First-mover positioning in the regional tier — a brand weight that cannot be purchased after the fact |
-| **Academic Legacy** | The institution's alumni story is written at this decision point — in 15 years, those alumni will be in positions of influence, and KJU will either be in that story or it won't |
+| **Academic Legacy** | The institution's alumni story is written at this decision point — in 15 years, those alumni will be in positions of influence, and UNI will either be in that story or it won't |
 | **Digital Frontier Prestige** | Technological credibility that compounds across rankings, accreditation, and national recognition |
 
 ---
@@ -223,13 +223,13 @@ These phrases and terms carry specific strategic weight and should remain consis
 |---|---|
 | Cognitive Campus | The end state — an institution where AI is infrastructure, not a feature |
 | Project: Institutional Intelligence | The codename for the full transformation engagement |
-| KJU_COGNITIVE_V1.0 | The deployment identifier — signals precision, versioning, and intentionality |
+| UNI_COGNITIVE_V1.0 | The deployment identifier — signals precision, versioning, and intentionality |
 | The Vanguard | Phase 2 — the proof-of-value pilot in 3 departments |
 | Practitioner, Not User | The student outcome differentiator |
 | Cognitive Surge | The 40–60% faculty time reclamation effect |
 | The Flywheel | The self-reinforcing loop between Pillars 1, 2, and 3 |
-| AI-native | The institutional identity KJU will claim — not "AI-adopting" or "AI-enhanced" |
-| Subject Mastery + AI Fluency | The KJU graduate credential that no competitor can currently match |
+| AI-native | The institutional identity UNI will claim — not "AI-adopting" or "AI-enhanced" |
+| Subject Mastery + AI Fluency | The UNI graduate credential that no competitor can currently match |
 
 ---
 
@@ -244,4 +244,4 @@ This is an institutional identity transformation. The product is the Cognitive C
 
 ---
 
-*Smartslate × Kristu Jayanti College — Academic Excellence 2026*
+*Smartslate × the University — Academic Excellence 2026*

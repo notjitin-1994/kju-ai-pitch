@@ -98,14 +98,14 @@ const commitmentPillars = [
     Icon: FileSignature,
     title: 'Contractually Defined',
     body: 'Every deliverable, KPI, and timeline written into the contract. No ambiguity.',
-    tag: 'Contract KJU/STM-2026',
+    tag: 'Contract UNI/STM-2026',
     accent: '#A7DADB',
   },
   {
     clause: '§02',
     Icon: Activity,
     title: 'Data-Backed Reporting',
-    body: 'Quarterly business reviews with full adoption data and uplift evidence provided to KJU leadership.',
+    body: 'Quarterly business reviews with full adoption data and uplift evidence provided to UNI leadership.',
     tag: 'Quarterly Cadence',
     accent: '#A7DADB',
   },
@@ -113,7 +113,7 @@ const commitmentPillars = [
     clause: '§03',
     Icon: ShieldCheck,
     title: 'No Technology Markup',
-    body: 'KJU pays tech vendors directly. Smartslate fees are professional services only.',
+    body: 'UNI pays tech vendors directly. Smartslate fees are professional services only.',
     tag: 'Zero Markup Guarantee',
     accent: '#A7DADB',
   },
@@ -137,7 +137,7 @@ const paths = [
       'Zero capital expenditure. Live in 3–5 days. All AI inference via Claude API (Haiku for concierge, Sonnet for faculty tools). Application on AWS India. The fastest path to a live, measurable transformation.',
     glance: [
       { label: 'Time to Live', value: '14–21 Days' },
-      { label: 'KJU Capital Outlay', value: '₹0' },
+      { label: 'UNI Capital Outlay', value: '₹0' },
       { label: 'Data Location', value: 'AWS India' },
       { label: '5-Year Tech TCO', value: '~₹28L' },
     ],
@@ -156,7 +156,7 @@ const paths = [
       'Migrate from cloud to Indian cloud GPU (AceCloud A100) when usage triggers cost crossover. Full India data residency from Phase B. Builds on the Year 1 cloud foundation with zero additional CapEx.',
     glance: [
       { label: 'Time to Live', value: '14–21 Days' },
-      { label: 'KJU Capital Outlay', value: '₹0' },
+      { label: 'UNI Capital Outlay', value: '₹0' },
       { label: 'Data Location', value: 'Full India (Phase B+)' },
       { label: '5-Year Tech TCO', value: '₹44.6L' },
     ],
@@ -172,10 +172,10 @@ const paths = [
     name: 'On-Prem Infrastructure',
     badge: 'Year 3+ · Full Institutional Ownership',
     description:
-      '4× RTX 5090 GPU cluster at KJU campus. All models run locally — data never leaves the institution. Permanent capital asset built after the programme is proven and embedded at scale.',
+      '4× RTX 5090 GPU cluster at UNI campus. All models run locally — data never leaves the institution. Permanent capital asset built after the programme is proven and embedded at scale.',
     glance: [
       { label: 'Time to Live', value: '4–5 Weeks' },
-      { label: 'KJU Capital Outlay', value: '₹35L (to vendors)' },
+      { label: 'UNI Capital Outlay', value: '₹35L (to vendors)' },
       { label: 'Data Location', value: 'Full On-Campus' },
       { label: '5-Year Tech TCO', value: '₹72.6L (stable)' },
     ],
@@ -212,7 +212,7 @@ type KpiMetric = {
 const kpiMetrics: readonly KpiMetric[] = [
   {
     id: '01',
-    ref: 'KJU/STM-2026/KPI-01',
+    ref: 'UNI/STM-2026/KPI-01',
     pillar: 'Operations',
     prefix: '≥',
     value: 70,
@@ -222,7 +222,7 @@ const kpiMetrics: readonly KpiMetric[] = [
       'Routine student queries — schedules, fees, hostel, registrations — resolved autonomously in <30 seconds, 24/7. Staff redirected to high-value student interactions.',
     binding: {
       method: 'Ticket-volume delta vs. pre-deployment baseline, 12-week rolling.',
-      cadence: 'Weekly internal · Quarterly to KJU leadership.',
+      cadence: 'Weekly internal · Quarterly to UNI leadership.',
       trigger: '14-day remediation plan if <60% sustained for 4 weeks.',
     },
     evidence: [
@@ -234,7 +234,7 @@ const kpiMetrics: readonly KpiMetric[] = [
   },
   {
     id: '02',
-    ref: 'KJU/STM-2026/KPI-02',
+    ref: 'UNI/STM-2026/KPI-02',
     pillar: 'Faculty',
     prefix: '',
     value: 40,
@@ -245,7 +245,7 @@ const kpiMetrics: readonly KpiMetric[] = [
       'Measured weekly against a pre-deployment baseline. Lesson plans generated in <20 minutes vs 2–3 hours pre-deployment. Reclaimed hours go directly back to student mentorship.',
     binding: {
       method: 'Self-reported timesheets, cross-checked against platform telemetry.',
-      cadence: 'Weekly internal · Quarterly to KJU Dean of Faculty.',
+      cadence: 'Weekly internal · Quarterly to UNI Dean of Faculty.',
       trigger: 'Remediation plan if cohort median falls below 30% for 6 weeks.',
     },
     evidence: [
@@ -257,14 +257,14 @@ const kpiMetrics: readonly KpiMetric[] = [
   },
   {
     id: '03',
-    ref: 'KJU/STM-2026/KPI-03',
+    ref: 'UNI/STM-2026/KPI-03',
     pillar: 'Students',
     prefix: '>',
     value: 80,
     suffix: '%',
     label: 'Students AI-certified institution-wide',
     detail:
-      'AI literacy embedded across all streams — not an elective. Every student builds a verifiable, institutionally-issued credential that differentiates KJU alumni in every hiring cycle.',
+      'AI literacy embedded across all streams — not an elective. Every student builds a verifiable, institutionally-issued credential that differentiates UNI alumni in every hiring cycle.',
     binding: {
       method: 'Institutional credential issuance per cohort, all streams, all years.',
       cadence: 'Per academic term · Annual ROI report.',
@@ -319,13 +319,13 @@ const programmePillars = [
     video: FOOTAGE.studentsOutdoorMNIT,
     pillar: 'Learning & Outcomes',
     name: 'AI-First Students',
-    headline: 'Every KJU graduate leaves with a verifiable, industry-aligned AI credential at graduation.',
+    headline: 'Every UNI graduate leaves with a verifiable, industry-aligned AI credential at graduation.',
     stat: { value: '>80%', label: 'Students AI-certified institution-wide — all streams, all years' },
     items: [
-      { title: 'Mandatory AI Literacy Curriculum', detail: 'Embedded across all streams — not an elective. AI becomes a core competency of every KJU degree programme.' },
+      { title: 'Mandatory AI Literacy Curriculum', detail: 'Embedded across all streams — not an elective. AI becomes a core competency of every UNI degree programme.' },
       { title: 'AI-Augmented Assignments', detail: 'Applied problem-solving, not shortcuts. Students build real capability and critical judgment, not AI dependency.' },
       { title: 'Enterprise-Grade AI Lab', detail: 'Infosys and Deloitte standard. Students graduate fully ready for the AI-native workforce they\'ll enter from day one.' },
-      { title: 'Institutional AI Credential', detail: 'A verifiable, KJU-issued certification that differentiates every graduate in every hiring cycle — permanently.' },
+      { title: 'Institutional AI Credential', detail: 'A verifiable, UNI-issued certification that differentiates every graduate in every hiring cycle — permanently.' },
     ],
   },
   {
@@ -338,7 +338,7 @@ const programmePillars = [
     headline: 'The programme evolves as AI evolves — no renegotiation, no gaps, no institutional drift.',
     stat: { value: '₹44L / yr', label: 'Annual retainer fee — Year 2 onwards, covering all four continuity pillars' },
     items: [
-      { title: 'Continuous AI Model Updates', detail: 'As frontier models improve, KJU\'s platform updates automatically — no redeployment or additional retraining required.' },
+      { title: 'Continuous AI Model Updates', detail: 'As frontier models improve, UNI\'s platform updates automatically — no redeployment or additional retraining required.' },
       { title: 'New Faculty Cohort Onboarding', detail: 'Every incoming faculty cohort trained to Year 1 standard. Zero drift in AI capability across the institution over time.' },
       { title: 'Quarterly Business Reviews', detail: 'Full adoption data, KPI performance, and forward-looking strategic recommendations delivered every quarter.' },
       { title: 'Priority Support & Advisory', detail: 'Direct line to Smartslate leadership. Rapid-response SLA for anything that surfaces in a live institutional deployment.' },
@@ -348,13 +348,13 @@ const programmePillars = [
 
 const finRows = [
   { label: 'Year 1 Smartslate Service Fee', cloud: '₹88L',   hybrid: '₹94L',   onprem: '₹98L',              bold: false },
-  { label: 'Year 1 KJU Direct Tech Costs',  cloud: '₹3.3L',  hybrid: '₹3.3L',  onprem: '₹38.1L (incl. HW)', bold: false },
+  { label: 'Year 1 UNI Direct Tech Costs',  cloud: '₹3.3L',  hybrid: '₹3.3L',  onprem: '₹38.1L (incl. HW)', bold: false },
   { label: 'Year 1 Total Investment',        cloud: '₹91.3L', hybrid: '₹97.3L', onprem: '₹1.36 Cr',          bold: true  },
   { label: 'Year 2 Smartslate Retainer',    cloud: '₹44L',   hybrid: '₹44L',   onprem: '₹44L',              bold: false },
-  { label: 'Year 2 KJU Tech Costs',         cloud: '₹4.3L',  hybrid: '₹9.1L',  onprem: '₹3.6L',             bold: false },
+  { label: 'Year 2 UNI Tech Costs',         cloud: '₹4.3L',  hybrid: '₹9.1L',  onprem: '₹3.6L',             bold: false },
   { label: 'Year 3 Smartslate Retainer',    cloud: '₹44L',   hybrid: '₹44L',   onprem: '₹44L',              bold: false },
-  { label: 'Year 3 KJU Tech Costs',         cloud: '₹5.6L',  hybrid: '₹13.0L', onprem: '₹4.2L',             bold: false },
-  { label: '5-Year Technology TCO (KJU direct)', cloud: '₹27.7L', hybrid: '₹44.6L', onprem: '₹72.6L',       bold: false },
+  { label: 'Year 3 UNI Tech Costs',         cloud: '₹5.6L',  hybrid: '₹13.0L', onprem: '₹4.2L',             bold: false },
+  { label: '5-Year Technology TCO (UNI direct)', cloud: '₹27.7L', hybrid: '₹44.6L', onprem: '₹72.6L',       bold: false },
 ] as const;
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -672,7 +672,7 @@ const PricingHero: React.FC = () => (
           {[
             { v: '₹88L', sub: 'Year 1 Smartslate service fee — all three implementation options', accent: '#A7DADB' },
             { v: '6 months', sub: 'Phase 1 through Phase 3: Week 1 to Month 12+ full campus deployment', accent: '#A7DADB' },
-            { v: '~10,000', sub: 'Users at KJU scale: students, faculty, and administrative staff', accent: '#A7DADB' },
+            { v: '~10,000', sub: 'Users at UNI scale: students, faculty, and administrative staff', accent: '#A7DADB' },
           ].map((s, i) => (
             <div key={i} className={`flex gap-4 ${i > 0 ? 'pt-8 border-t border-white/[0.06]' : ''}`}>
               {/* Left-edge accent bar — editorial detail */}
@@ -941,7 +941,7 @@ const BindingPanel: React.FC<{ metric: KpiMetric }> = ({ metric }) => (
       {/* Contract footer */}
       <div className="border-t border-white/[0.05] px-6 md:px-8 py-3.5 flex items-center justify-between gap-4 flex-wrap">
         <span className="font-mono text-[9px] tabular-nums text-[#b0c5c6]/32 tracking-wide">
-          EFFECTIVE: DAY 01 · VERIFIED BY: KJU PROGRAMME OFFICE
+          EFFECTIVE: DAY 01 · VERIFIED BY: UNI PROGRAMME OFFICE
         </span>
         <span className="font-mono text-[9px] tabular-nums text-[#A7DADB]/38 tracking-wide">
           {metric.ref}
@@ -1052,7 +1052,7 @@ const ContractualKPIs: React.FC = () => {
                 className="mt-8 flex flex-wrap items-stretch border-t border-white/[0.07] pt-5 divide-x divide-white/[0.06]"
               >
                 {[
-                  { k: 'Contract',     v: 'KJU/STM-2026' },
+                  { k: 'Contract',     v: 'UNI/STM-2026' },
                   { k: 'Cadence',      v: 'Quarterly' },
                   { k: 'Remediation',  v: '14-day SLA' },
                   { k: 'Jurisdiction', v: 'Karnataka' },
@@ -1110,7 +1110,7 @@ const ContractualKPIs: React.FC = () => {
             END OF LEDGER · 3 OF 3 KPIs ATTESTED
           </span>
           <span className="font-mono text-[10px] tabular-nums text-[#A7DADB]/40 tracking-wide">
-            KJU/STM-2026 · v1.0
+            UNI/STM-2026 · v1.0
           </span>
         </div>
       </div>
@@ -1290,7 +1290,7 @@ const FeeSchedule: React.FC = () => {
                 transition={{ duration: 0.85, delay: 0.12, ease: easeOut }}
                 className="mt-8 font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.6] max-w-[60ch]"
               >
-                Smartslate service fees are fixed per phase across all three implementation options. Your choice of Cloud, Hybrid, or On-Prem determines only the underlying technology costs — which KJU pays directly to vendors at zero markup.{' '}
+                Smartslate service fees are fixed per phase across all three implementation options. Your choice of Cloud, Hybrid, or On-Prem determines only the underlying technology costs — which UNI pays directly to vendors at zero markup.{' '}
                 <span className="text-[#A7DADB]/70 text-base">Click each phase to see every deliverable.</span>
               </motion.p>
             </div>
@@ -1550,14 +1550,14 @@ const FeeSchedule: React.FC = () => {
               </div>
             </div>
 
-            {/* KJU direct tech costs */}
+            {/* UNI direct tech costs */}
             <div className="lg:col-span-5 rounded-[20px] md:rounded-[24px] border border-white/[0.07] bg-[#0a1729]/50 backdrop-blur-xl glass-refract overflow-hidden">
               <div className="px-5 sm:px-7 py-5 border-b border-white/[0.06]">
                 <span className="font-display text-[10px] tracking-[0.45em] uppercase text-[#b0c5c6]/55 font-bold">
-                  KJU Direct Technology Costs
+                  UNI Direct Technology Costs
                 </span>
                 <p className="mt-2 font-body text-[#b0c5c6]/45 text-xs leading-relaxed">
-                  Paid by KJU directly to technology vendors. Smartslate charges no markup.
+                  Paid by UNI directly to technology vendors. Smartslate charges no markup.
                 </p>
               </div>
               <div className="px-5 sm:px-7 py-6 space-y-4">
@@ -2845,11 +2845,11 @@ const PricingCTA: React.FC = () => (
           {
             step: '02',
             title: 'Sign Partnership Agreement',
-            body: 'Smartslate issues a full SLA and engagement contract within 48 hours of a decision. KJU legal review typically takes 5–10 business days.',
+            body: 'Smartslate issues a full SLA and engagement contract within 48 hours of a decision. UNI legal review typically takes 5–10 business days.',
           },
           {
             step: '03',
-            title: 'KJU Goes AI-First',
+            title: 'UNI Goes AI-First',
             body: 'Phase 1 begins on contract signing day. The window to be the first AI-native institution in your tier is open now.',
           },
         ].map((s, si) => (
@@ -2880,7 +2880,7 @@ const PricingCTA: React.FC = () => (
         className="mt-14 flex flex-col sm:flex-row items-start sm:items-center gap-5"
       >
         <a
-          href="mailto:hello@smartslate.io?subject=AI%20Transformation%20Programme%20-%20KJU%20Enquiry"
+          href="mailto:hello@smartslate.io?subject=AI%20Transformation%20Programme%20-%20UNI%20Enquiry"
           className="press-scale group inline-flex items-center gap-3 rounded-full px-7 py-4 bg-[#A7DADB] text-[#020C1B] font-display font-bold text-sm tracking-[0.18em] uppercase"
           style={{ boxShadow: '0 12px 32px -10px rgba(167,218,219,0.55), inset 0 1px 0 rgba(255,255,255,0.4)', transition: 'transform 160ms var(--ease-out-expo), box-shadow 250ms var(--ease-out-expo)' }}
         >
@@ -2908,7 +2908,7 @@ const PricingCTA: React.FC = () => (
       >
         <img src="/logo.png" alt="Smartslate" className="h-6 sm:h-7 w-auto shrink-0" style={{ filter: 'drop-shadow(0 2px 10px rgba(167,218,219,0.35))' }} />
         <div aria-hidden className="h-6 sm:h-7 w-px bg-[#A7DADB]/30 shrink-0" />
-        <img src="/kjc-logo.png" alt="Kristu Jayanti University" className="h-7 sm:h-9 w-auto shrink-0" style={{ filter: 'drop-shadow(0 2px 10px rgba(255,255,255,0.15))' }} />
+        <img src="/uni-logo.png" alt="the University" className="h-7 sm:h-9 w-auto shrink-0" style={{ filter: 'drop-shadow(0 2px 10px rgba(255,255,255,0.15))' }} />
       </motion.div>
 
       <motion.div
@@ -2929,7 +2929,7 @@ const PricingCTA: React.FC = () => (
           </span>
         </div>
         <span className="font-display text-[10px] tracking-[0.4em] uppercase text-[#b0c5c6]/55 font-bold tabular-nums">
-          KJU_AI_PROPOSAL_V1.0
+          UNI_AI_PROPOSAL_V1.0
         </span>
       </motion.div>
     </div>

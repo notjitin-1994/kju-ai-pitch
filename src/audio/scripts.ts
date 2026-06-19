@@ -15,7 +15,7 @@ export const SCRIPTS: Record<SectionId, SectionScript> = {
     title: 'Chapter 01 · The Opening',
     durationSec: 32,
     transcript:
-      "An era is being written. Right now, at universities across India, your students are using AI — with or without your guidance. They aren't waiting for permission. They're building habits, forming dependencies, and arriving at outcomes you didn't design. The question isn't whether AI reaches Kristu Jayanti. It already has. The question is whether Kristu Jayanti shapes what that looks like — or inherits someone else's answer.",
+      "An era is being written. Right now, at universities across India, your students are using AI — with or without your guidance. They aren't waiting for permission. They're building habits, forming dependencies, and arriving at outcomes you didn't design. The question isn't whether AI reaches the University. It already has. The question is whether the University shapes what that looks like — or inherits someone else's answer.",
   },
   problem: {
     id: 'problem',
@@ -43,6 +43,6 @@ export const SCRIPTS: Record<SectionId, SectionScript> = {
     title: 'Chapter 05 · The Decision',
     durationSec: 50,
     transcript:
-      "The infrastructure is ready. The playbook is proven. The team is here. Institutions that move this year set the standard for AI-native higher education in India. That standard becomes the benchmark every institution that follows will be measured against. Institutions that wait don't stand still. They fall behind a standard they had no hand in writing. Kristu Jayanti has always been first. This is that moment. The window is open. Begin the conversation.",
+      "The infrastructure is ready. The playbook is proven. The team is here. Institutions that move this year set the standard for AI-native higher education in India. That standard becomes the benchmark every institution that follows will be measured against. Institutions that wait don't stand still. They fall behind a standard they had no hand in writing. the University has always been first. This is that moment. The window is open. Begin the conversation.",
   },
 };

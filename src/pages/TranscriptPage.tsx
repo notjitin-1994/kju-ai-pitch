@@ -87,7 +87,7 @@ const TranscriptPage: React.FC = () => {
         {/* Footer note */}
         <div className="mt-20 pt-10 border-t border-white/[0.06]">
           <p className="font-display text-[10px] tracking-[0.35em] uppercase text-[#b0c5c6]/35 font-bold">
-            Smartslate × KJU  ·  Academic Excellence 2026  ·  KJU_COGNITIVE_V1.0
+            Smartslate | Institutional Intelligence  ·  Academic Excellence 2026  ·  UNI_COGNITIVE_V1.0
           </p>
         </div>
       </main>

@@ -1,7 +1,7 @@
 # Smartslate Cinematic & Atmospheric Design System
 
 ## Vision
-A world-class, industry-leading aesthetic for AI-driven institutional transformation. Designed for Kristu Jayanti College, it combines institutional credibility with cutting-edge generative frontiers.
+A world-class, industry-leading aesthetic for AI-driven institutional transformation. Designed for the University, it combines institutional credibility with cutting-edge generative frontiers.
 
 ## Color Palette
 - **Primary Background**: Deep Slate (`#020C1B`)

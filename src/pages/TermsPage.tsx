@@ -140,7 +140,7 @@ const SmartslateTerms: React.FC = () => {
           <BlurFade delay={0.5}>
             <p className="max-w-2xl text-lg text-[#b0c5c6]/80 font-light leading-relaxed">
               This document outlines the protective measures and legal boundaries governing the collaboration between 
-              Smartslate.io and Kristu Jayanti University.
+              Smartslate.io and the University.
             </p>
           </BlurFade>
         </header>
@@ -157,7 +157,7 @@ const SmartslateTerms: React.FC = () => {
                 <div className="space-y-4">
                   <h2 className="text-2xl font-['Quicksand'] font-bold text-white">IMPORTANT NOTICE — PLEASE READ BEFORE PROCEEDING</h2>
                   <p className="text-[#b0c5c6] font-light leading-relaxed italic">
-                    This document contains proprietary and confidential information of Smartslate.io. It is provided to Kristu Jayanti University solely for the purpose of evaluating the proposed AI Transformation Programme. By receiving, accessing, or reviewing this document, you agree to be bound by the terms and conditions set forth herein.
+                    This document contains proprietary and confidential information of Smartslate.io. It is provided to the University solely for the purpose of evaluating the proposed AI Transformation Programme. By receiving, accessing, or reviewing this document, you agree to be bound by the terms and conditions set forth herein.
                   </p>
                 </div>
               </div>
@@ -176,7 +176,7 @@ const SmartslateTerms: React.FC = () => {
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               <DefinitionItem term="Smartslate" definition="Smartslate.io, its directors, employees, contractors, agents, and affiliated entities." />
-              <DefinitionItem term="Recipient" definition="Kristu Jayanti University, its officers, administration, faculty, employees, agents, and any person or entity to whom this document is made available." />
+              <DefinitionItem term="Recipient" definition="the University, its officers, administration, faculty, employees, agents, and any person or entity to whom this document is made available." />
               <DefinitionItem term="Proposal" definition="This document in its entirety, including all text, data, financial figures, methodologies, and frameworks." />
               <DefinitionItem term="Confidential Information" definition="All information disclosed in or through this Proposal, whether or not marked confidential, including pricing, methodology, and technology architecture." />
               <DefinitionItem term="Permitted Purpose" definition="The sole purpose of internally evaluating whether the Recipient wishes to enter into a commercial engagement with Smartslate." />

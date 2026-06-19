@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useMotionTemplate, useReducedMotion } from 'framer-motion';
 import { Mail, ArrowUpRight, ArrowDown } from 'lucide-react';
-import { HeroVideoDialog } from '../ui/hero-video-dialog';
+import { Ripple } from '../ui/ripple';
 import { FlickeringGrid } from '../ui/flickering-grid';
 import { MeshGradient } from '../ui/atmosphere';
 import { PlayNarrationButton } from '../../audio/PlayNarrationButton';
@@ -11,16 +11,7 @@ const easeOut = [0.16, 1, 0.3, 1] as const;
 const springDefault = { type: 'spring' as const, duration: 0.35, bounce: 0.15 };
 
 export const Hero = () => {
-  const [videoOpen, setVideoOpen] = useState(false);
-  const { pauseForVideo, resumeFromVideo } = useNarration();
-
-  useEffect(() => {
-    if (videoOpen) {
-      pauseForVideo();
-    } else {
-      resumeFromVideo();
-    }
-  }, [videoOpen, pauseForVideo, resumeFromVideo]);
+  // Video state removed for generic institutional offering
 
   const reduce = useReducedMotion();
   const mouseX = useMotionValue(0);
@@ -106,7 +97,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.18, ease: easeOut }}
             className="font-body font-light text-[#b0c5c6] text-lg md:text-xl leading-[1.55] max-w-[58ch]"
           >
-            Smartslate, in partnership with <span className="text-white font-normal">Kristu Jayanti University</span>, presents a three-pillar architecture for the AI-native campus.
+            Smartslate, in partnership with <span className="text-white font-normal">the University</span>, presents a three-pillar architecture for the AI-native campus.
           </motion.p>
 
           {/* CTA cluster */}
@@ -118,7 +109,7 @@ export const Hero = () => {
           >
             {/* Primary CTA */}
             <motion.a
-              href="mailto:hello@smartslate.io?subject=KJU%20AI%20Transformation%20Programme%20Enquiry"
+              href="mailto:hello@smartslate.io?subject=UNI%20AI%20Transformation%20Programme%20Enquiry"
               className="group inline-flex items-center gap-3 rounded-full px-6 md:px-7 py-3.5 bg-[#A7DADB] text-[#020C1B] font-display font-bold text-[13px] md:text-sm tracking-[0.16em] uppercase"
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.97 }}
@@ -225,20 +216,20 @@ export const Hero = () => {
               }}
             />
 
-            {/* Gallery-mat frame — 6px mat, concentric radius 30px outer vs dialog's 24px inner */}
+            {/* Abstract Premium Visual */}
             <div
-              className="group relative rounded-[30px] p-1.5 border border-[#A7DADB]/15 hover:border-[#A7DADB]/30 bg-[#0a1729]/40 backdrop-blur-sm"
+              className="group relative rounded-[30px] w-full aspect-video p-1.5 border border-[#A7DADB]/15 hover:border-[#A7DADB]/30 bg-[#0a1729]/40 backdrop-blur-sm overflow-hidden flex items-center justify-center"
               style={{ transition: 'border-color 400ms var(--ease-out-expo)' }}
             >
+              <Ripple mainCircleSize={150} mainCircleOpacity={0.15} numCircles={6} />
               <div className="absolute top-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/30 to-transparent pointer-events-none" />
-              <HeroVideoDialog
-                videoSrc="https://hxxvxsmengeoazuywpjm.supabase.co/storage/v1/object/public/brand-assets/kju-intro-v2.mp4"
-                thumbnailSrc="/video-thumbnail.jpg"
-                thumbnailAlt="Project Institutional Intelligence — Watch the film"
-                durationLabel="03:50"
-                externallyOpen={videoOpen}
-                onOpenChange={setVideoOpen}
-              />
+              <div className="relative z-10 flex flex-col items-center text-center px-8">
+                <div className="w-16 h-16 rounded-full bg-[#A7DADB]/10 border border-[#A7DADB]/30 flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(167,218,219,0.3)]">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#A7DADB] to-white blur-[2px] animate-pulse" />
+                </div>
+                <h3 className="text-white font-display text-xl md:text-2xl font-bold tracking-tight mb-2">Cognitive Core</h3>
+                <p className="text-[#b0c5c6]/70 font-body text-sm max-w-xs">An AI-native institutional heartbeat constantly optimizing campus operations.</p>
+              </div>
               <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#A7DADB]/20 to-transparent pointer-events-none" />
             </div>
 
@@ -251,9 +242,9 @@ export const Hero = () => {
             >
               <span className="flex items-center gap-2">
                 <span className="inline-flex h-1.5 w-1.5 rounded-full bg-[#A7DADB]/60" />
-                Smartslate × KJU
+                Smartslate | Institutional Intelligence
               </span>
-              <span className="tabular-nums text-[#A7DADB]/50">KJU_COGNITIVE_V1.0</span>
+              <span className="tabular-nums text-[#A7DADB]/50">UNI_COGNITIVE_V1.0</span>
             </motion.div>
           </motion.div>
         </motion.div>
